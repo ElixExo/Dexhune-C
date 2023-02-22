@@ -22,6 +22,8 @@ LDeN: Lowest Decimal Number
 
 DoS: Denial of Service 
 
+IDA: irreplicable Digital Asset
+
 # ~ Basics ~
 Peng(e)v2 is a revised version of Peng(e) which addresses the issue of private key storage, in this version network nodes do not store private keys. 
 Peng(e)v2 functions using coded inputs to "Pseudo-treasuries" owned and controlled by users. Users send "coded inputs" to these addresses whose public view key is known to the network upon the Pseudo-treasury's creation. The amount sent is an instruction of what to do with the Pseud's balances. Token balances are stored inside the network. 
@@ -42,8 +44,9 @@ Each NFT and FFT Pseud is a public key, the public view key is made known to the
 # ~ Allocation ~
 Each time a transaction is initiated the coded input is sent to the node operator’s public key; this is the same public key the node presents to the user. The input acts as a fee. 
 
-# ~ Test by Finality ~
-TeF is a way to get the current market price of a blockchain without using external data, it instead uses information from the VM nodes. Because transaction amounts are unknowable on the Monero blockchain, TeF-XMR will be based on average reward per block for the past 10 blocks, current average reward per 10 blocks (17-Jan-2023) is 0.60785‬XMR, this becomes 1XMR to 0.60785TeF-XMR‬, reward per block is an indicator of on-chain activity which in turn is an indicator of demand or price, reward per block can be used as TeF to denote the value of the chain against the overall commodities market. This data does not need to be inverted because it will go up as the chain becomes more valuable, meaning in the pairing it will be less valuable.
+# ~ Token Price ~
+Contrary to previous versions of this document, fixed price is no longer handled using TeF, rather it uses a price feed set for all tokens using the (3) signature "Arbiter" IDA. This feed can be updated if all (3) signates agree. [Link](https://drive.google.com/file/d/1bwUl0gLsmyU5IhG-590zLvUVE2x3gRHG/view?usp=share_link) to the Old Document. 
+
 
 Full Design paper can be found [here](https://drive.google.com/file/d/1bwUl0gLsmyU5IhG-590zLvUVE2x3gRHG/view?usp=share_link)
 
