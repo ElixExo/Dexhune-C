@@ -10,3 +10,4 @@ There are currently (4) versions of proposed uses for the Hybrid-Line-Bus/Networ
 2. Pengv2c Linked [here](https://medium.com/@genericmage1127/pengv2c-nfts-tokens-and-dapps-on-dogecoin-f5945cee32d)
 3. Pengv3f Linked [here](https://medium.com/@genericmage1127/towards-global-fiat-currency-stabilization-5570088eee3d)
 4. Pengv2g Linked [here](https://medium.com/@genericmage1127/towards-secure-liquidity-bridges-4865e2810b27)
+5. Pengv2j Linked [here](https://medium.com/@genericmage1127/pengv2j-distributed-exchange-84ee7ccfbba1)
