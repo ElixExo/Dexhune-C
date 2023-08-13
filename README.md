@@ -1,8 +1,7 @@
 # Peng-Protocol
-Peng Protocol is a blockchain interoperable non-cryptographic solution, in simple words; this means it is not a blockchain but rather an immutable webapp oriented towards transactions. This is the "Hybrid-Line-Bus" which is trustless and scales infintely based on the capacity of nodes in the network. 
-
+Peng Protocol is a series of proposed Blockchain interoperable systems which aim to enhance existing consensus mechanisms either through on-chain applications or immutable off-chain systems. 
 # Hybrid Line Network 
-The Hybrid line Network is a hybrid setup where nodes connect to the network linearly, meaning they can only have one "child connection" and one "parent connection", the oldest node in the line is called a "root", which has no parent. Nodes communicate with each other about database states and transactions taking place. For consensus to be achieved all actions must be checked and approved by the current root node, actions outside this are considered delinquency and the delinquent node is kicked from the network. Counter measures against root delinquency are as follows; child nodes can break off from a delinquent root and attempt "re-discovery", the valid root is determined by the "formal website" which is hosted on IPFS as an immutable object, the Formal Website routes client requests to the network, therefore the Formal Website is the arbitrator of the network. More information about the network can be found [here](https://drive.google.com/file/d/1zIHSdoCiDXmMnENdjWEAzlSOWcRqMN_d/view?usp=share_link)
+The Hybrid line Network is the second iteration of the first proposed application, which functions external to any Blockchain system. More information about the proposed network can be found [here](https://drive.google.com/file/d/1zIHSdoCiDXmMnENdjWEAzlSOWcRqMN_d/view?usp=share_link)
 
 # Design Proposals
 There are currently (4) proposed versions for the Hybrid-Line-Bus/Network. 
@@ -11,3 +10,7 @@ There are currently (4) proposed versions for the Hybrid-Line-Bus/Network.
 3. Pengv3f Linked [here](https://medium.com/@genericmage1127/towards-global-fiat-currency-stabilization-5570088eee3d)
 4. Pengv2g Linked [here](https://medium.com/@genericmage1127/towards-secure-liquidity-bridges-4865e2810b27)
 5. Pengv2j Linked [here](https://medium.com/@genericmage1127/pengv2j-distributed-exchange-84ee7ccfbba1)
+
+
+# Dexhune Distributed Exchange 
+Dexhune is a pilot system for Peng Protocol, which inherits many of the same security and trading concepts of the Hybrid Line proposals but built on a much simpler platform; the EVM. The Dexhune whitepaper can be found [Here](https://files.catbox.moe/78mg6x.pdf)
