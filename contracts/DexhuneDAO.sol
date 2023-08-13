@@ -12,15 +12,16 @@
 
 pragma solidity >=0.4.22 <0.9.0;
 import "./DexhuneBase.sol";
+import "./DexhuneRoot.sol";
 
-contract DexhuneDAO is DexhuneBase {    
+contract DexhuneDAO is DexhuneBase, DexhuneRoot {    
     
 
     uint256 price;
     uint256 proposalCount;
     mapping(uint256 => PriceProposal) public PriceProposals;
 
-    function getPrice() public returns(uint256) {
+    function getPrice() public view returns(uint256) {
         return price;
     }
 
@@ -78,8 +79,8 @@ contract DexhuneDAO is DexhuneBase {
         }
     }
 
-    function ensureEligible() private returns(bool) {
-        return true;
+    function ensureEligible() private view returns(bool) {
+        return false;
     }
 
 

@@ -17,12 +17,4 @@ import "./DexhuneAccounts.sol";
 import "./DexhuneDAO.sol";
 
 contract Dexhune is DexhuneRoot, DexhuneDAO, DexhuneAccounts {
-    uint256 public totalSupply;
-    
-
-    function transfer(address recipient, uint256 amount) external returns(bool) {
-        accounts[msg.sender]
-    }
-
-
 }

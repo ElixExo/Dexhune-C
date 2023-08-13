@@ -14,9 +14,9 @@
 */
 
 pragma solidity >=0.4.22 <0.9.0;
+import "./DexhuneRoot.sol";
 
-
-contract DexhuneERC20 {
+contract DexhuneERC20 is DexhuneConfig {
     string constant NAME = "Dexhune";
     string constant SYMBOL = "DXH";
     uint8 constant DECIMALS = 18;
@@ -24,7 +24,7 @@ contract DexhuneERC20 {
     uint256 supply = type(uint256).max;
     mapping(address => uint256) private balances;
     mapping(address => mapping(address => uint256)) private allowances;
-    mapping(address => uint) private transferTimer;
+    mapping(address => uint) private cooler;
 
     function name() public pure returns (string memory) {
         return NAME;
@@ -52,20 +52,25 @@ contract DexhuneERC20 {
     }
 
     function transferFrom(address _sender, address _to, uint256 _value) external returns (bool) {
-        require(false, "This operatation is not supported");
-
+        require(block.timestamp > cooler[_to], "This transaction cannot be completed because your account is experiencing cooldown. Please try again in a couple of minutes.");
+        
         _transferInternal(_sender, _to, _value);
+
+        if (transferCooldown) {
+            cooler[_to] = block.timestamp + cooldownTimeout;            
+        }
+
         return true;
     }
 
-    function _transferInternal(address _sender, address _to, uint256 _value) private {
-        uint256 balance = balances[_sender];
+    function _transferInternal(address _from, address _to, uint256 _value) private {
+        uint256 balance = balances[_from];
         require(balance - _value >= 0, "Insufficient balance");
 
-        balances[_sender] -= _value;
+        balances[_from] -= _value;
         balances[_to] += _value;
 
-        emit Transfer(msg.sender, _to, _value);
+        emit Transfer(_from, _to, _value);
     }
 
     function approve(address _spender, uint256 _amount) external returns (bool) {
@@ -75,10 +80,9 @@ contract DexhuneERC20 {
         return true;
     }
 
-
-
-
-
+    function allowance(address _owner, address _spender) public view returns (uint256 remaining) {
+        return allowances[_owner][_spender];
+    }
 
     event Transfer(address indexed _from, address indexed _to, uint256 _value);
     event Approval(address indexed _owner, address indexed _spender, uint256 _value);
