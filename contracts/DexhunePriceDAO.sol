@@ -14,9 +14,7 @@ pragma solidity >=0.4.22 <0.9.0;
 import "./DexhuneBase.sol";
 import "./DexhuneRoot.sol";
 
-contract DexhuneDAO is DexhuneBase, DexhuneRoot {    
-    
-
+contract DexhunePriceDAO is DexhuneBase, DexhuneRoot {    
     uint256 price;
     uint256 proposalCount;
     mapping(uint256 => PriceProposal) public PriceProposals;
@@ -33,7 +31,7 @@ contract DexhuneDAO is DexhuneBase, DexhuneRoot {
         p.deadline = block.number + PROPOSAL_BLOCKS;
         
 
-        emit proposalCreated(proposalCount, _desc, msg.sender);
+        emit ProposalCreated(proposalCount, _desc, msg.sender);
         proposalCount++;
     }
 
@@ -53,7 +51,7 @@ contract DexhuneDAO is DexhuneBase, DexhuneRoot {
             p.votesDown++;
         }
 
-        emit voteCasted(msg.sender, _id, _vote);
+        emit VoteCast(msg.sender, _id, _vote);
     }
 
     function finalizePriceProposal(uint256 _id) public {
@@ -72,14 +70,14 @@ contract DexhuneDAO is DexhuneBase, DexhuneRoot {
             uint256 old = price;
             price = p.value;
 
-            emit proposalFinalized(_id, true);
-            emit priceUpdated(old, price);
+            emit ProposalFinalized(_id, true);
+            emit PriceUpdated(old, price);
         } else {
-            emit proposalFinalized(_id, false);
+            emit ProposalFinalized(_id, false);
         }
     }
 
-    function ensureEligible() private view returns(bool) {
+    function ensureEligible() private pure returns(bool) {
         return false;
     }
 
@@ -90,7 +88,7 @@ contract DexhuneDAO is DexhuneBase, DexhuneRoot {
     /// @param id Id of the proposal
     /// @param description Description of the proposal
     /// @param proposer Address of the proposer
-    event proposalCreated(uint256 id, string description, address proposer);
+    event ProposalCreated(uint256 id, string description, address proposer);
 
 
     /// @notice A vote has been cast on a proposal
@@ -98,15 +96,15 @@ contract DexhuneDAO is DexhuneBase, DexhuneRoot {
     /// @param voter Address of the voter
     /// @param proposal Id of the proposal
     /// @param votedFor Indicates whether the voter voted for or against
-    event voteCasted(address voter, uint256 proposal, bool votedFor);
+    event VoteCast(address voter, uint256 proposal, bool votedFor);
 
     /// @notice Voting result of the Proposal
     /// @dev Notifies that a proposal has been finalized
     /// @param id Id of the proposal
     /// @param passed Result of the voting on proposal, passed defines that the proposal is accepted by the voters
-    event proposalFinalized(uint256 id, bool passed);
+    event ProposalFinalized(uint256 id, bool passed);
 
     /// @notice The price has been updated
-    event priceUpdated(uint256 oldPrice, uint256 newPrice);
+    event PriceUpdated(uint256 oldPrice, uint256 newPrice);
 }
 

@@ -1,0 +1,162 @@
+{
+    "contractName": "DexhuneAccounts",
+    "abi": [],
+    "metadata": "{\"compiler\":{\"version\":\"0.8.19+commit.7dd6d404\"},\"language\":\"Solidity\",\"output\":{\"abi\":[],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"c:/Users/Prince/source/repos/Peng_Protocol/dexhune/contracts/DexhuneAccounts.sol\":\"DexhuneAccounts\"},\"evmVersion\":\"paris\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"c:/Users/Prince/source/repos/Peng_Protocol/dexhune/contracts/DexhuneAccounts.sol\":{\"keccak256\":\"0x2d212a8c5941716559d13c01281135e20df03b48cb23c190348862246f530820\",\"license\":\"BSD-3-Clause\",\"urls\":[\"bzz-raw://9f9107f814dc4fdd9eb2be7083c38ab255b56806d1c0e073f03cb840740574d2\",\"dweb:/ipfs/QmSjNj7LUw2aaenxWbvnU98yQQ7n339uDwkdBmjsv4rtVB\"]},\"c:/Users/Prince/source/repos/Peng_Protocol/dexhune/contracts/DexhuneBase.sol\":{\"keccak256\":\"0xcb0a10de4b84923eeb291de3501ad0efe8e91ebfa28988e341ad84f1a8cab835\",\"license\":\"BSD-3-Clause\",\"urls\":[\"bzz-raw://d7101146662e22e6b99d4cd7f75769f3e30a9818df890ad3110be45e3f3ad710\",\"dweb:/ipfs/QmZ8K3e5CkUCox9bU681S1h1GwbqEa4g5kxHxnGpcd4YU3\"]}},\"version\":1}",
+    "bytecode": "6080604052348015600f57600080fd5b50603f80601d6000396000f3fe6080604052600080fdfea2646970667358221220fe5c02cb530a6cd741537ed0360513cdc0a3b77fd6c24615013ff4a8976a68a464736f6c63430008130033",
+    "deployedBytecode": "6080604052600080fdfea2646970667358221220fe5c02cb530a6cd741537ed0360513cdc0a3b77fd6c24615013ff4a8976a68a464736f6c63430008130033",
+    "sourceMap": "599:87:1:-:0;;;;;;;;;;;;;;;;;;;",
+    "deployedSourceMap": "599:87:1:-:0;;;;;",
+    "sourcePath": "c:/Users/Prince/source/repos/Peng_Protocol/dexhune/contracts/DexhuneAccounts.sol",
+    "compiler": {
+        "name": "solc",
+        "version": "0.8.19+commit.7dd6d404"
+    },
+    "ast": {
+        "absolutePath": "c:/Users/Prince/source/repos/Peng_Protocol/dexhune/contracts/DexhuneAccounts.sol",
+        "exportedSymbols": {
+            "DexhuneAccounts": [
+                22
+            ],
+            "DexhuneBase": [
+                50
+            ]
+        },
+        "id": 23,
+        "license": "BSD-3-Clause",
+        "nodeType": "SourceUnit",
+        "nodes": [
+            {
+                "id": 13,
+                "literals": [
+                    "solidity",
+                    ">=",
+                    "0.4",
+                    ".22",
+                    "<",
+                    "0.9",
+                    ".0"
+                ],
+                "nodeType": "PragmaDirective",
+                "src": "532:32:1"
+            },
+            {
+                "absolutePath": "c:/Users/Prince/source/repos/Peng_Protocol/dexhune/contracts/DexhuneBase.sol",
+                "file": "./DexhuneBase.sol",
+                "id": 14,
+                "nameLocation": "-1:-1:-1",
+                "nodeType": "ImportDirective",
+                "scope": 23,
+                "sourceUnit": 51,
+                "src": "568:27:1",
+                "symbolAliases": [],
+                "unitAlias": ""
+            },
+            {
+                "abstract": false,
+                "baseContracts": [
+                    {
+                        "baseName": {
+                            "id": 15,
+                            "name": "DexhuneBase",
+                            "nameLocations": [
+                                "627:11:1"
+                            ],
+                            "nodeType": "IdentifierPath",
+                            "referencedDeclaration": 50,
+                            "src": "627:11:1"
+                        },
+                        "id": 16,
+                        "nodeType": "InheritanceSpecifier",
+                        "src": "627:11:1"
+                    }
+                ],
+                "canonicalName": "DexhuneAccounts",
+                "contractDependencies": [],
+                "contractKind": "contract",
+                "fullyImplemented": true,
+                "id": 22,
+                "linearizedBaseContracts": [
+                    22,
+                    50
+                ],
+                "name": "DexhuneAccounts",
+                "nameLocation": "608:15:1",
+                "nodeType": "ContractDefinition",
+                "nodes": [
+                    {
+                        "constant": false,
+                        "id": 21,
+                        "mutability": "mutable",
+                        "name": "accounts",
+                        "nameLocation": "674:8:1",
+                        "nodeType": "VariableDeclaration",
+                        "scope": 22,
+                        "src": "646:36:1",
+                        "stateVariable": true,
+                        "storageLocation": "default",
+                        "typeDescriptions": {
+                            "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Account_$49_storage_$",
+                            "typeString": "mapping(address => struct DexhuneBase.Account)"
+                        },
+                        "typeName": {
+                            "id": 20,
+                            "keyName": "",
+                            "keyNameLocation": "-1:-1:-1",
+                            "keyType": {
+                                "id": 17,
+                                "name": "address",
+                                "nodeType": "ElementaryTypeName",
+                                "src": "654:7:1",
+                                "typeDescriptions": {
+                                    "typeIdentifier": "t_address",
+                                    "typeString": "address"
+                                }
+                            },
+                            "nodeType": "Mapping",
+                            "src": "646:27:1",
+                            "typeDescriptions": {
+                                "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Account_$49_storage_$",
+                                "typeString": "mapping(address => struct DexhuneBase.Account)"
+                            },
+                            "valueName": "",
+                            "valueNameLocation": "-1:-1:-1",
+                            "valueType": {
+                                "id": 19,
+                                "nodeType": "UserDefinedTypeName",
+                                "pathNode": {
+                                    "id": 18,
+                                    "name": "Account",
+                                    "nameLocations": [
+                                        "665:7:1"
+                                    ],
+                                    "nodeType": "IdentifierPath",
+                                    "referencedDeclaration": 49,
+                                    "src": "665:7:1"
+                                },
+                                "referencedDeclaration": 49,
+                                "src": "665:7:1",
+                                "typeDescriptions": {
+                                    "typeIdentifier": "t_struct$_Account_$49_storage_ptr",
+                                    "typeString": "struct DexhuneBase.Account"
+                                }
+                            }
+                        },
+                        "visibility": "internal"
+                    }
+                ],
+                "scope": 23,
+                "src": "599:87:1",
+                "usedErrors": []
+            }
+        ],
+        "src": "532:154:1"
+    },
+    "functionHashes": {},
+    "gasEstimates": {
+        "creation": {
+            "codeDepositCost": "12600",
+            "executionCost": "66",
+            "totalCost": "12666"
+        }
+    }
+}
