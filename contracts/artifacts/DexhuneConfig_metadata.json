@@ -1,0 +1,85 @@
+{
+	"compiler": {
+		"version": "0.8.18+commit.87f61d96"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [],
+				"name": "cooldownTimeout",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "transferCooldown",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"stateVariables": {
+				"PROPOSAL_DURATION": {
+					"details": "Total proposal duration in seconds"
+				}
+			},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/DexhuneRoot.sol": "DexhuneConfig"
+		},
+		"evmVersion": "paris",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"contracts/DexhuneBase.sol": {
+			"keccak256": "0x787845030bdec105b35d758918e69bf4b37dac9086fb8b8538ec9e085a840780",
+			"license": "BSD-3-Clause",
+			"urls": [
+				"bzz-raw://d7997e80a720dcb31a750c3d7cf6652452d01b9a23b03fbef05234ec3c4a7ebe",
+				"dweb:/ipfs/QmajW3QhELKZNNvpDdbwKiFhBpKvk57PkX97A7r5CCG8Z4"
+			]
+		},
+		"contracts/DexhuneRoot.sol": {
+			"keccak256": "0xb4cd3668f90db8720925d98dcd4705604a4930c29ec49c5281a6be74a242fd15",
+			"license": "BSD-3-Clause",
+			"urls": [
+				"bzz-raw://427c2d9d7b6ee793cfb639ed3f636bbcd6fea88537298b06e1399f3b701af4ca",
+				"dweb:/ipfs/QmRQ8ACxfmzVnPFWsPJegKR6SFcUdcZNtNkQfg8HrR3VXY"
+			]
+		}
+	},
+	"version": 1
+}

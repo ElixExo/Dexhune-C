@@ -3,6 +3,7 @@
 // Sources: 
 // https://eips.ethereum.org/EIPS/eip-20
 // https://docs.google.com/document/d/1YLPtQxZu1UAvO9cZ1O2RPXBbT0mooh4DYKjA_jp-RLM
+// https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC20/IERC20.sol
 /*
 *    ........................................................
 *    .%%%%%...%%%%%%..%%..%%..%%..%%..%%..%%..%%..%%..%%%%%%.
@@ -15,8 +16,9 @@
 
 pragma solidity >=0.4.22 <0.9.0;
 import "./DexhuneRoot.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
-contract DexhuneERC20 is DexhuneConfig {
+contract DexhuneERC20 is IERC20, DexhuneConfig {
     string constant NAME = "Dexhune";
     string constant SYMBOL = "DXH";
     uint8 constant DECIMALS = 18;
@@ -83,7 +85,4 @@ contract DexhuneERC20 is DexhuneConfig {
     function allowance(address _owner, address _spender) public view returns (uint256 remaining) {
         return allowances[_owner][_spender];
     }
-
-    event Transfer(address indexed _from, address indexed _to, uint256 _value);
-    event Approval(address indexed _owner, address indexed _spender, uint256 _value);
 }

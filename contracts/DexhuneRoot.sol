@@ -27,16 +27,11 @@ contract DexhuneConfig {
 
 abstract contract DexhuneRoot is DexhuneConfig {
     address public owner;
-    uint256 collectionCount;
-    mapping(uint256 => NFTCollection) public collections;
-
-    struct NFTCollection {
-        address contractAddr;
-        address[] nfts;
-    }
+    address[] nftCollections;
 
     constructor() {
         owner = msg.sender;
+        nftCollections = new address[](0);
     }
     
     function ensureOwnership() private view {
@@ -51,26 +46,28 @@ abstract contract DexhuneRoot is DexhuneConfig {
         emit transferredOwnership(oldAddress, owner);
     }
 
-    function addNFTCollection(address _contractAddress, address[] memory nfts) public {
+    function addNFTCollection(address _contractAddress) public {
         ensureOwnership();
         require(_contractAddress != address(0), "An NFT collection cannot have an empty address");
 
-        NFTCollection memory col = collections[collectionCount];
-        col.contractAddr = _contractAddress;
-        col.nfts = nfts;
-
-        emit addedNFTCollection(collectionCount);
-        collectionCount++;
+        uint index = nftCollections.length;
+        nftCollections.push(_contractAddress);
+        emit addedNFTCollection(index, _contractAddress);
     }
 
-    function removeNFTCollection(uint256 _id) public {
+    
+    function removeNFTCollection(uint256 _index) public {
         ensureOwnership();
-
-        NFTCollection memory col = collections[_id];
-        require(col.contractAddr == address(0), "The provided NFT collection does not exist");
         
-        delete collections[_id];
-        emit removedNFTCollection(_id);
+        require(_index >= 0 && _index < nftCollections.length, "The requested NFT collection does not exist");
+
+        address addr = nftCollections[_index];
+        
+        // https://ethereum.stackexchange.com/a/59234
+        nftCollections[_index] = nftCollections[nftCollections.length - 1];
+        nftCollections.pop();
+        
+        emit removedNFTCollection(_index, addr);
     }
 
     function setTransferTimeout(bool _enabled) public {
@@ -94,10 +91,10 @@ abstract contract DexhuneRoot is DexhuneConfig {
     /// @notice An NFT collection has been added
     /// @dev Adds an NFT collection
     /// @param id Id of the collection
-    event addedNFTCollection(uint256 id);
+    event addedNFTCollection(uint256 id, address collectionAddress);
 
     /// @notice An NFT collection has been removed
     /// @dev Removes an NFT collection
     /// @param id Id of the collection
-    event removedNFTCollection(uint256 id);
+    event removedNFTCollection(uint256 id, address collectionAddress);
 }

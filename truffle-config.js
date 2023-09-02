@@ -56,6 +56,11 @@ module.exports = {
    *
    * $ truffle test --network <network-name>
    */
+  plugins: ['truffle-plugin-verify'],
+  api_keys: {
+    snowtrace: '4N6J9BKZZAYWBYH4RF2UBWU1P3UX8CPSKG'
+  },
+
 
   networks: {
     // Useful for testing. The `development` name is special - truffle uses it by default
@@ -96,6 +101,9 @@ module.exports = {
     //   network_id: 2111,   // This network is yours, in the cloud.
     //   production: true    // Treats this network as if it was a public net. (default: false)
     // }
+    cchain: {
+      network_id: 43114
+    }
   },
 
   // Set default mocha options here, use special reporters, etc.

@@ -1,0 +1,497 @@
+{
+	"compiler": {
+		"version": "0.8.18+commit.87f61d96"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "oldPrice",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "newPrice",
+						"type": "uint256"
+					}
+				],
+				"name": "PriceUpdated",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "id",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "string",
+						"name": "description",
+						"type": "string"
+					},
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "proposer",
+						"type": "address"
+					}
+				],
+				"name": "ProposalCreated",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "id",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "bool",
+						"name": "passed",
+						"type": "bool"
+					}
+				],
+				"name": "ProposalFinalized",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "voter",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "proposal",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "bool",
+						"name": "votedFor",
+						"type": "bool"
+					}
+				],
+				"name": "VoteCast",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "id",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "collectionAddress",
+						"type": "address"
+					}
+				],
+				"name": "addedNFTCollection",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "id",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "collectionAddress",
+						"type": "address"
+					}
+				],
+				"name": "removedNFTCollection",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "from",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "to",
+						"type": "address"
+					}
+				],
+				"name": "transferredOwnership",
+				"type": "event"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"name": "PriceProposals",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "description",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "deadline",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "votesUp",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "votesDown",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "value",
+						"type": "uint256"
+					},
+					{
+						"internalType": "bool",
+						"name": "finalized",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "_contractAddress",
+						"type": "address"
+					}
+				],
+				"name": "addNFTCollection",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "bool",
+						"name": "_vote",
+						"type": "bool"
+					}
+				],
+				"name": "castPriceVote",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "cooldownTimeout",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_id",
+						"type": "uint256"
+					}
+				],
+				"name": "finalizePriceProposal",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getPrice",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "owner",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "string",
+						"name": "_desc",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_price",
+						"type": "uint256"
+					}
+				],
+				"name": "proposePrice",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_index",
+						"type": "uint256"
+					}
+				],
+				"name": "removeNFTCollection",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_timeout",
+						"type": "uint256"
+					}
+				],
+				"name": "setCooldownTimeout",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "bool",
+						"name": "_enabled",
+						"type": "bool"
+					}
+				],
+				"name": "setTransferTimeout",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "transferCooldown",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "_address",
+						"type": "address"
+					}
+				],
+				"name": "transferOwnership",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"events": {
+				"ProposalCreated(uint256,string,address)": {
+					"details": "Notifies that a new proposal was created",
+					"params": {
+						"description": "Description of the proposal",
+						"id": "Id of the proposal",
+						"proposer": "Address of the proposer"
+					}
+				},
+				"ProposalFinalized(uint256,bool)": {
+					"details": "Notifies that a proposal has been finalized",
+					"params": {
+						"id": "Id of the proposal",
+						"passed": "Result of the voting on proposal, passed defines that the proposal is accepted by the voters"
+					}
+				},
+				"VoteCast(address,uint256,bool)": {
+					"details": "Notifies that a vote has been casted",
+					"params": {
+						"proposal": "Id of the proposal",
+						"votedFor": "Indicates whether the voter voted for or against",
+						"voter": "Address of the voter"
+					}
+				},
+				"addedNFTCollection(uint256,address)": {
+					"details": "Adds an NFT collection",
+					"params": {
+						"id": "Id of the collection"
+					}
+				},
+				"removedNFTCollection(uint256,address)": {
+					"details": "Removes an NFT collection",
+					"params": {
+						"id": "Id of the collection"
+					}
+				},
+				"transferredOwnership(address,address)": {
+					"details": "Transfers ownership of the contract to another address",
+					"params": {
+						"from": "Address of the previous owner",
+						"to": "Address of the new owner"
+					}
+				}
+			},
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"events": {
+				"PriceUpdated(uint256,uint256)": {
+					"notice": "The price has been updated"
+				},
+				"ProposalCreated(uint256,string,address)": {
+					"notice": "A new proposal was created"
+				},
+				"ProposalFinalized(uint256,bool)": {
+					"notice": "Voting result of the Proposal"
+				},
+				"VoteCast(address,uint256,bool)": {
+					"notice": "A vote has been cast on a proposal"
+				},
+				"addedNFTCollection(uint256,address)": {
+					"notice": "An NFT collection has been added"
+				},
+				"removedNFTCollection(uint256,address)": {
+					"notice": "An NFT collection has been removed"
+				},
+				"transferredOwnership(address,address)": {
+					"notice": "Ownership of Dexhune has been transferred"
+				}
+			},
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/DexhunePriceDAO.sol": "DexhunePriceDAO"
+		},
+		"evmVersion": "paris",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"contracts/DexhuneBase.sol": {
+			"keccak256": "0x787845030bdec105b35d758918e69bf4b37dac9086fb8b8538ec9e085a840780",
+			"license": "BSD-3-Clause",
+			"urls": [
+				"bzz-raw://d7997e80a720dcb31a750c3d7cf6652452d01b9a23b03fbef05234ec3c4a7ebe",
+				"dweb:/ipfs/QmajW3QhELKZNNvpDdbwKiFhBpKvk57PkX97A7r5CCG8Z4"
+			]
+		},
+		"contracts/DexhunePriceDAO.sol": {
+			"keccak256": "0xfbd8de6140615b99895f0f87cf12f7cf611af906b7fe79abab71e224e3972f7f",
+			"license": "BSD-3-Clause",
+			"urls": [
+				"bzz-raw://a9e08a62e69b56da139fb0a614b0873a0d72f4efd6edff2824684279a4633c72",
+				"dweb:/ipfs/QmS6kfwA2XVZurc58f9MqaZ8Rde1VHHGKB2ZbJs8c8kTe7"
+			]
+		},
+		"contracts/DexhuneRoot.sol": {
+			"keccak256": "0xb4cd3668f90db8720925d98dcd4705604a4930c29ec49c5281a6be74a242fd15",
+			"license": "BSD-3-Clause",
+			"urls": [
+				"bzz-raw://427c2d9d7b6ee793cfb639ed3f636bbcd6fea88537298b06e1399f3b701af4ca",
+				"dweb:/ipfs/QmRQ8ACxfmzVnPFWsPJegKR6SFcUdcZNtNkQfg8HrR3VXY"
+			]
+		},
+		"contracts/interfaces/IERC721.sol": {
+			"keccak256": "0x126a262310481d8a1ef4165170bd839d0bf50517bad6ac8dfcdabf94c7d83c32",
+			"license": "BSD-3-Clause",
+			"urls": [
+				"bzz-raw://d9135a40223aa499cb889f963a57ff9bb3eaf12552bd33448cad6c9939edad1d",
+				"dweb:/ipfs/QmUorrMfg48SsbZwm4taAmniUTVwrL2cRzUiVpKHPZoM2Z"
+			]
+		}
+	},
+	"version": 1
+}

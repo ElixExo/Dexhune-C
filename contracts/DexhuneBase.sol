@@ -16,17 +16,12 @@ contract DexhuneBase {
      struct PriceProposal {
         uint256 id;
         string description;
-        uint deadline;
+        uint256 deadline;
         uint256 votesUp;
         uint256 votesDown;
-        uint256 maxVotes;
-        uint256 value;
+        string value;
+        mapping(address => int8) votes;
         bool finalized;
-    }
-
-    struct Account {
-        address addr;
-        uint256 balance;
-        address[] nfts;
+        bool exists;
     }
 }
