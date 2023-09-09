@@ -4,7 +4,6 @@
     "description": "Dexhune is a cryptocurrency system built on Avalanche C-Chain, it is designed to enable the creation of price pegged assets via a new form of 'Distributed' Exchange",
     "main": "truffle-config.js",
     "dependencies": {
-        "@openzeppelin/contracts": "^4.9.3",
         "dotenv": "^16.3.1",
         "web3": "^1.3.3"
     },

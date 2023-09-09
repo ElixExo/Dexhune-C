@@ -21,17 +21,21 @@ contract DexhuneConfig {
     uint256 internal constant PROPOSAL_DURATION = 300; // 15 blocks per 30 seconds
     uint256 internal constant PROPOSAL_BLOCKS = BLOCKS_PER_SECOND * PROPOSAL_DURATION;
 
+    
+
     bool public transferCooldown = true;
     uint public cooldownTimeout = BLOCKS_PER_SECOND * 60;
 }
 
-abstract contract DexhuneRoot is DexhuneConfig {
+abstract contract DexhuneRoot is DexhuneConfig, DexhuneBase {
     address public owner;
-    address[] nftCollections;
+    PriceProposal[] public PriceProposals;
+    address[] public NFTCollections;
 
     constructor() {
         owner = msg.sender;
-        nftCollections = new address[](0);
+        // PriceProposals = new PriceProposal[](0);
+        NFTCollections = new address[](0);
     }
     
     function ensureOwnership() private view {
@@ -50,8 +54,8 @@ abstract contract DexhuneRoot is DexhuneConfig {
         ensureOwnership();
         require(_contractAddress != address(0), "An NFT collection cannot have an empty address");
 
-        uint index = nftCollections.length;
-        nftCollections.push(_contractAddress);
+        uint index = NFTCollections.length;
+        NFTCollections.push(_contractAddress);
         emit addedNFTCollection(index, _contractAddress);
     }
 
@@ -59,13 +63,13 @@ abstract contract DexhuneRoot is DexhuneConfig {
     function removeNFTCollection(uint256 _index) public {
         ensureOwnership();
         
-        require(_index >= 0 && _index < nftCollections.length, "The requested NFT collection does not exist");
+        require(_index >= 0 && _index < NFTCollections.length, "The requested NFT collection does not exist");
 
-        address addr = nftCollections[_index];
+        address addr = NFTCollections[_index];
         
         // https://ethereum.stackexchange.com/a/59234
-        nftCollections[_index] = nftCollections[nftCollections.length - 1];
-        nftCollections.pop();
+        NFTCollections[_index] = NFTCollections[NFTCollections.length - 1];
+        NFTCollections.pop();
         
         emit removedNFTCollection(_index, addr);
     }

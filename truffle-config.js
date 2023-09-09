@@ -58,6 +58,7 @@ module.exports = {
    */
   plugins: ['truffle-plugin-verify'],
   api_keys: {
+    etherscan: '55XUVBFP3Y2FBUZ253GFMBDNQZ347GXZFQ',
     snowtrace: '4N6J9BKZZAYWBYH4RF2UBWU1P3UX8CPSKG'
   },
 
@@ -102,7 +103,9 @@ module.exports = {
     //   production: true    // Treats this network as if it was a public net. (default: false)
     // }
     cchain: {
-      network_id: 43114
+      network_id: 43114,
+      gasPrice: 20000000000,
+      gasPrice: 8000000000
     }
   },
 

@@ -12,78 +12,126 @@
 
 pragma solidity >=0.4.22 <0.9.0;
 
+import "./ERC721.sol";
 import "./DexhuneBase.sol";
 import "./DexhuneRoot.sol";
-import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 
+// import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
+
+error NotEligibleToVote();
+error AlreadyVoted();
+error ProposalDoesNotExist();
+error VotingDeactivated();
+error ProposalIsStillActive();
 
 contract DexhunePriceDAO is DexhuneBase, DexhuneRoot {    
     string price;
-    uint256 proposalCount = 0;
-    mapping(uint256 => PriceProposal) public PriceProposals;
+    mapping(uint256 => mapping(address => int8)) Votes;
+    mapping(address => uint256) tickets;
+
+    uint256 internal constant VERIFICATION_TICKET_DURATION = 86400;
+    uint256 internal constant VERIFICATION_TICKET_BLOCKS = BLOCKS_PER_SECOND * VERIFICATION_TICKET_DURATION;
 
     function getPrice() public view returns(string memory) {
         return price;
     }
 
-    function proposePrice(string memory _desc, string memory _price) public {
-        PriceProposal storage p = PriceProposals[proposalCount];
-        p.id = proposalCount;
-        p.description = _desc;
-        p.value = _price;
-        p.exists = true;
-        p.deadline = block.number + PROPOSAL_BLOCKS;
-        
+    function proposePrice(string memory _desc, string memory _price) external {
+        uint256 id = PriceProposals.length;
+        PriceProposal memory p = PriceProposal(id, _desc, false, 0, 0, 
+            _price, block.number + PROPOSAL_BLOCKS);
+        // p.id = id;
+        // p.description = _desc;
+        // p.value = _price;
+        // p.exists = true;
+        // p.deadline = block.number + PROPOSAL_BLOCKS;
 
-        emit ProposalCreated(proposalCount, _desc, msg.sender);
-        proposalCount++;
+        PriceProposals.push(p);
+        
+        emit ProposalCreated(id, _desc, msg.sender);
     }
 
-
-    function castPriceVote(uint256 _id, bool _vote) public {
-        require(ensureEligible(), "You are not eligible to vote.");
+    function voteUp(uint256 _id) external {
+        if (block.number > tickets[msg.sender]) {
+            revert NotEligibleToVote();
+        }
         
-        PriceProposal storage p = PriceProposals[_id];
-        require(p.exists, "The requested proposal does not exist");
-        require(
-            block.number < p.deadline,
-            "Voting has been deactivated for this proposal"
-        );
-        
-        int8 value = p.votes[msg.sender];
-        bool hasVoted = value == 1 || value == -1;
+        PriceProposal storage p = ensureProposal(_id);
 
-        require(!hasVoted, "You are not allowed to vote more than once");        
-
-        if (_vote) {
-            p.votesUp++;
-            p.votes[msg.sender] = 1;
-        } else {
-            p.votesDown++;
-            p.votes[msg.sender] = -1;
+        if (block.number > p.deadline) {
+            revert VotingDeactivated();
         }
 
-        emit VoteCast(msg.sender, _id, _vote);
+        int8 value = Votes[_id][msg.sender];
+
+        if (value == 1 || value == -1) {
+            revert AlreadyVoted();
+        }
+
+        p.votesUp++;
+        Votes[_id][msg.sender] = 1;
+        emit VotedUp(msg.sender, _id);
     }
 
-    function finalizePriceProposal(uint256 _id) public {
-        PriceProposal storage p = PriceProposals[_id];
-        require(p.exists, "The requested proposal does not exist");
-        require(
-            block.number > p.deadline,
-            "The requested proposal is still active"
-        );
+    function voteDown(uint256 _id) external {
+        if (!ensureEligible()) {
+            revert NotEligibleToVote();
+        }
+        
+        PriceProposal storage p = ensureProposal(_id);
+
+        if (block.number > p.deadline) {
+            revert VotingDeactivated();
+        }
+        
+        int8 value = Votes[_id][msg.sender];
+
+        if (value == 1 || value == -1) {
+            revert AlreadyVoted();
+        }
+
+        p.votesDown++;
+        Votes[_id][msg.sender] = -1;
+        emit VotedDown(msg.sender, _id);
+    }
+
+    // function doProposal(uint256 _id) external {
+    //     if (block.number > tickets[msg.sender]) {
+    //         revert NotEligibleToVote();
+    //     }
+        
+    //     PriceProposal storage p = ensureProposal(_id);
+
+    //     if (block.number > p.deadline) {
+    //         revert VotingDeactivated();
+    //     }
+        
+    //     int8 value = Votes[_id][msg.sender];
+
+    //     if (value == 1 || value == -1) {
+    //         revert AlreadyVoted();
+    //     }
+
+    //     emit VotedDown(msg.sender, _id);
+    // }
+
+    function finalizePriceProposal(uint256 _id) external {
+        PriceProposal storage p = ensureProposal(_id);
+
+        if (block.number < p.deadline) {
+            revert ProposalIsStillActive();
+        }
 
         if (p.finalized) {
             return;
         }
 
         if (p.votesUp > p.votesDown) {
-            string memory old = price;
+            emit PriceUpdated(price, p.value);
             price = p.value;
 
             emit ProposalFinalized(_id, true);
-            emit PriceUpdated(old, price);
+            
         } else {
             emit ProposalFinalized(_id, false);
         }
@@ -92,8 +140,8 @@ contract DexhunePriceDAO is DexhuneBase, DexhuneRoot {
     }
 
     function ensureEligible() private view returns(bool) {
-        for (uint i = 0; i < nftCollections.length; i++) {
-            address addr = nftCollections[i];
+        for (uint i = 0; i < NFTCollections.length; i++) {
+            address addr = NFTCollections[i];
             IERC721 collection = IERC721(addr);
 
             if (collection.balanceOf(msg.sender) > 0) {
@@ -104,6 +152,22 @@ contract DexhunePriceDAO is DexhuneBase, DexhuneRoot {
         return false;
     }
 
+    function ensureProposal(uint256 _id) private view returns(PriceProposal storage) {
+        if (_id >= PriceProposals.length) {
+            revert ProposalDoesNotExist();
+        }
+
+        return PriceProposals[_id];
+    }
+
+    function renewEligibility() external {
+        if (ensureEligible()) {
+            tickets[msg.sender] = block.number + VERIFICATION_TICKET_BLOCKS;
+        } else {
+            require(false, "You need at least one NFT to be eligible. Please purchase and NFT and try again.");
+        }
+    }
+
     /// @notice A new proposal was created
     /// @dev Notifies that a new proposal was created
     /// @param id Id of the proposal
@@ -111,13 +175,17 @@ contract DexhunePriceDAO is DexhuneBase, DexhuneRoot {
     /// @param proposer Address of the proposer
     event ProposalCreated(uint256 id, string description, address proposer);
 
-
-    /// @notice A vote has been cast on a proposal
-    /// @dev Notifies that a vote has been casted
+    /// @notice A proposal has been voted up
+    /// @dev Notifies that a proposal has been voted up
     /// @param voter Address of the voter
     /// @param proposalId Id of the proposal
-    /// @param votedFor Indicates whether the voter voted for or against
-    event VoteCast(address voter, uint256 proposalId, bool votedFor);
+    event VotedUp(address voter, uint256 proposalId);
+
+    /// @notice A proposal has been voted down
+    /// @dev Notifies that a proposal has been voted down
+    /// @param voter Address of the voter
+    /// @param proposalId Id of the proposal
+    event VotedDown(address voter, uint256 proposalId);
 
     /// @notice Voting result of the Proposal
     /// @dev Notifies that a proposal has been finalized
