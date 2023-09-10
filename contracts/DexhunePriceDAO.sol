@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: BSD-3-Clause
-/// @title Dexhune DAO Logic
+/// @title Dexhune Price DAO Logic
 /*
 *    ........................................................
 *    .%%%%%...%%%%%%..%%..%%..%%..%%..%%..%%..%%..%%..%%%%%%.
@@ -16,8 +16,6 @@ import "./ERC721.sol";
 import "./DexhuneBase.sol";
 import "./DexhuneRoot.sol";
 
-// import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
-
 error NotEligibleToVote();
 error AlreadyVoted();
 error ProposalDoesNotExist();
@@ -26,11 +24,8 @@ error ProposalIsStillActive();
 
 contract DexhunePriceDAO is DexhuneBase, DexhuneRoot {    
     string price;
-    mapping(uint256 => mapping(address => int8)) Votes;
+    mapping(uint256 => mapping(address => int8)) votes;
     mapping(address => uint256) tickets;
-
-    uint256 internal constant VERIFICATION_TICKET_DURATION = 86400;
-    uint256 internal constant VERIFICATION_TICKET_BLOCKS = BLOCKS_PER_SECOND * VERIFICATION_TICKET_DURATION;
 
     function getPrice() public view returns(string memory) {
         return price;
@@ -38,13 +33,8 @@ contract DexhunePriceDAO is DexhuneBase, DexhuneRoot {
 
     function proposePrice(string memory _desc, string memory _price) external {
         uint256 id = PriceProposals.length;
-        PriceProposal memory p = PriceProposal(id, _desc, false, 0, 0, 
+        PriceProposal memory p = PriceProposal(_desc, false, 0, 0, 
             _price, block.number + PROPOSAL_BLOCKS);
-        // p.id = id;
-        // p.description = _desc;
-        // p.value = _price;
-        // p.exists = true;
-        // p.deadline = block.number + PROPOSAL_BLOCKS;
 
         PriceProposals.push(p);
         
@@ -52,7 +42,7 @@ contract DexhunePriceDAO is DexhuneBase, DexhuneRoot {
     }
 
     function voteUp(uint256 _id) external {
-        if (block.number > tickets[msg.sender]) {
+        if (!ensureEligible()) {
             revert NotEligibleToVote();
         }
         
@@ -62,14 +52,14 @@ contract DexhunePriceDAO is DexhuneBase, DexhuneRoot {
             revert VotingDeactivated();
         }
 
-        int8 value = Votes[_id][msg.sender];
+        int8 value = votes[_id][msg.sender];
 
         if (value == 1 || value == -1) {
             revert AlreadyVoted();
         }
 
         p.votesUp++;
-        Votes[_id][msg.sender] = 1;
+        votes[_id][msg.sender] = 1;
         emit VotedUp(msg.sender, _id);
     }
 
@@ -84,36 +74,16 @@ contract DexhunePriceDAO is DexhuneBase, DexhuneRoot {
             revert VotingDeactivated();
         }
         
-        int8 value = Votes[_id][msg.sender];
+        int8 value = votes[_id][msg.sender];
 
         if (value == 1 || value == -1) {
             revert AlreadyVoted();
         }
 
         p.votesDown++;
-        Votes[_id][msg.sender] = -1;
+        votes[_id][msg.sender] = -1;
         emit VotedDown(msg.sender, _id);
     }
-
-    // function doProposal(uint256 _id) external {
-    //     if (block.number > tickets[msg.sender]) {
-    //         revert NotEligibleToVote();
-    //     }
-        
-    //     PriceProposal storage p = ensureProposal(_id);
-
-    //     if (block.number > p.deadline) {
-    //         revert VotingDeactivated();
-    //     }
-        
-    //     int8 value = Votes[_id][msg.sender];
-
-    //     if (value == 1 || value == -1) {
-    //         revert AlreadyVoted();
-    //     }
-
-    //     emit VotedDown(msg.sender, _id);
-    // }
 
     function finalizePriceProposal(uint256 _id) external {
         PriceProposal storage p = ensureProposal(_id);
@@ -158,14 +128,6 @@ contract DexhunePriceDAO is DexhuneBase, DexhuneRoot {
         }
 
         return PriceProposals[_id];
-    }
-
-    function renewEligibility() external {
-        if (ensureEligible()) {
-            tickets[msg.sender] = block.number + VERIFICATION_TICKET_BLOCKS;
-        } else {
-            require(false, "You need at least one NFT to be eligible. Please purchase and NFT and try again.");
-        }
     }
 
     /// @notice A new proposal was created
