@@ -12,7 +12,6 @@
 
 pragma solidity >=0.4.22 <0.9.0;
 
-import "./ERC721.sol";
 import "./DexhuneBase.sol";
 import "./DexhuneRoot.sol";
 
@@ -21,34 +20,80 @@ error AlreadyVoted();
 error ProposalDoesNotExist();
 error VotingDeactivated();
 error ProposalIsStillActive();
+error ProposalHasExpired();
+
+interface IERC721Proxy {
+    /**
+     * @dev Returns the number of tokens in ``owner``'s account.
+     */
+    function balanceOf(address owner) external view returns (uint256 balance);
+}
 
 contract DexhunePriceDAO is DexhuneBase, DexhuneRoot {    
     string price;
+    uint256 votingDeadline;
+    uint256 deadline;
+
     mapping(uint256 => mapping(address => int8)) votes;
     mapping(address => uint256) tickets;
+
+    /// @dev Total proposal duration in seconds
+    uint256 internal constant PROPOSAL_DURATION = 600; // 15 blocks per 30 seconds\
+
+    /// @dev Total proposal voting duration in seconds
+    uint256 internal constant PROPOSAL_VOTING_DURATION = 300;
+    uint256 internal constant PROPOSAL_BLOCKS = BLOCKS_PER_SECOND * PROPOSAL_DURATION;
+    uint256 internal constant PROPOSAL_VOTING_BLOCKS = BLOCKS_PER_SECOND * PROPOSAL_VOTING_DURATION;
+
+    uint256 internal constant VERIFICATION_TICKET_DURATION = 3600; // 1 hour
+    uint256 internal constant VERIFICATION_TICKET_BLOCKS = BLOCKS_PER_SECOND * VERIFICATION_TICKET_DURATION;
 
     function getPrice() public view returns(string memory) {
         return price;
     }
 
+    function latestProposal() public view returns (PriceProposal memory) {
+        return PriceProposals[PriceProposals.length - 1];
+    }
+
+    function votingEndsAt() public view returns (uint256) {
+        return votingDeadline;
+    }
+
+    function proposalExpiresAt() public view returns (uint256) {
+        return deadline;
+    }
+
     function proposePrice(string memory _desc, string memory _price) external {
         uint256 id = PriceProposals.length;
-        PriceProposal memory p = PriceProposal(_desc, false, 0, 0, 
-            _price, block.number + PROPOSAL_BLOCKS);
+        if (id > 0) {
+            if (!PriceProposals[id - 1].finalized) {
+                if (deadline > block.number) {
+                    revert ProposalIsStillActive();
+                }
+            }
+        }
+        
+        PriceProposal memory p = PriceProposal(_desc, _price, 
+            0, 0, false);
+
+        votingDeadline = block.number + PROPOSAL_VOTING_BLOCKS; 
+        deadline = block.number + PROPOSAL_BLOCKS;
 
         PriceProposals.push(p);
         
         emit ProposalCreated(id, _desc, msg.sender);
     }
 
-    function voteUp(uint256 _id) external {
+    function voteUp() external {
         if (!ensureEligible()) {
             revert NotEligibleToVote();
         }
-        
+
+        uint256 _id = PriceProposals.length - 1;
         PriceProposal storage p = ensureProposal(_id);
 
-        if (block.number > p.deadline) {
+        if (block.number >= votingDeadline) {
             revert VotingDeactivated();
         }
 
@@ -63,14 +108,15 @@ contract DexhunePriceDAO is DexhuneBase, DexhuneRoot {
         emit VotedUp(msg.sender, _id);
     }
 
-    function voteDown(uint256 _id) external {
+    function voteDown() external {
         if (!ensureEligible()) {
             revert NotEligibleToVote();
         }
         
+        uint256 _id = PriceProposals.length - 1;
         PriceProposal storage p = ensureProposal(_id);
 
-        if (block.number > p.deadline) {
+        if (block.number >= votingDeadline) {
             revert VotingDeactivated();
         }
         
@@ -85,11 +131,16 @@ contract DexhunePriceDAO is DexhuneBase, DexhuneRoot {
         emit VotedDown(msg.sender, _id);
     }
 
-    function finalizePriceProposal(uint256 _id) external {
+    function finalizeProposal() external {
+        uint256 _id = PriceProposals.length - 1;
         PriceProposal storage p = ensureProposal(_id);
-
-        if (block.number < p.deadline) {
+        
+        if (votingDeadline > block.number) {
             revert ProposalIsStillActive();
+        }
+
+        if (block.number >= deadline) {
+            revert ProposalHasExpired();
         }
 
         if (p.finalized) {
@@ -109,12 +160,17 @@ contract DexhunePriceDAO is DexhuneBase, DexhuneRoot {
         p.finalized = true;
     }
 
-    function ensureEligible() private view returns(bool) {
+    function ensureEligible() private returns(bool) {
+        if (block.number < tickets[msg.sender]) {
+            return true;
+        }
+        
         for (uint i = 0; i < NFTCollections.length; i++) {
             address addr = NFTCollections[i];
-            IERC721 collection = IERC721(addr);
+            IERC721Proxy collection = IERC721Proxy(addr);
 
             if (collection.balanceOf(msg.sender) > 0) {
+                tickets[msg.sender] = block.number + VERIFICATION_TICKET_BLOCKS;
                 return true;
             }
         }

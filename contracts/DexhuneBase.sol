@@ -15,10 +15,9 @@ pragma solidity >=0.4.22 <0.9.0;
 contract DexhuneBase {    
      struct PriceProposal {
         string description;
-        bool finalized;
+        string value;
         uint256 votesUp;
         uint256 votesDown;
-        string value;
-        uint256 deadline;   
+        bool finalized;
     }
 }

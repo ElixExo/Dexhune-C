@@ -1,0 +1,27 @@
+// SPDX-License-Identifier: BSD-3-Clause
+/// @title Mock contract for ERC721 related tests
+/// @dev Allows minting and checking of nft balance. 
+/*
+*    ........................................................
+*    .%%%%%...%%%%%%..%%..%%..%%..%%..%%..%%..%%..%%..%%%%%%.
+*    .%%..%%..%%.......%%%%...%%..%%..%%..%%..%%%.%%..%%.....
+*    .%%..%%..%%%%......%%....%%%%%%..%%..%%..%%.%%%..%%%%...
+*    .%%..%%..%%.......%%%%...%%..%%..%%..%%..%%..%%..%%.....
+*    .%%%%%...%%%%%%..%%..%%..%%..%%...%%%%...%%..%%..%%%%%%.
+*    ........................................................
+*/
+
+contract MockNFT {
+    mapping(address => uint256) wallets;
+
+    function mint(address user) external {
+        uint256 count = wallets[user];
+
+        count++;
+        wallets[user] = count;
+    }
+
+    function balanceOf(address owner) external view returns (uint256 balance) {
+        return wallets[owner];
+    }
+}

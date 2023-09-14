@@ -1,0 +1,10 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "DexhuneBase",
+  "sourceName": "contracts/DexhuneBase.sol",
+  "abi": [],
+  "bytecode": "0x6080604052348015600f57600080fd5b50603f80601d6000396000f3fe6080604052600080fdfea26469706673582212204dcbec8cb484b47eec6a1d5f076298a8d4fef418c0d199dfb1eac5dffad12ad264736f6c63430008120033",
+  "deployedBytecode": "0x6080604052600080fdfea26469706673582212204dcbec8cb484b47eec6a1d5f076298a8d4fef418c0d199dfb1eac5dffad12ad264736f6c63430008120033",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}

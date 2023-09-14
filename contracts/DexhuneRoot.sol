@@ -17,11 +17,6 @@ contract DexhuneConfig {
     //  30 seconds or 15 blocks, but in the testnet version we'll do 5 minutes
     uint256 internal constant MAXIMUM_VOTES_PER_PROPOSAL = 1000;
     uint256 internal constant BLOCKS_PER_SECOND = 2;
-    /// @dev Total proposal duration in seconds
-    uint256 internal constant PROPOSAL_DURATION = 300; // 15 blocks per 30 seconds
-    uint256 internal constant PROPOSAL_BLOCKS = BLOCKS_PER_SECOND * PROPOSAL_DURATION;
-
-    
 
     bool public transferCooldown = true;
     uint public cooldownTimeout = BLOCKS_PER_SECOND * 60;
