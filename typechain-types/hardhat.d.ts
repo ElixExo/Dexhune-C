@@ -25,6 +25,10 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.DexhunePriceDAO__factory>;
     getContractFactory(
+      name: "IERC721Proxy",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IERC721Proxy__factory>;
+    getContractFactory(
       name: "DexhuneConfig",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.DexhuneConfig__factory>;
@@ -65,6 +69,11 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.DexhunePriceDAO>;
     getContractAt(
+      name: "IERC721Proxy",
+      address: string | ethers.Addressable,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IERC721Proxy>;
+    getContractAt(
       name: "DexhuneConfig",
       address: string | ethers.Addressable,
       signer?: ethers.Signer
@@ -108,6 +117,10 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.DexhunePriceDAO>;
     deployContract(
+      name: "IERC721Proxy",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IERC721Proxy>;
+    deployContract(
       name: "DexhuneConfig",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.DexhuneConfig>;
@@ -147,6 +160,11 @@ declare module "hardhat/types/runtime" {
       args: any[],
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.DexhunePriceDAO>;
+    deployContract(
+      name: "IERC721Proxy",
+      args: any[],
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IERC721Proxy>;
     deployContract(
       name: "DexhuneConfig",
       args: any[],

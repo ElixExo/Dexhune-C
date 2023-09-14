@@ -3,20 +3,24 @@
 /* eslint-disable */
 import type * as dexhuneErc20Sol from "./DexhuneERC20.sol";
 export type { dexhuneErc20Sol };
+import type * as dexhunePriceDaoSol from "./DexhunePriceDAO.sol";
+export type { dexhunePriceDaoSol };
 import type * as dexhuneRootSol from "./DexhuneRoot.sol";
 export type { dexhuneRootSol };
 import type * as erc721Sol from "./ERC721.sol";
 export type { erc721Sol };
 import type * as mockups from "./mockups";
 export type { mockups };
-export type { DexhunePriceDAO } from "./DexhunePriceDAO";
 export type { Lock } from "./Lock";
 export * as factories from "./factories";
 export type { DexhuneERC20 } from "./DexhuneERC20.sol/DexhuneERC20";
 export { DexhuneERC20__factory } from "./factories/DexhuneERC20.sol/DexhuneERC20__factory";
 export type { IERC20 } from "./DexhuneERC20.sol/IERC20";
 export { IERC20__factory } from "./factories/DexhuneERC20.sol/IERC20__factory";
-export { DexhunePriceDAO__factory } from "./factories/DexhunePriceDAO__factory";
+export type { DexhunePriceDAO } from "./DexhunePriceDAO.sol/DexhunePriceDAO";
+export { DexhunePriceDAO__factory } from "./factories/DexhunePriceDAO.sol/DexhunePriceDAO__factory";
+export type { IERC721Proxy } from "./DexhunePriceDAO.sol/IERC721Proxy";
+export { IERC721Proxy__factory } from "./factories/DexhunePriceDAO.sol/IERC721Proxy__factory";
 export type { DexhuneConfig } from "./DexhuneRoot.sol/DexhuneConfig";
 export { DexhuneConfig__factory } from "./factories/DexhuneRoot.sol/DexhuneConfig__factory";
 export type { DexhuneRoot } from "./DexhuneRoot.sol/DexhuneRoot";

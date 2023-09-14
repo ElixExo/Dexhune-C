@@ -37,8 +37,8 @@
       ]
     },
     "C:\\Users\\Prince\\source\\repos\\Peng_Protocol\\dexhune\\contracts\\DexhuneRoot.sol": {
-      "lastModificationDate": 1694556026481,
-      "contentHash": "4399127ae88971bf0ec84b9ea57a61dd",
+      "lastModificationDate": 1694649665790,
+      "contentHash": "ef5bad5e9371b7c1a5ea9544180f6133",
       "sourceName": "contracts/DexhuneRoot.sol",
       "solcConfig": {
         "version": "0.8.18",
@@ -64,7 +64,6 @@
         }
       },
       "imports": [
-        "./ERC721.sol",
         "./DexhuneBase.sol"
       ],
       "versionPragmas": [
@@ -75,45 +74,9 @@
         "DexhuneRoot"
       ]
     },
-    "C:\\Users\\Prince\\source\\repos\\Peng_Protocol\\dexhune\\contracts\\ERC721.sol": {
-      "lastModificationDate": 1694264411434,
-      "contentHash": "49681e95c936aee41ba36795b389faa2",
-      "sourceName": "contracts/ERC721.sol",
-      "solcConfig": {
-        "version": "0.8.18",
-        "settings": {
-          "optimizer": {
-            "enabled": false,
-            "runs": 200
-          },
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [],
-      "versionPragmas": [
-        ">=0.4.22 <0.9.0"
-      ],
-      "artifacts": [
-        "IERC165",
-        "IERC721"
-      ]
-    },
     "C:\\Users\\Prince\\source\\repos\\Peng_Protocol\\dexhune\\contracts\\DexhunePriceDAO.sol": {
-      "lastModificationDate": 1694644100097,
-      "contentHash": "cb196d37eaec1f413f157cd60e66e446",
+      "lastModificationDate": 1694651258337,
+      "contentHash": "da78fede4dcd3097871ab7bd62797f6a",
       "sourceName": "contracts/DexhunePriceDAO.sol",
       "solcConfig": {
         "version": "0.8.18",
@@ -139,7 +102,6 @@
         }
       },
       "imports": [
-        "./ERC721.sol",
         "./DexhuneBase.sol",
         "./DexhuneRoot.sol"
       ],
@@ -147,7 +109,8 @@
         ">=0.4.22 <0.9.0"
       ],
       "artifacts": [
-        "DexhunePriceDAO"
+        "DexhunePriceDAO",
+        "IERC721Proxy"
       ]
     },
     "C:\\Users\\Prince\\source\\repos\\Peng_Protocol\\dexhune\\contracts\\DexhuneERC20.sol": {
@@ -186,41 +149,6 @@
       "artifacts": [
         "DexhuneERC20",
         "IERC20"
-      ]
-    },
-    "C:\\Users\\Prince\\source\\repos\\Peng_Protocol\\dexhune\\contracts\\Lock.sol": {
-      "lastModificationDate": 1694556051572,
-      "contentHash": "ae66265769cc28ebdaa34881df95bc5e",
-      "sourceName": "contracts/Lock.sol",
-      "solcConfig": {
-        "version": "0.8.18",
-        "settings": {
-          "optimizer": {
-            "enabled": false,
-            "runs": 200
-          },
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [],
-      "versionPragmas": [
-        "^0.8.9"
-      ],
-      "artifacts": [
-        "Lock"
       ]
     },
     "C:\\Users\\Prince\\source\\repos\\Peng_Protocol\\dexhune\\contracts\\mockups\\MockNFT.sol": {

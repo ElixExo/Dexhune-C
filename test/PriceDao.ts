@@ -11,7 +11,7 @@
 */
 
 import { loadFixture, time } from "@nomicfoundation/hardhat-network-helpers";
-import { expect, use } from "chai";
+import { expect } from "chai";
 import { ethers } from "hardhat";
 import { DexhunePriceDAO, MockNFT } from "../typechain-types";
 import { HardhatEthersSigner } from "@nomicfoundation/hardhat-ethers/signers";
@@ -58,8 +58,8 @@ describe("PriceDao", function() {
             await dao.connect(signer).voteUp();
         }
 
-        const current = await dao.currentProposal();
-        expect(current.votesUp).eq(signers.length);
+        const latest = await dao.latestProposal();
+        expect(latest.votesUp).eq(signers.length);
     }
 
     async function simulateVoteAgainst(dao: DexhunePriceDAO, mockNft: MockNFT) {
@@ -72,8 +72,8 @@ describe("PriceDao", function() {
             await dao.connect(signer).voteDown();
         }
 
-        const current = await dao.currentProposal();
-        expect(current.votesDown).eq(signers.length);
+        const latest = await dao.latestProposal();
+        expect(latest.votesDown).eq(signers.length);
     }
 
     describe("Deployment", function() {
@@ -85,10 +85,10 @@ describe("PriceDao", function() {
 
             await proposeFirstPrice(PriceDao);
 
-            const current = await PriceDao.currentProposal();
+            const latest = await PriceDao.latestProposal();
             
-            expect(current.description).to.eq(desc);
-            expect(current.value).to.eq(price);            
+            expect(latest.description).to.eq(desc);
+            expect(latest.value).to.eq(price);            
         });
 
         it ("Should not allow multple proposals at a time", async () => {

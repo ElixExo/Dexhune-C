@@ -1,22 +1,22 @@
 {
   "_format": "hh-sol-artifact-1",
-  "contractName": "IERC165",
-  "sourceName": "contracts/ERC721.sol",
+  "contractName": "IERC721Proxy",
+  "sourceName": "contracts/DexhunePriceDAO.sol",
   "abi": [
     {
       "inputs": [
         {
-          "internalType": "bytes4",
-          "name": "interfaceId",
-          "type": "bytes4"
+          "internalType": "address",
+          "name": "owner",
+          "type": "address"
         }
       ],
-      "name": "supportsInterface",
+      "name": "balanceOf",
       "outputs": [
         {
-          "internalType": "bool",
-          "name": "",
-          "type": "bool"
+          "internalType": "uint256",
+          "name": "balance",
+          "type": "uint256"
         }
       ],
       "stateMutability": "view",
