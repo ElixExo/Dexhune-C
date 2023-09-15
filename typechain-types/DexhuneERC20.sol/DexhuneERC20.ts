@@ -30,6 +30,7 @@ export interface DexhuneERC20Interface extends Interface {
       | "approve"
       | "balanceOf"
       | "decimals"
+      | "getOwner"
       | "mint"
       | "mintToDao"
       | "mintToExchange"
@@ -57,6 +58,7 @@ export interface DexhuneERC20Interface extends Interface {
     values: [AddressLike]
   ): string;
   encodeFunctionData(functionFragment: "decimals", values?: undefined): string;
+  encodeFunctionData(functionFragment: "getOwner", values?: undefined): string;
   encodeFunctionData(functionFragment: "mint", values?: undefined): string;
   encodeFunctionData(functionFragment: "mintToDao", values?: undefined): string;
   encodeFunctionData(
@@ -90,6 +92,7 @@ export interface DexhuneERC20Interface extends Interface {
   decodeFunctionResult(functionFragment: "approve", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "decimals", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "getOwner", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "mint", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "mintToDao", data: BytesLike): Result;
   decodeFunctionResult(
@@ -212,6 +215,8 @@ export interface DexhuneERC20 extends BaseContract {
 
   decimals: TypedContractMethod<[], [bigint], "view">;
 
+  getOwner: TypedContractMethod<[], [string], "view">;
+
   mint: TypedContractMethod<[], [void], "nonpayable">;
 
   mintToDao: TypedContractMethod<[], [void], "nonpayable">;
@@ -268,6 +273,9 @@ export interface DexhuneERC20 extends BaseContract {
   getFunction(
     nameOrSignature: "decimals"
   ): TypedContractMethod<[], [bigint], "view">;
+  getFunction(
+    nameOrSignature: "getOwner"
+  ): TypedContractMethod<[], [string], "view">;
   getFunction(
     nameOrSignature: "mint"
   ): TypedContractMethod<[], [void], "nonpayable">;

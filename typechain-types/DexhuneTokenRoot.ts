@@ -23,6 +23,7 @@ import type {
 export interface DexhuneTokenRootInterface extends Interface {
   getFunction(
     nameOrSignature:
+      | "getOwner"
       | "mint"
       | "mintToDao"
       | "mintToExchange"
@@ -30,6 +31,7 @@ export interface DexhuneTokenRootInterface extends Interface {
       | "setExchangeAddress"
   ): FunctionFragment;
 
+  encodeFunctionData(functionFragment: "getOwner", values?: undefined): string;
   encodeFunctionData(functionFragment: "mint", values?: undefined): string;
   encodeFunctionData(functionFragment: "mintToDao", values?: undefined): string;
   encodeFunctionData(
@@ -45,6 +47,7 @@ export interface DexhuneTokenRootInterface extends Interface {
     values: [AddressLike]
   ): string;
 
+  decodeFunctionResult(functionFragment: "getOwner", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "mint", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "mintToDao", data: BytesLike): Result;
   decodeFunctionResult(
@@ -104,6 +107,8 @@ export interface DexhuneTokenRoot extends BaseContract {
     event?: TCEvent
   ): Promise<this>;
 
+  getOwner: TypedContractMethod<[], [string], "view">;
+
   mint: TypedContractMethod<[], [void], "nonpayable">;
 
   mintToDao: TypedContractMethod<[], [void], "nonpayable">;
@@ -122,6 +127,9 @@ export interface DexhuneTokenRoot extends BaseContract {
     key: string | FunctionFragment
   ): T;
 
+  getFunction(
+    nameOrSignature: "getOwner"
+  ): TypedContractMethod<[], [string], "view">;
   getFunction(
     nameOrSignature: "mint"
   ): TypedContractMethod<[], [void], "nonpayable">;

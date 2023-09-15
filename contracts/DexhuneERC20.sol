@@ -114,7 +114,7 @@ contract DexhuneERC20 is IERC20, DexhuneTokenRoot {
     }
 
     function totalSupply() public view returns (uint256) {
-        return _toUInt(_supply);
+        return uint128(_supply);
     }
 
     function balanceOf(address owner) public view returns (uint256 balance) {

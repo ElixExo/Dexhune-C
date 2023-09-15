@@ -17,8 +17,8 @@ import "./libraries/ABDKMath64x64.sol";
 contract DexhuneTokenRoot  {
     address private _owner;
 
-    address private _exchangeAddress;
-    address private _daoAddress;
+    address private _exchangeAddress = address(0);
+    address private _daoAddress = address(0);
     uint256 private _totalMints;
 
     address[] private _holders;
@@ -43,6 +43,8 @@ contract DexhuneTokenRoot  {
     int32 private constant INITIAL_MINT_VALUE = 10_000_000;
     int32 private constant EXCHANGE_MINT_VALUE = 1_400_000;
     int32 private constant DAO_MINT_VALUE = 5760;
+
+    address private constant DEAD_OWNER_ADDRESS = 0x000000000000000000000000000000000000dEaD;
     
 
     error UnauthorizedAccount(address account);
@@ -51,10 +53,15 @@ contract DexhuneTokenRoot  {
     error MintedTooEarly(uint256 timeRemaining);
     error MintLimitReached();
     error InvalidBalance(address addr, int128 balance);
+    error ExchangeAddressNotSet();
+    error PriceDaoAddressNotSet();
 
     
     constructor() {
         _owner = msg.sender;
+
+        _supply = INITIAL_MINT_VALUE;
+        _setBalance(_owner, _supply);
     }
 
     modifier ownerOnly() {
@@ -70,12 +77,25 @@ contract DexhuneTokenRoot  {
 
     function setDaoAddress(address addr) external ownerOnly {
         _daoAddress = addr;
+
+        if (_exchangeAddress != address(0)) {
+            _renounceContract();
+        }
     }
 
     function setExchangeAddress(address addr) external ownerOnly {
         _exchangeAddress = addr;
-        
+
+        if (_daoAddress != address(0)) {
+            _renounceContract();
+        }
     }
+
+    function getOwner() external view returns(address) {
+        return _owner;
+    }
+
+    function canMintExchangeIn
 
     function mint() external {
         if (_mintCount >= MINT_LIMIT) {
@@ -101,6 +121,10 @@ contract DexhuneTokenRoot  {
             revert MintedTooEarly(block.timestamp - _nextExchangeMintTime);
         }
 
+        if (_exchangeAddress == address(0)) {
+            revert ExchangeAddressNotSet();
+        }
+
         _nextExchangeMintTime = block.timestamp + EXCHANGE_MINT_INTERVAL;
 
         int128 balance = balances[_exchangeAddress];
@@ -114,12 +138,20 @@ contract DexhuneTokenRoot  {
             revert MintedTooEarly(block.timestamp - _nextDaoMintTime);
         }
 
+        if (_daoAddress == address(0)) {
+            revert PriceDaoAddressNotSet();
+        }
+
         _nextDaoMintTime = block.timestamp + DAO_MINT_INTERVAL;
 
         int128 balance = balances[_daoAddress];
         balance += DAO_MINT_VALUE;
 
         _setBalance(_daoAddress, balance);
+    }
+
+    function _renounceContract() private {
+        _owner = DEAD_OWNER_ADDRESS;
     }
 
     function _getBalance(address addr) internal view returns(int128) {
@@ -133,8 +165,7 @@ contract DexhuneTokenRoot  {
     }
 
     function _getFullBalance(address addr) internal view returns(uint256) {
-        int128 balance = _getBalance(addr);
-        return _toUInt(balance);
+        return uint128(_getBalance(addr));
     }
 
     function _setBalance(address addr, int128 balance) private {
@@ -192,9 +223,5 @@ contract DexhuneTokenRoot  {
         res = ABDKMath64x64.div(res, 10000);
 
         return res;
-    }
-
-    function _toUInt(int128 value) internal pure returns(uint256) {
-        return ABDKMath64x64.toUInt(value);
     }
 }
