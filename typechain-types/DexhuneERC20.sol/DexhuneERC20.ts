@@ -29,13 +29,16 @@ export interface DexhuneERC20Interface extends Interface {
       | "allowance"
       | "approve"
       | "balanceOf"
-      | "cooldownTimeout"
       | "decimals"
+      | "mint"
+      | "mintToDao"
+      | "mintToExchange"
       | "name"
+      | "setDaoAddress"
+      | "setExchangeAddress"
       | "symbol"
       | "totalSupply"
       | "transfer"
-      | "transferCooldown"
       | "transferFrom"
   ): FunctionFragment;
 
@@ -53,12 +56,22 @@ export interface DexhuneERC20Interface extends Interface {
     functionFragment: "balanceOf",
     values: [AddressLike]
   ): string;
+  encodeFunctionData(functionFragment: "decimals", values?: undefined): string;
+  encodeFunctionData(functionFragment: "mint", values?: undefined): string;
+  encodeFunctionData(functionFragment: "mintToDao", values?: undefined): string;
   encodeFunctionData(
-    functionFragment: "cooldownTimeout",
+    functionFragment: "mintToExchange",
     values?: undefined
   ): string;
-  encodeFunctionData(functionFragment: "decimals", values?: undefined): string;
   encodeFunctionData(functionFragment: "name", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "setDaoAddress",
+    values: [AddressLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setExchangeAddress",
+    values: [AddressLike]
+  ): string;
   encodeFunctionData(functionFragment: "symbol", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "totalSupply",
@@ -69,10 +82,6 @@ export interface DexhuneERC20Interface extends Interface {
     values: [AddressLike, BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: "transferCooldown",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
     functionFragment: "transferFrom",
     values: [AddressLike, AddressLike, BigNumberish]
   ): string;
@@ -80,22 +89,28 @@ export interface DexhuneERC20Interface extends Interface {
   decodeFunctionResult(functionFragment: "allowance", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "approve", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "decimals", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "mint", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "mintToDao", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "cooldownTimeout",
+    functionFragment: "mintToExchange",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "decimals", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "name", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "setDaoAddress",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "setExchangeAddress",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "symbol", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "totalSupply",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "transfer", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "transferCooldown",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(
     functionFragment: "transferFrom",
     data: BytesLike
@@ -193,13 +208,25 @@ export interface DexhuneERC20 extends BaseContract {
     "nonpayable"
   >;
 
-  balanceOf: TypedContractMethod<[_owner: AddressLike], [bigint], "view">;
-
-  cooldownTimeout: TypedContractMethod<[], [bigint], "view">;
+  balanceOf: TypedContractMethod<[owner: AddressLike], [bigint], "view">;
 
   decimals: TypedContractMethod<[], [bigint], "view">;
 
+  mint: TypedContractMethod<[], [void], "nonpayable">;
+
+  mintToDao: TypedContractMethod<[], [void], "nonpayable">;
+
+  mintToExchange: TypedContractMethod<[], [void], "nonpayable">;
+
   name: TypedContractMethod<[], [string], "view">;
+
+  setDaoAddress: TypedContractMethod<[addr: AddressLike], [void], "nonpayable">;
+
+  setExchangeAddress: TypedContractMethod<
+    [addr: AddressLike],
+    [void],
+    "nonpayable"
+  >;
 
   symbol: TypedContractMethod<[], [string], "view">;
 
@@ -211,10 +238,8 @@ export interface DexhuneERC20 extends BaseContract {
     "nonpayable"
   >;
 
-  transferCooldown: TypedContractMethod<[], [boolean], "view">;
-
   transferFrom: TypedContractMethod<
-    [_sender: AddressLike, _to: AddressLike, _value: BigNumberish],
+    [from: AddressLike, to: AddressLike, value: BigNumberish],
     [boolean],
     "nonpayable"
   >;
@@ -239,16 +264,28 @@ export interface DexhuneERC20 extends BaseContract {
   >;
   getFunction(
     nameOrSignature: "balanceOf"
-  ): TypedContractMethod<[_owner: AddressLike], [bigint], "view">;
-  getFunction(
-    nameOrSignature: "cooldownTimeout"
-  ): TypedContractMethod<[], [bigint], "view">;
+  ): TypedContractMethod<[owner: AddressLike], [bigint], "view">;
   getFunction(
     nameOrSignature: "decimals"
   ): TypedContractMethod<[], [bigint], "view">;
   getFunction(
+    nameOrSignature: "mint"
+  ): TypedContractMethod<[], [void], "nonpayable">;
+  getFunction(
+    nameOrSignature: "mintToDao"
+  ): TypedContractMethod<[], [void], "nonpayable">;
+  getFunction(
+    nameOrSignature: "mintToExchange"
+  ): TypedContractMethod<[], [void], "nonpayable">;
+  getFunction(
     nameOrSignature: "name"
   ): TypedContractMethod<[], [string], "view">;
+  getFunction(
+    nameOrSignature: "setDaoAddress"
+  ): TypedContractMethod<[addr: AddressLike], [void], "nonpayable">;
+  getFunction(
+    nameOrSignature: "setExchangeAddress"
+  ): TypedContractMethod<[addr: AddressLike], [void], "nonpayable">;
   getFunction(
     nameOrSignature: "symbol"
   ): TypedContractMethod<[], [string], "view">;
@@ -263,12 +300,9 @@ export interface DexhuneERC20 extends BaseContract {
     "nonpayable"
   >;
   getFunction(
-    nameOrSignature: "transferCooldown"
-  ): TypedContractMethod<[], [boolean], "view">;
-  getFunction(
     nameOrSignature: "transferFrom"
   ): TypedContractMethod<
-    [_sender: AddressLike, _to: AddressLike, _value: BigNumberish],
+    [from: AddressLike, to: AddressLike, value: BigNumberish],
     [boolean],
     "nonpayable"
   >;

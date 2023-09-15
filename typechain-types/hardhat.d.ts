@@ -37,17 +37,9 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.DexhuneRoot__factory>;
     getContractFactory(
-      name: "IERC165",
+      name: "DexhuneTokenRoot",
       signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.IERC165__factory>;
-    getContractFactory(
-      name: "IERC721",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.IERC721__factory>;
-    getContractFactory(
-      name: "Lock",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.Lock__factory>;
+    ): Promise<Contracts.DexhuneTokenRoot__factory>;
     getContractFactory(
       name: "MockNFT",
       signerOrOptions?: ethers.Signer | FactoryOptions
@@ -84,20 +76,10 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.DexhuneRoot>;
     getContractAt(
-      name: "IERC165",
+      name: "DexhuneTokenRoot",
       address: string | ethers.Addressable,
       signer?: ethers.Signer
-    ): Promise<Contracts.IERC165>;
-    getContractAt(
-      name: "IERC721",
-      address: string | ethers.Addressable,
-      signer?: ethers.Signer
-    ): Promise<Contracts.IERC721>;
-    getContractAt(
-      name: "Lock",
-      address: string | ethers.Addressable,
-      signer?: ethers.Signer
-    ): Promise<Contracts.Lock>;
+    ): Promise<Contracts.DexhuneTokenRoot>;
     getContractAt(
       name: "MockNFT",
       address: string | ethers.Addressable,
@@ -129,17 +111,9 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.DexhuneRoot>;
     deployContract(
-      name: "IERC165",
+      name: "DexhuneTokenRoot",
       signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.IERC165>;
-    deployContract(
-      name: "IERC721",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.IERC721>;
-    deployContract(
-      name: "Lock",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.Lock>;
+    ): Promise<Contracts.DexhuneTokenRoot>;
     deployContract(
       name: "MockNFT",
       signerOrOptions?: ethers.Signer | FactoryOptions
@@ -176,20 +150,10 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.DexhuneRoot>;
     deployContract(
-      name: "IERC165",
+      name: "DexhuneTokenRoot",
       args: any[],
       signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.IERC165>;
-    deployContract(
-      name: "IERC721",
-      args: any[],
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.IERC721>;
-    deployContract(
-      name: "Lock",
-      args: any[],
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.Lock>;
+    ): Promise<Contracts.DexhuneTokenRoot>;
     deployContract(
       name: "MockNFT",
       args: any[],

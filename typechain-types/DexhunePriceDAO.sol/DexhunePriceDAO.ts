@@ -23,30 +23,6 @@ import type {
   TypedContractMethod,
 } from "../common";
 
-export declare namespace DexhuneBase {
-  export type PriceProposalStruct = {
-    description: string;
-    value: string;
-    votesUp: BigNumberish;
-    votesDown: BigNumberish;
-    finalized: boolean;
-  };
-
-  export type PriceProposalStructOutput = [
-    description: string,
-    value: string,
-    votesUp: bigint,
-    votesDown: bigint,
-    finalized: boolean
-  ] & {
-    description: string;
-    value: string;
-    votesUp: bigint;
-    votesDown: bigint;
-    finalized: boolean;
-  };
-}
-
 export interface DexhunePriceDAOInterface extends Interface {
   getFunction(
     nameOrSignature:
@@ -387,7 +363,14 @@ export interface DexhunePriceDAO extends BaseContract {
 
   latestProposal: TypedContractMethod<
     [],
-    [DexhuneBase.PriceProposalStructOutput],
+    [
+      [string, string, bigint, bigint] & {
+        description: string;
+        value: string;
+        votesUp: bigint;
+        votesDown: bigint;
+      }
+    ],
     "view"
   >;
 
@@ -469,7 +452,18 @@ export interface DexhunePriceDAO extends BaseContract {
   ): TypedContractMethod<[], [string], "view">;
   getFunction(
     nameOrSignature: "latestProposal"
-  ): TypedContractMethod<[], [DexhuneBase.PriceProposalStructOutput], "view">;
+  ): TypedContractMethod<
+    [],
+    [
+      [string, string, bigint, bigint] & {
+        description: string;
+        value: string;
+        votesUp: bigint;
+        votesDown: bigint;
+      }
+    ],
+    "view"
+  >;
   getFunction(
     nameOrSignature: "owner"
   ): TypedContractMethod<[], [string], "view">;

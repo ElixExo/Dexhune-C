@@ -52,8 +52,9 @@ contract DexhunePriceDAO is DexhuneBase, DexhuneRoot {
         return price;
     }
 
-    function latestProposal() public view returns (PriceProposal memory) {
-        return PriceProposals[PriceProposals.length - 1];
+    function latestProposal() public view  returns (string memory description, string memory value, uint256 votesUp, uint256 votesDown) {
+        PriceProposal memory p = PriceProposals[PriceProposals.length - 1];
+        return (p.description, p.value, p.votesUp, p.votesDown);
     }
 
     function votingEndsAt() public view returns (uint256) {

@@ -15,7 +15,7 @@
 */
 
 pragma solidity >=0.4.22 <0.9.0;
-import "./DexhuneRoot.sol";
+import "./DexhuneTokenRoot.sol";
 
 interface IERC20 {
     /**
@@ -89,13 +89,15 @@ interface IERC20 {
     function transferFrom(address from, address to, uint256 value) external returns (bool);
 }
 
-contract DexhuneERC20 is IERC20, DexhuneConfig {
+error InsufficientBalance();
+error NotEnoughAllowance(uint256 allowance, uint256 expectedAllowance);
+
+contract DexhuneERC20 is IERC20, DexhuneTokenRoot {
     string constant NAME = "Dexhune";
     string constant SYMBOL = "DXH";
-    uint8 constant DECIMALS = 18;
+    uint8 constant DECIMALS = 0;
 
-    uint256 supply = type(uint256).max;
-    mapping(address => uint256) private balances;
+    
     mapping(address => mapping(address => uint256)) private allowances;
     mapping(address => uint) private cooler;
 
@@ -112,11 +114,11 @@ contract DexhuneERC20 is IERC20, DexhuneConfig {
     }
 
     function totalSupply() public view returns (uint256) {
-        return supply;
+        return _toUInt(_supply);
     }
 
-    function balanceOf(address _owner) public view returns (uint256 balance) {
-        return balances[_owner];
+    function balanceOf(address owner) public view returns (uint256 balance) {
+        return _getFullBalance(owner);
     }
 
     function transfer(address _to, uint256 _value) external returns (bool) {
@@ -124,26 +126,33 @@ contract DexhuneERC20 is IERC20, DexhuneConfig {
         return true;
     }
 
-    function transferFrom(address _sender, address _to, uint256 _value) external returns (bool) {
-        require(block.timestamp > cooler[_to], "This transaction cannot be completed because your account is experiencing cooldown. Please try again in a couple of minutes.");
-        
-        _transferInternal(_sender, _to, _value);
+    function transferFrom(address from, address to, uint256 value) external returns (bool) {
+        uint256 currentAllowance = allowances[from][msg.sender];
 
-        if (transferCooldown) {
-            cooler[_to] = block.timestamp + cooldownTimeout;            
+        if (value > currentAllowance) {
+            revert NotEnoughAllowance(value, currentAllowance);
         }
+        
+        _transferInternal(from, to, value);
 
         return true;
     }
 
-    function _transferInternal(address _from, address _to, uint256 _value) private {
-        uint256 balance = balances[_from];
-        require(balance - _value >= 0, "Insufficient balance");
+    function _transferInternal(address from, address to, uint256 value) private {
+        uint256 balance = _getFullBalance(from);
+        balance -= value;
 
-        balances[_from] -= _value;
-        balances[_to] += _value;
+        if (balance < 0) {
+            revert InsufficientBalance();
+        }
 
-        emit Transfer(_from, _to, _value);
+        uint256 targetBalance = _getFullBalance(to);
+        targetBalance += value;
+
+        _setBalance(from, balance);
+        _setBalance(to, targetBalance);
+
+        emit Transfer(from, to, value);
     }
 
     function approve(address _spender, uint256 _amount) external returns (bool) {
