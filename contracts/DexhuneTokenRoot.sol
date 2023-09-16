@@ -12,7 +12,7 @@
 *    ........................................................
 */
 
-import "./libraries/ABDKMath64x64.sol";
+pragma solidity ^0.8.18;
 
 contract DexhuneTokenRoot  {
     address private _owner;
@@ -21,7 +21,7 @@ contract DexhuneTokenRoot  {
     address private _daoAddress = address(0);
     uint256 private _totalMints;
 
-    address[] private _holders;
+    address[] public _holders;
     mapping(address => int128) private balances;
 
     int128 _supply = 0;
@@ -41,7 +41,7 @@ contract DexhuneTokenRoot  {
     int8 private constant MINT_VALUE_PER_TEN_THOUSAND = 12;
 
     int32 private constant INITIAL_MINT_VALUE = 10_000_000;
-    int32 private constant EXCHANGE_MINT_VALUE = 1_400_000;
+    int32 private constant EXCHANGE_MINT_VALUE = 300_000;
     int32 private constant DAO_MINT_VALUE = 5760;
 
     address private constant DEAD_OWNER_ADDRESS = 0x000000000000000000000000000000000000dEaD;
@@ -95,7 +95,35 @@ contract DexhuneTokenRoot  {
         return _owner;
     }
 
-    function canMintExchangeIn
+    function mintingStartsAfter() external view returns (uint256) {
+        uint256 timestamp = block.timestamp;
+
+        if (_nextMintTime < timestamp) {
+            return 0;
+        }
+
+        return _nextMintTime - timestamp;
+    }
+
+    function exchangeMintingStartsAfter() external view returns (uint256) {
+        uint256 timestamp = block.timestamp;
+
+        if (_nextExchangeMintTime < timestamp) {
+            return 0;
+        }
+
+        return _nextExchangeMintTime - timestamp;
+    }
+
+    function daoMintingStartsAfter() external view returns (uint256) {
+        uint256 timestamp = block.timestamp;
+
+        if (_nextDaoMintTime < timestamp) {
+            return 0;
+        }
+
+        return _nextDaoMintTime - timestamp;
+    }
 
     function mint() external {
         if (_mintCount >= MINT_LIMIT) {
@@ -106,19 +134,32 @@ contract DexhuneTokenRoot  {
             revert MintedTooEarly(block.timestamp - _nextMintTime);
         }
 
+        _mintCount++;
         _nextMintTime = block.timestamp + MINT_INTERVAL;
 
         int128 supply = _supply;
-        int128 distribution = _thperc(supply, MINT_VALUE_PER_TEN_THOUSAND);
+        int128 delegated = (supply * MINT_VALUE_PER_TEN_THOUSAND) / 10000;
         
-        _distribute(distribution);
+        int128 distributed = _distribute(delegated);
+        int128 rem = delegated - distributed;
 
-        _supply += distribution;
+        if (rem > 0) {
+            if (_exchangeAddress != address(0)) {
+                _addToBalance(_exchangeAddress, rem);
+            } else if (_daoAddress != address(0)) {
+                _addToBalance(_daoAddress, rem);
+            } else {
+                _addToBalance(_owner, rem);
+            }
+        }
+
+        _supply += delegated;
     }
 
+
     function mintToExchange() external {
-        if (block.timestamp < _nextExchangeMintTime) {
-            revert MintedTooEarly(block.timestamp - _nextExchangeMintTime);
+        if (_nextExchangeMintTime > block.timestamp) {
+            revert MintedTooEarly(_nextExchangeMintTime - block.timestamp);
         }
 
         if (_exchangeAddress == address(0)) {
@@ -126,11 +167,7 @@ contract DexhuneTokenRoot  {
         }
 
         _nextExchangeMintTime = block.timestamp + EXCHANGE_MINT_INTERVAL;
-
-        int128 balance = balances[_exchangeAddress];
-        balance += EXCHANGE_MINT_VALUE;
-
-        _setBalance(_exchangeAddress, balance); 
+        _addToBalance(_exchangeAddress, EXCHANGE_MINT_VALUE);
     }
 
     function mintToDao() external {
@@ -143,11 +180,7 @@ contract DexhuneTokenRoot  {
         }
 
         _nextDaoMintTime = block.timestamp + DAO_MINT_INTERVAL;
-
-        int128 balance = balances[_daoAddress];
-        balance += DAO_MINT_VALUE;
-
-        _setBalance(_daoAddress, balance);
+        _addToBalance(_daoAddress, DAO_MINT_VALUE);
     }
 
     function _renounceContract() private {
@@ -193,35 +226,44 @@ contract DexhuneTokenRoot  {
     }
 
     function _setBalance(address addr, uint256 balance) internal {
-        _setBalance(addr, ABDKMath64x64.fromUInt(balance));
+        _setBalance(addr, int128(uint128(balance)));
     }
 
-    function _distribute(int128 funds) private {
+    function _addToBalance(address addr, int128 value) private {
+        int128 balance = balances[addr];
+
+        // Balance is zero, user does not exist
+        if (balance == 0) {
+            _holders.push(addr);
+        }
+
+        balance += value;
+        balances[addr] = balance;
+    }
+
+    function _distribute(int128 funds) private returns (int128) {
         address holder;
         int128 balance;
 
-        int128 div;
         int128 cut;
+        int128 distributed;
 
         for (uint i = 0; i < _holders.length; i++) {
             holder = _holders[i];
-
-            
             balance = balances[holder];
+        
+            cut = (balance * funds) / _supply;
             
-            div = ABDKMath64x64.div(balance, _supply);
-            cut = ABDKMath64x64.mul(div, funds);
-
             balance += cut;
+            distributed += cut;
 
             balances[holder] = balance;
+            
+            emit Alloc(holder, balance);
         }
+
+        return distributed;
     }
 
-    function _thperc(int128 value, int8 percentage) private pure returns(int128) {
-        int128 res = ABDKMath64x64.mul(value, percentage);
-        res = ABDKMath64x64.div(res, 10000);
-
-        return res;
-    }
+    event Alloc(address addr, int128 funds);
 }

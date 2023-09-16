@@ -3,10 +3,12 @@
 /* eslint-disable */
 import type {
   BaseContract,
+  BigNumberish,
   BytesLike,
   FunctionFragment,
   Result,
   Interface,
+  EventFragment,
   AddressLike,
   ContractRunner,
   ContractMethod,
@@ -16,6 +18,7 @@ import type {
   TypedContractEvent,
   TypedDeferredTopicFilter,
   TypedEventLog,
+  TypedLogDescription,
   TypedListener,
   TypedContractMethod,
 } from "./common";
@@ -23,19 +26,41 @@ import type {
 export interface DexhuneTokenRootInterface extends Interface {
   getFunction(
     nameOrSignature:
+      | "_holders"
+      | "daoMintingStartsAfter"
+      | "exchangeMintingStartsAfter"
       | "getOwner"
       | "mint"
       | "mintToDao"
       | "mintToExchange"
+      | "mintingStartsAfter"
       | "setDaoAddress"
       | "setExchangeAddress"
   ): FunctionFragment;
 
+  getEvent(nameOrSignatureOrTopic: "Alloc"): EventFragment;
+
+  encodeFunctionData(
+    functionFragment: "_holders",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "daoMintingStartsAfter",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "exchangeMintingStartsAfter",
+    values?: undefined
+  ): string;
   encodeFunctionData(functionFragment: "getOwner", values?: undefined): string;
   encodeFunctionData(functionFragment: "mint", values?: undefined): string;
   encodeFunctionData(functionFragment: "mintToDao", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "mintToExchange",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "mintingStartsAfter",
     values?: undefined
   ): string;
   encodeFunctionData(
@@ -47,11 +72,24 @@ export interface DexhuneTokenRootInterface extends Interface {
     values: [AddressLike]
   ): string;
 
+  decodeFunctionResult(functionFragment: "_holders", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "daoMintingStartsAfter",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "exchangeMintingStartsAfter",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "getOwner", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "mint", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "mintToDao", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "mintToExchange",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "mintingStartsAfter",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -62,6 +100,19 @@ export interface DexhuneTokenRootInterface extends Interface {
     functionFragment: "setExchangeAddress",
     data: BytesLike
   ): Result;
+}
+
+export namespace AllocEvent {
+  export type InputTuple = [addr: AddressLike, funds: BigNumberish];
+  export type OutputTuple = [addr: string, funds: bigint];
+  export interface OutputObject {
+    addr: string;
+    funds: bigint;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
 }
 
 export interface DexhuneTokenRoot extends BaseContract {
@@ -107,6 +158,12 @@ export interface DexhuneTokenRoot extends BaseContract {
     event?: TCEvent
   ): Promise<this>;
 
+  _holders: TypedContractMethod<[arg0: BigNumberish], [string], "view">;
+
+  daoMintingStartsAfter: TypedContractMethod<[], [bigint], "view">;
+
+  exchangeMintingStartsAfter: TypedContractMethod<[], [bigint], "view">;
+
   getOwner: TypedContractMethod<[], [string], "view">;
 
   mint: TypedContractMethod<[], [void], "nonpayable">;
@@ -114,6 +171,8 @@ export interface DexhuneTokenRoot extends BaseContract {
   mintToDao: TypedContractMethod<[], [void], "nonpayable">;
 
   mintToExchange: TypedContractMethod<[], [void], "nonpayable">;
+
+  mintingStartsAfter: TypedContractMethod<[], [bigint], "view">;
 
   setDaoAddress: TypedContractMethod<[addr: AddressLike], [void], "nonpayable">;
 
@@ -128,6 +187,15 @@ export interface DexhuneTokenRoot extends BaseContract {
   ): T;
 
   getFunction(
+    nameOrSignature: "_holders"
+  ): TypedContractMethod<[arg0: BigNumberish], [string], "view">;
+  getFunction(
+    nameOrSignature: "daoMintingStartsAfter"
+  ): TypedContractMethod<[], [bigint], "view">;
+  getFunction(
+    nameOrSignature: "exchangeMintingStartsAfter"
+  ): TypedContractMethod<[], [bigint], "view">;
+  getFunction(
     nameOrSignature: "getOwner"
   ): TypedContractMethod<[], [string], "view">;
   getFunction(
@@ -140,11 +208,33 @@ export interface DexhuneTokenRoot extends BaseContract {
     nameOrSignature: "mintToExchange"
   ): TypedContractMethod<[], [void], "nonpayable">;
   getFunction(
+    nameOrSignature: "mintingStartsAfter"
+  ): TypedContractMethod<[], [bigint], "view">;
+  getFunction(
     nameOrSignature: "setDaoAddress"
   ): TypedContractMethod<[addr: AddressLike], [void], "nonpayable">;
   getFunction(
     nameOrSignature: "setExchangeAddress"
   ): TypedContractMethod<[addr: AddressLike], [void], "nonpayable">;
 
-  filters: {};
+  getEvent(
+    key: "Alloc"
+  ): TypedContractEvent<
+    AllocEvent.InputTuple,
+    AllocEvent.OutputTuple,
+    AllocEvent.OutputObject
+  >;
+
+  filters: {
+    "Alloc(address,int128)": TypedContractEvent<
+      AllocEvent.InputTuple,
+      AllocEvent.OutputTuple,
+      AllocEvent.OutputObject
+    >;
+    Alloc: TypedContractEvent<
+      AllocEvent.InputTuple,
+      AllocEvent.OutputTuple,
+      AllocEvent.OutputObject
+    >;
+  };
 }

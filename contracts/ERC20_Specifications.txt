@@ -1,0 +1,55 @@
+/// Premise /// 
+A time based dividend token.
+
+/// Parameters ///
+Name : Dexhune
+Ticker : DXH 
+Price : 0.0001XAU (Gold Troy Ounce) 
+Decimals : 0
+
+/// General ///
+The DXH token is an ERC-20 which at certain intervals will mint a fixed amount of tokens distributed to holders based on how much they own, the amount distributed is always 0.12% of existing supply. 
+
+For this to happen the 'Mint' function has to be called. 
+
+However, dividends cease after 40 years (after 315360000 blocks or being called 3650 times). Each mint interval in blocks is; 86,400 blocks. 
+
+! PerpetualMintToExchange !
+The contract should have a second mint function that specifically targets the 'Exchange contract', minting 1,400,000DXH to the 'Exchange Contract', this is available every day or every 21600 blocks, and can be called in perpetuity. 
+
+! PerpetualMintToDAO ! 
+The contract should have a third mint function that specifically targets the 'Price DAO', minting 5760DXH every 21600 blocks, and can be called in perpetuity.   
+
+
+/// Notes ///
+- The token has no decimals. 
+
+- The Contract cannot be directly controlled by the owner to 'withdraw' or 'transfer' or 'halt', these functions are simply not available.
+
+- DXH contract will need 'SetExchangeAddress' and 'SetDAOaddress' functions, to determine where the "perpetual mint" allocations are sent to. 
+
+- When the DXH contract is created a total of 10,000,000DXH is minted to the deployer. 
+
+- At first, there will be no one to call the 'mint' functions, so the team will have to do that. 
+
+- All percentage calculations should use approximate values or nearest whole numbers since DXH cannot be broken down. If an address is owed 0.5DXH or less, then they get 0, but if they are owed 0.6DXH or more then they get 1DXH. 
+
+- The DXH contract should be renounced after setting the Exchange address and 'Price DAO' address. 
+
+- The DXH contract will be eligible for a payout as soon as it is deployed, this means the deployer should set the respective addresses and then call the 'mint' function(s). 
+
+
+
+clear();
+supply = 10000000;
+distribution = 0;
+output = "";
+
+for (let i = 0; i < 3650; i++) {
+  distribution = Math.round(supply * 0.0012);
+  supply += distribution;
+  
+  output += `Total supply is now ${supply}. We distributed ${distribution} DXH!\n`;
+}
+
+console.log(output);

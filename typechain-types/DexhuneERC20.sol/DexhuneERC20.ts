@@ -26,14 +26,18 @@ import type {
 export interface DexhuneERC20Interface extends Interface {
   getFunction(
     nameOrSignature:
+      | "_holders"
       | "allowance"
       | "approve"
       | "balanceOf"
+      | "daoMintingStartsAfter"
       | "decimals"
+      | "exchangeMintingStartsAfter"
       | "getOwner"
       | "mint"
       | "mintToDao"
       | "mintToExchange"
+      | "mintingStartsAfter"
       | "name"
       | "setDaoAddress"
       | "setExchangeAddress"
@@ -43,8 +47,14 @@ export interface DexhuneERC20Interface extends Interface {
       | "transferFrom"
   ): FunctionFragment;
 
-  getEvent(nameOrSignatureOrTopic: "Approval" | "Transfer"): EventFragment;
+  getEvent(
+    nameOrSignatureOrTopic: "Alloc" | "Approval" | "Transfer"
+  ): EventFragment;
 
+  encodeFunctionData(
+    functionFragment: "_holders",
+    values: [BigNumberish]
+  ): string;
   encodeFunctionData(
     functionFragment: "allowance",
     values: [AddressLike, AddressLike]
@@ -57,12 +67,24 @@ export interface DexhuneERC20Interface extends Interface {
     functionFragment: "balanceOf",
     values: [AddressLike]
   ): string;
+  encodeFunctionData(
+    functionFragment: "daoMintingStartsAfter",
+    values?: undefined
+  ): string;
   encodeFunctionData(functionFragment: "decimals", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "exchangeMintingStartsAfter",
+    values?: undefined
+  ): string;
   encodeFunctionData(functionFragment: "getOwner", values?: undefined): string;
   encodeFunctionData(functionFragment: "mint", values?: undefined): string;
   encodeFunctionData(functionFragment: "mintToDao", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "mintToExchange",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "mintingStartsAfter",
     values?: undefined
   ): string;
   encodeFunctionData(functionFragment: "name", values?: undefined): string;
@@ -88,15 +110,28 @@ export interface DexhuneERC20Interface extends Interface {
     values: [AddressLike, AddressLike, BigNumberish]
   ): string;
 
+  decodeFunctionResult(functionFragment: "_holders", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "allowance", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "approve", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "daoMintingStartsAfter",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "decimals", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "exchangeMintingStartsAfter",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "getOwner", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "mint", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "mintToDao", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "mintToExchange",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "mintingStartsAfter",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "name", data: BytesLike): Result;
@@ -118,6 +153,19 @@ export interface DexhuneERC20Interface extends Interface {
     functionFragment: "transferFrom",
     data: BytesLike
   ): Result;
+}
+
+export namespace AllocEvent {
+  export type InputTuple = [addr: AddressLike, funds: BigNumberish];
+  export type OutputTuple = [addr: string, funds: bigint];
+  export interface OutputObject {
+    addr: string;
+    funds: bigint;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
 }
 
 export namespace ApprovalEvent {
@@ -199,6 +247,8 @@ export interface DexhuneERC20 extends BaseContract {
     event?: TCEvent
   ): Promise<this>;
 
+  _holders: TypedContractMethod<[arg0: BigNumberish], [string], "view">;
+
   allowance: TypedContractMethod<
     [_owner: AddressLike, _spender: AddressLike],
     [bigint],
@@ -213,7 +263,11 @@ export interface DexhuneERC20 extends BaseContract {
 
   balanceOf: TypedContractMethod<[owner: AddressLike], [bigint], "view">;
 
+  daoMintingStartsAfter: TypedContractMethod<[], [bigint], "view">;
+
   decimals: TypedContractMethod<[], [bigint], "view">;
+
+  exchangeMintingStartsAfter: TypedContractMethod<[], [bigint], "view">;
 
   getOwner: TypedContractMethod<[], [string], "view">;
 
@@ -222,6 +276,8 @@ export interface DexhuneERC20 extends BaseContract {
   mintToDao: TypedContractMethod<[], [void], "nonpayable">;
 
   mintToExchange: TypedContractMethod<[], [void], "nonpayable">;
+
+  mintingStartsAfter: TypedContractMethod<[], [bigint], "view">;
 
   name: TypedContractMethod<[], [string], "view">;
 
@@ -254,6 +310,9 @@ export interface DexhuneERC20 extends BaseContract {
   ): T;
 
   getFunction(
+    nameOrSignature: "_holders"
+  ): TypedContractMethod<[arg0: BigNumberish], [string], "view">;
+  getFunction(
     nameOrSignature: "allowance"
   ): TypedContractMethod<
     [_owner: AddressLike, _spender: AddressLike],
@@ -271,7 +330,13 @@ export interface DexhuneERC20 extends BaseContract {
     nameOrSignature: "balanceOf"
   ): TypedContractMethod<[owner: AddressLike], [bigint], "view">;
   getFunction(
+    nameOrSignature: "daoMintingStartsAfter"
+  ): TypedContractMethod<[], [bigint], "view">;
+  getFunction(
     nameOrSignature: "decimals"
+  ): TypedContractMethod<[], [bigint], "view">;
+  getFunction(
+    nameOrSignature: "exchangeMintingStartsAfter"
   ): TypedContractMethod<[], [bigint], "view">;
   getFunction(
     nameOrSignature: "getOwner"
@@ -285,6 +350,9 @@ export interface DexhuneERC20 extends BaseContract {
   getFunction(
     nameOrSignature: "mintToExchange"
   ): TypedContractMethod<[], [void], "nonpayable">;
+  getFunction(
+    nameOrSignature: "mintingStartsAfter"
+  ): TypedContractMethod<[], [bigint], "view">;
   getFunction(
     nameOrSignature: "name"
   ): TypedContractMethod<[], [string], "view">;
@@ -316,6 +384,13 @@ export interface DexhuneERC20 extends BaseContract {
   >;
 
   getEvent(
+    key: "Alloc"
+  ): TypedContractEvent<
+    AllocEvent.InputTuple,
+    AllocEvent.OutputTuple,
+    AllocEvent.OutputObject
+  >;
+  getEvent(
     key: "Approval"
   ): TypedContractEvent<
     ApprovalEvent.InputTuple,
@@ -331,6 +406,17 @@ export interface DexhuneERC20 extends BaseContract {
   >;
 
   filters: {
+    "Alloc(address,int128)": TypedContractEvent<
+      AllocEvent.InputTuple,
+      AllocEvent.OutputTuple,
+      AllocEvent.OutputObject
+    >;
+    Alloc: TypedContractEvent<
+      AllocEvent.InputTuple,
+      AllocEvent.OutputTuple,
+      AllocEvent.OutputObject
+    >;
+
     "Approval(address,address,uint256)": TypedContractEvent<
       ApprovalEvent.InputTuple,
       ApprovalEvent.OutputTuple,

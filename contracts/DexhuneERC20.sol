@@ -90,6 +90,7 @@ interface IERC20 {
 }
 
 error InsufficientBalance();
+error DuplicateTransferAddress();
 error NotEnoughAllowance(uint256 allowance, uint256 expectedAllowance);
 
 contract DexhuneERC20 is IERC20, DexhuneTokenRoot {
@@ -132,19 +133,28 @@ contract DexhuneERC20 is IERC20, DexhuneTokenRoot {
         if (value > currentAllowance) {
             revert NotEnoughAllowance(value, currentAllowance);
         }
+
+        currentAllowance -= value;
+        allowances[from][msg.sender] = currentAllowance;
         
         _transferInternal(from, to, value);
+        
 
         return true;
     }
 
     function _transferInternal(address from, address to, uint256 value) private {
         uint256 balance = _getFullBalance(from);
-        balance -= value;
 
-        if (balance < 0) {
+        if (value > balance) {
             revert InsufficientBalance();
         }
+
+        if (from == to) {
+            revert DuplicateTransferAddress();
+        }
+
+        balance -= value;
 
         uint256 targetBalance = _getFullBalance(to);
         targetBalance += value;

@@ -12,7 +12,9 @@
 
 import { loadFixture, time } from "@nomicfoundation/hardhat-network-helpers";
 import { expect } from "chai";
+import { ContractTransactionResponse, Mnemonic } from "ethers";
 import { ethers } from "hardhat";
+import { DexhuneERC20 } from "../typechain-types";
 
 describe("ERC20", function() {
     async function deploy() {
@@ -21,6 +23,28 @@ describe("ERC20", function() {
         const DexhuneToken = await DexhuneERC20Factory.deploy();
 
         return { DexhuneToken };
+    }
+
+    async function randomlyAssignFunds(dexhuneToken: DexhuneERC20, signerCount: number) {
+        const supply = Number(await dexhuneToken.totalSupply());
+        let remSupply = supply;
+        const balances = new Map<string, number>();
+
+        const signers = await ethers.getSigners();
+        const owner = signers[0];
+
+        for (let i = 1; i < signerCount; i++) {
+            const signer = signers[i];
+            const balance = Math.floor(Math.random() * remSupply);
+            remSupply -= balance;
+
+            // TODO: Cannot transfer to your own address
+            await dexhuneToken.transfer(signer.address, balance);
+            balances.set(signer.address, balance);                
+        }
+
+        balances.set(owner.address, remSupply);
+        return balances;
     }
 
     describe("Deployment", function() {
@@ -76,6 +100,75 @@ describe("ERC20", function() {
         });
     })
 
+    describe("ERC Standard", function() {
+        it ("Should not allow tranfers from an empty wallet", async () => {
+            const { DexhuneToken } = await loadFixture(deploy);
+            const [owner, user1, user2] = await ethers.getSigners();
+
+            const dexhuneToken = await DexhuneToken.connect(user1);
+
+            const res = dexhuneToken.transfer(user2, 1000);
+            await expect(res).revertedWithCustomError(dexhuneToken, "InsufficientBalance");
+        });
+
+        it ("Should not allow tranfers to the same wallet address", async () => {
+            const { DexhuneToken } = await loadFixture(deploy);
+            const [owner, user1, user2] = await ethers.getSigners();
+
+            DexhuneToken.transfer(user1, 10000);
+            const dexhuneToken = await DexhuneToken.connect(user1);
+
+            const res = dexhuneToken.transfer(user1, 1000);
+            await expect(res).revertedWithCustomError(dexhuneToken, "DuplicateTransferAddress");
+        });
+
+        it ("Accurately transfer funds", async () => {
+            const { DexhuneToken } = await loadFixture(deploy);
+            const [owner, user1, user2] = await ethers.getSigners();
+
+            const supply = await DexhuneToken.totalSupply();
+            
+
+            const dexhuneToken = await DexhuneToken.connect(user1);
+
+            for (let i = 0; i < 10; i++) {
+                const amount = Math.floor(Math.random() * Number(supply));
+                await DexhuneToken.transfer(user1, amount);
+
+                const balance = await DexhuneToken.balanceOf(user1.address);
+                expect(balance).eq(amount);
+
+                await dexhuneToken.transfer(owner, amount);
+            }
+        });
+
+        it ("Should only allow transferFrom based on allowance provided by the user", async () => {
+            const { DexhuneToken } = await loadFixture(deploy);
+            const [owner, user1] = await ethers.getSigners();
+
+            let res = DexhuneToken.transferFrom(owner, user1, 10);
+            await expect(res).revertedWithCustomError(DexhuneToken, "NotEnoughAllowance");
+
+            await DexhuneToken.approve(user1, 100);
+            
+            const dexhuneToken = await DexhuneToken.connect(user1);
+            res = dexhuneToken.transferFrom(owner, user1, 10);
+            await expect(res).not.be.reverted;
+
+            res = dexhuneToken.transferFrom(owner, user1, 50);
+            await expect(res).not.be.reverted;
+
+            res = dexhuneToken.transferFrom(owner, user1, 50);
+            await expect(res).revertedWithCustomError(DexhuneToken, "NotEnoughAllowance");
+
+            res = dexhuneToken.transferFrom(owner, user1, 40);
+            await expect(res).not.be.reverted;
+
+            res = dexhuneToken.transferFrom(owner, user1, 1);
+            await expect(res).revertedWithCustomError(DexhuneToken, "NotEnoughAllowance");
+        });
+    });
+
     describe("Minting", function() {
         it ("Should not mint for exchange when exchange address is empty", async () => {
             const { DexhuneToken } = await loadFixture(deploy);
@@ -97,21 +190,162 @@ describe("ERC20", function() {
             await expect(res).revertedWithCustomError(DexhuneToken, "PriceDaoAddressNotSet");
         });
 
-        it ("Should mint 1.4M DXH to exchange each time", async () => {
+        it ("Should mint 300k DXH to exchange each time", async () => {
             const { DexhuneToken } = await loadFixture(deploy);
             const [_, exchangeAddress] = await ethers.getSigners();
 
             await DexhuneToken.setExchangeAddress(exchangeAddress);
 
-            // for (int i = 0;)
+            let nextMintTime = BigInt(0);
+            let res: Promise<ContractTransactionResponse>|undefined;
 
+            let minted = BigInt(0);
+            let balance = BigInt(0);
 
+            for (let i = 0; i < 100; i++) {
+                res = DexhuneToken.mintToExchange();
+                await expect(res).to.not.reverted;
 
-            const res = await DexhuneToken.mintToExchange();
+                minted += BigInt(300_000);
 
+                balance = await DexhuneToken.balanceOf(exchangeAddress);
+                expect(balance).eq(minted);
 
-
-            await expect(res).revertedWithCustomError(DexhuneToken, "PriceDaoAddressNotSet");
+                nextMintTime = await DexhuneToken.exchangeMintingStartsAfter();
+                await time.increase(nextMintTime);
+            }
         });
+
+        it ("Should mint 5760 DXH to dao each time", async () => {
+            const { DexhuneToken } = await loadFixture(deploy);
+            const [_, __, daoAddress] = await ethers.getSigners();
+
+            await DexhuneToken.setDaoAddress(daoAddress);
+
+            let nextMintTime = BigInt(0);
+            let res: Promise<ContractTransactionResponse>|undefined;
+
+            let minted = BigInt(0);
+            let balance = BigInt(0);
+
+            for (let i = 0; i < 100; i++) {
+                res = DexhuneToken.mintToDao();
+                await expect(res).to.not.reverted;
+
+                minted += BigInt(5760);
+
+                balance = await DexhuneToken.balanceOf(daoAddress);
+                expect(balance).eq(minted);
+
+                nextMintTime = await DexhuneToken.daoMintingStartsAfter();
+                await time.increase(nextMintTime);
+            }
+        });
+
+        it ("Should distribute minted funds based on holders percentage", async () => {
+            const { DexhuneToken } = await loadFixture(deploy);
+            
+            const signers = await ethers.getSigners();
+            const balances = await randomlyAssignFunds(DexhuneToken, 5);
+
+            const exchangeAddr = signers[1].address;
+
+            DexhuneToken.setExchangeAddress(exchangeAddr);
+
+            for (let [addr, value] of balances) {
+                const balance = await DexhuneToken.balanceOf(addr);
+                expect(Number(balance)).eq(value);
+            }
+
+            for (let i = 0; i < 10; i++) {
+                const supply = Number(await DexhuneToken.totalSupply());
+                
+                await DexhuneToken.mint();
+                const distribution = Math.floor((Number(supply) * 12) / 10000);
+            
+
+                for (let [addr, balance] of balances) {
+                    const cut = Math.floor((balance * distribution) / supply);
+                    balance += cut;
+                    balances.set(addr, balance);
+
+                    const contractBalance = await DexhuneToken.balanceOf(addr);
+                    
+                    try {
+                        expect(Number(contractBalance)).eq(balance);
+                    } catch (err) {
+                        if (addr == exchangeAddr) {
+                            continue; // Exchange gets leftover tokens
+                        }
+
+                        console.error(err);
+                        throw err;
+                    }
+                }
+
+                const nextMintTime = await DexhuneToken.mintingStartsAfter();
+                await time.increase(nextMintTime);
+            }
+            
+            
+
+            
+        });
+
+        it ("Should maintain an accurate supply value", async () => {
+            const { DexhuneToken } = await loadFixture(deploy);
+
+            const balances = await randomlyAssignFunds(DexhuneToken, 10);
+            const balanceKeys = [...balances.keys()];
+
+            let nextMintTime = BigInt(0);
+
+            for (let i = 0; i < 100; i++) {
+                const res = DexhuneToken.mint();
+                await expect(res).to.not.reverted;
+                
+                nextMintTime = await DexhuneToken.mintingStartsAfter();
+                await time.increase(nextMintTime);
+
+                const supply = Number(await DexhuneToken.totalSupply());
+                let availableSupply = BigInt(0)
+
+                for (let j = 0; j < balances.size; j++) {
+                    const addr = balanceKeys[j];
+
+                    const balance = await DexhuneToken.balanceOf(addr);
+                    availableSupply += balance;
+                }
+
+                expect(supply).eq(availableSupply);
+            }
+        })
+
+        it ("Should have a mint limit of 3650 and maintain an exponential supply growth", async () => {;
+            const { DexhuneToken } = await loadFixture(deploy);
+            
+            let nextMintTime = BigInt(0);
+            let supply = await DexhuneToken.totalSupply();
+            let distribution = 0;
+
+            for (let i = 0; i < 3650; i++) {
+                const res = DexhuneToken.mint();
+                await expect(res).to.not.reverted;
+
+                distribution = Math.floor((Number(supply) * 12) / 10000);
+                supply += BigInt(distribution);
+
+                const cSupply = await DexhuneToken.totalSupply();
+
+                expect(cSupply).eq(supply);
+            
+                nextMintTime = await DexhuneToken.mintingStartsAfter();
+                await time.increase(nextMintTime);
+            }
+
+            const res = DexhuneToken.mint();
+            await expect(res)
+                .revertedWithCustomError(DexhuneToken, "MintLimitReached");
+        }).timeout(120000);
     });
 });
