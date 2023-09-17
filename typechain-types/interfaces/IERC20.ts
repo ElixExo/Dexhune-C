@@ -23,24 +23,12 @@ import type {
   TypedContractMethod,
 } from "../common";
 
-export interface DexhuneERC20Interface extends Interface {
+export interface IERC20Interface extends Interface {
   getFunction(
     nameOrSignature:
       | "allowance"
       | "approve"
       | "balanceOf"
-      | "daoMintingStartsAfter"
-      | "decimals"
-      | "exchangeMintingStartsAfter"
-      | "getOwner"
-      | "mint"
-      | "mintToDao"
-      | "mintToExchange"
-      | "mintingStartsAfter"
-      | "name"
-      | "setDaoAddress"
-      | "setExchangeAddress"
-      | "symbol"
       | "totalSupply"
       | "transfer"
       | "transferFrom"
@@ -61,36 +49,6 @@ export interface DexhuneERC20Interface extends Interface {
     values: [AddressLike]
   ): string;
   encodeFunctionData(
-    functionFragment: "daoMintingStartsAfter",
-    values?: undefined
-  ): string;
-  encodeFunctionData(functionFragment: "decimals", values?: undefined): string;
-  encodeFunctionData(
-    functionFragment: "exchangeMintingStartsAfter",
-    values?: undefined
-  ): string;
-  encodeFunctionData(functionFragment: "getOwner", values?: undefined): string;
-  encodeFunctionData(functionFragment: "mint", values?: undefined): string;
-  encodeFunctionData(functionFragment: "mintToDao", values?: undefined): string;
-  encodeFunctionData(
-    functionFragment: "mintToExchange",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "mintingStartsAfter",
-    values?: undefined
-  ): string;
-  encodeFunctionData(functionFragment: "name", values?: undefined): string;
-  encodeFunctionData(
-    functionFragment: "setDaoAddress",
-    values: [AddressLike]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "setExchangeAddress",
-    values: [AddressLike]
-  ): string;
-  encodeFunctionData(functionFragment: "symbol", values?: undefined): string;
-  encodeFunctionData(
     functionFragment: "totalSupply",
     values?: undefined
   ): string;
@@ -106,36 +64,6 @@ export interface DexhuneERC20Interface extends Interface {
   decodeFunctionResult(functionFragment: "allowance", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "approve", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "daoMintingStartsAfter",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "decimals", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "exchangeMintingStartsAfter",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "getOwner", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "mint", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "mintToDao", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "mintToExchange",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "mintingStartsAfter",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "name", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "setDaoAddress",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "setExchangeAddress",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "symbol", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "totalSupply",
     data: BytesLike
@@ -183,11 +111,11 @@ export namespace TransferEvent {
   export type LogDescription = TypedLogDescription<Event>;
 }
 
-export interface DexhuneERC20 extends BaseContract {
-  connect(runner?: ContractRunner | null): DexhuneERC20;
+export interface IERC20 extends BaseContract {
+  connect(runner?: ContractRunner | null): IERC20;
   waitForDeployment(): Promise<this>;
 
-  interface: DexhuneERC20Interface;
+  interface: IERC20Interface;
 
   queryFilter<TCEvent extends TypedContractEvent>(
     event: TCEvent,
@@ -227,51 +155,23 @@ export interface DexhuneERC20 extends BaseContract {
   ): Promise<this>;
 
   allowance: TypedContractMethod<
-    [_owner: AddressLike, _spender: AddressLike],
+    [owner: AddressLike, spender: AddressLike],
     [bigint],
     "view"
   >;
 
   approve: TypedContractMethod<
-    [_spender: AddressLike, _amount: BigNumberish],
+    [spender: AddressLike, value: BigNumberish],
     [boolean],
     "nonpayable"
   >;
 
-  balanceOf: TypedContractMethod<[owner: AddressLike], [bigint], "view">;
-
-  daoMintingStartsAfter: TypedContractMethod<[], [bigint], "view">;
-
-  decimals: TypedContractMethod<[], [bigint], "view">;
-
-  exchangeMintingStartsAfter: TypedContractMethod<[], [bigint], "view">;
-
-  getOwner: TypedContractMethod<[], [string], "view">;
-
-  mint: TypedContractMethod<[], [void], "nonpayable">;
-
-  mintToDao: TypedContractMethod<[], [void], "nonpayable">;
-
-  mintToExchange: TypedContractMethod<[], [void], "nonpayable">;
-
-  mintingStartsAfter: TypedContractMethod<[], [bigint], "view">;
-
-  name: TypedContractMethod<[], [string], "view">;
-
-  setDaoAddress: TypedContractMethod<[addr: AddressLike], [void], "nonpayable">;
-
-  setExchangeAddress: TypedContractMethod<
-    [addr: AddressLike],
-    [void],
-    "nonpayable"
-  >;
-
-  symbol: TypedContractMethod<[], [string], "view">;
+  balanceOf: TypedContractMethod<[account: AddressLike], [bigint], "view">;
 
   totalSupply: TypedContractMethod<[], [bigint], "view">;
 
   transfer: TypedContractMethod<
-    [_to: AddressLike, _value: BigNumberish],
+    [to: AddressLike, value: BigNumberish],
     [boolean],
     "nonpayable"
   >;
@@ -289,63 +189,27 @@ export interface DexhuneERC20 extends BaseContract {
   getFunction(
     nameOrSignature: "allowance"
   ): TypedContractMethod<
-    [_owner: AddressLike, _spender: AddressLike],
+    [owner: AddressLike, spender: AddressLike],
     [bigint],
     "view"
   >;
   getFunction(
     nameOrSignature: "approve"
   ): TypedContractMethod<
-    [_spender: AddressLike, _amount: BigNumberish],
+    [spender: AddressLike, value: BigNumberish],
     [boolean],
     "nonpayable"
   >;
   getFunction(
     nameOrSignature: "balanceOf"
-  ): TypedContractMethod<[owner: AddressLike], [bigint], "view">;
-  getFunction(
-    nameOrSignature: "daoMintingStartsAfter"
-  ): TypedContractMethod<[], [bigint], "view">;
-  getFunction(
-    nameOrSignature: "decimals"
-  ): TypedContractMethod<[], [bigint], "view">;
-  getFunction(
-    nameOrSignature: "exchangeMintingStartsAfter"
-  ): TypedContractMethod<[], [bigint], "view">;
-  getFunction(
-    nameOrSignature: "getOwner"
-  ): TypedContractMethod<[], [string], "view">;
-  getFunction(
-    nameOrSignature: "mint"
-  ): TypedContractMethod<[], [void], "nonpayable">;
-  getFunction(
-    nameOrSignature: "mintToDao"
-  ): TypedContractMethod<[], [void], "nonpayable">;
-  getFunction(
-    nameOrSignature: "mintToExchange"
-  ): TypedContractMethod<[], [void], "nonpayable">;
-  getFunction(
-    nameOrSignature: "mintingStartsAfter"
-  ): TypedContractMethod<[], [bigint], "view">;
-  getFunction(
-    nameOrSignature: "name"
-  ): TypedContractMethod<[], [string], "view">;
-  getFunction(
-    nameOrSignature: "setDaoAddress"
-  ): TypedContractMethod<[addr: AddressLike], [void], "nonpayable">;
-  getFunction(
-    nameOrSignature: "setExchangeAddress"
-  ): TypedContractMethod<[addr: AddressLike], [void], "nonpayable">;
-  getFunction(
-    nameOrSignature: "symbol"
-  ): TypedContractMethod<[], [string], "view">;
+  ): TypedContractMethod<[account: AddressLike], [bigint], "view">;
   getFunction(
     nameOrSignature: "totalSupply"
   ): TypedContractMethod<[], [bigint], "view">;
   getFunction(
     nameOrSignature: "transfer"
   ): TypedContractMethod<
-    [_to: AddressLike, _value: BigNumberish],
+    [to: AddressLike, value: BigNumberish],
     [boolean],
     "nonpayable"
   >;

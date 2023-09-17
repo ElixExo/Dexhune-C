@@ -114,8 +114,8 @@
       ]
     },
     "C:\\Users\\Prince\\source\\repos\\Peng_Protocol\\dexhune\\contracts\\DexhuneERC20.sol": {
-      "lastModificationDate": 1694908248719,
-      "contentHash": "fd2850094a8630d6a8353e38c59ca79b",
+      "lastModificationDate": 1694945332915,
+      "contentHash": "b62bb3aa51548df89296a95f3cf40e76",
       "sourceName": "contracts/DexhuneERC20.sol",
       "solcConfig": {
         "version": "0.8.18",
@@ -141,14 +141,13 @@
         }
       },
       "imports": [
-        "./DexhuneTokenRoot.sol"
+        "./DexhuneERC20Base.sol"
       ],
       "versionPragmas": [
         "^0.8.18"
       ],
       "artifacts": [
-        "DexhuneERC20",
-        "IERC20"
+        "DexhuneERC20"
       ]
     },
     "C:\\Users\\Prince\\source\\repos\\Peng_Protocol\\dexhune\\contracts\\mockups\\MockNFT.sol": {
@@ -184,10 +183,47 @@
         "MockNFT"
       ]
     },
-    "C:\\Users\\Prince\\source\\repos\\Peng_Protocol\\dexhune\\contracts\\DexhuneTokenRoot.sol": {
-      "lastModificationDate": 1694902912787,
-      "contentHash": "7e7fe4966837cf8f0f02891cd87b39fe",
-      "sourceName": "contracts/DexhuneTokenRoot.sol",
+    "C:\\Users\\Prince\\source\\repos\\Peng_Protocol\\dexhune\\contracts\\DexhuneERC20Base.sol": {
+      "lastModificationDate": 1694945834885,
+      "contentHash": "396d62f4b6730ce9cf133ace06bd5359",
+      "sourceName": "contracts/DexhuneERC20Base.sol",
+      "solcConfig": {
+        "version": "0.8.18",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./interfaces/IERC20.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.18"
+      ],
+      "artifacts": [
+        "DexhuneERC20Base"
+      ]
+    },
+    "C:\\Users\\Prince\\source\\repos\\Peng_Protocol\\dexhune\\contracts\\interfaces\\IERC20.sol": {
+      "lastModificationDate": 1694943298948,
+      "contentHash": "3258755120ebcfab4f688cf265ba6331",
+      "sourceName": "contracts/interfaces/IERC20.sol",
       "solcConfig": {
         "version": "0.8.18",
         "settings": {
@@ -216,7 +252,7 @@
         "^0.8.18"
       ],
       "artifacts": [
-        "DexhuneTokenRoot"
+        "IERC20"
       ]
     }
   }

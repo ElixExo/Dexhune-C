@@ -1,7 +1,7 @@
 {
   "_format": "hh-sol-artifact-1",
   "contractName": "IERC20",
-  "sourceName": "contracts/DexhuneERC20.sol",
+  "sourceName": "contracts/interfaces/IERC20.sol",
   "abi": [
     {
       "anonymous": false,

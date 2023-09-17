@@ -14,15 +14,17 @@
 
 pragma solidity ^0.8.18;
 
-contract DexhuneTokenRoot  {
+import "./interfaces/IERC20.sol";
+
+abstract contract DexhuneERC20Base is IERC20 {
     address private _owner;
 
     address private _exchangeAddress = address(0);
     address private _daoAddress = address(0);
     uint256 private _totalMints;
 
-    address[] public _holders;
-    mapping(address => int128) private balances;
+    address[] private _holders;
+    mapping(address => int128) private _balances;
 
     int128 _supply = 0;
     int16 _mintCount = 0;
@@ -61,7 +63,7 @@ contract DexhuneTokenRoot  {
         _owner = msg.sender;
 
         _supply = INITIAL_MINT_VALUE;
-        _setBalance(_owner, _supply);
+        _addToBalance(_owner, _supply);
     }
 
     modifier ownerOnly() {
@@ -188,7 +190,7 @@ contract DexhuneTokenRoot  {
     }
 
     function _getBalance(address addr) internal view returns(int128) {
-        int128 balance = balances[addr];
+        int128 balance = _balances[addr];
 
         if (balance < 0) {
             balance = 0;
@@ -210,7 +212,7 @@ contract DexhuneTokenRoot  {
             balance = -1;
         }
 
-        int128 oldBalance = balances[addr];
+        int128 oldBalance = _balances[addr];
 
         // User does not have a balance, no further changes required
         if (oldBalance == 0 && balance == -1) {
@@ -222,7 +224,7 @@ contract DexhuneTokenRoot  {
             _holders.push(addr);
         }
 
-        balances[addr] = balance;
+        _balances[addr] = balance;
     }
 
     function _setBalance(address addr, uint256 balance) internal {
@@ -230,7 +232,7 @@ contract DexhuneTokenRoot  {
     }
 
     function _addToBalance(address addr, int128 value) private {
-        int128 balance = balances[addr];
+        int128 balance = _balances[addr];
 
         // Balance is zero, user does not exist
         if (balance == 0) {
@@ -238,7 +240,9 @@ contract DexhuneTokenRoot  {
         }
 
         balance += value;
-        balances[addr] = balance;
+        _balances[addr] = balance;
+
+        emit Transfer(address(this), addr, uint128(value));
     }
 
     function _distribute(int128 funds) private returns (int128) {
@@ -250,20 +254,20 @@ contract DexhuneTokenRoot  {
 
         for (uint i = 0; i < _holders.length; i++) {
             holder = _holders[i];
-            balance = balances[holder];
+            balance = _balances[holder];
         
             cut = (balance * funds) / _supply;
             
             balance += cut;
             distributed += cut;
 
-            balances[holder] = balance;
-            
-            emit Alloc(holder, balance);
+            _balances[holder] = balance;
+
+            if (cut > 0) {
+                emit Transfer(address(this), holder, uint128(cut));
+            }
         }
 
         return distributed;
     }
-
-    event Alloc(address addr, int128 funds);
 }
