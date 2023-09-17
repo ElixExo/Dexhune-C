@@ -2,8 +2,8 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "C:\\Users\\Prince\\source\\repos\\Peng_Protocol\\dexhune\\contracts\\DexhuneBase.sol": {
-      "lastModificationDate": 1694482119503,
-      "contentHash": "fcab06224b0fdfaa0920b8dc46910457",
+      "lastModificationDate": 1694908248876,
+      "contentHash": "eed91c8cc4069c6b0c67e1693911976c",
       "sourceName": "contracts/DexhuneBase.sol",
       "solcConfig": {
         "version": "0.8.18",
@@ -30,15 +30,15 @@
       },
       "imports": [],
       "versionPragmas": [
-        ">=0.4.22 <0.9.0"
+        "^0.8.18"
       ],
       "artifacts": [
         "DexhuneBase"
       ]
     },
     "C:\\Users\\Prince\\source\\repos\\Peng_Protocol\\dexhune\\contracts\\DexhuneRoot.sol": {
-      "lastModificationDate": 1694649665790,
-      "contentHash": "ef5bad5e9371b7c1a5ea9544180f6133",
+      "lastModificationDate": 1694908248719,
+      "contentHash": "5471bff4dfcdc9e752e6d58c90fd761f",
       "sourceName": "contracts/DexhuneRoot.sol",
       "solcConfig": {
         "version": "0.8.18",
@@ -67,7 +67,7 @@
         "./DexhuneBase.sol"
       ],
       "versionPragmas": [
-        ">=0.4.22 <0.9.0"
+        "^0.8.18"
       ],
       "artifacts": [
         "DexhuneConfig",
@@ -75,8 +75,8 @@
       ]
     },
     "C:\\Users\\Prince\\source\\repos\\Peng_Protocol\\dexhune\\contracts\\DexhunePriceDAO.sol": {
-      "lastModificationDate": 1694770028985,
-      "contentHash": "5297c8cb7953f146c4de67c4b8cddf78",
+      "lastModificationDate": 1694908248719,
+      "contentHash": "0855082cc02dd7de21d40c88329529ef",
       "sourceName": "contracts/DexhunePriceDAO.sol",
       "solcConfig": {
         "version": "0.8.18",
@@ -106,7 +106,7 @@
         "./DexhuneRoot.sol"
       ],
       "versionPragmas": [
-        ">=0.4.22 <0.9.0"
+        "^0.8.18"
       ],
       "artifacts": [
         "DexhunePriceDAO",
@@ -114,8 +114,8 @@
       ]
     },
     "C:\\Users\\Prince\\source\\repos\\Peng_Protocol\\dexhune\\contracts\\DexhuneERC20.sol": {
-      "lastModificationDate": 1694906269995,
-      "contentHash": "dd0d6dffadfdf4977db0b07eec107295",
+      "lastModificationDate": 1694908248719,
+      "contentHash": "fd2850094a8630d6a8353e38c59ca79b",
       "sourceName": "contracts/DexhuneERC20.sol",
       "solcConfig": {
         "version": "0.8.18",
@@ -144,7 +144,7 @@
         "./DexhuneTokenRoot.sol"
       ],
       "versionPragmas": [
-        ">=0.4.22 <0.9.0"
+        "^0.8.18"
       ],
       "artifacts": [
         "DexhuneERC20",

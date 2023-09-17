@@ -1,12 +1,17 @@
-import 'dotenv/config';
+import { config as dotEnvConfig } from "dotenv";
 import { HardhatUserConfig } from "hardhat/config";
 import "@nomicfoundation/hardhat-toolbox";
+
+dotEnvConfig();
+
 
 
 const config: HardhatUserConfig = {
   solidity: "0.8.18",
   etherscan: {
-    apiKey: process.env.ETHERSCAN_API_KEY,
+    apiKey: {
+      avalancheFujiTestnet: process.env.SNOWTRACE_API_KEY as string
+    },
   },
   networks: {
     local: {
@@ -23,7 +28,9 @@ const config: HardhatUserConfig = {
       url: 'https://api.avax-test.network/ext/bc/C/rpc',
       gasPrice: 225000000000,
       chainId: 43113,
-      accounts: []
+      accounts: [
+        process.env.DEPLOY_PRIVATE_KEY as string
+      ]
     },
     ava_mainnet: {
       url: 'https://api.avax.network/ext/bc/C/rpc',
