@@ -1,0 +1,286 @@
+/// Premise /// 
+A function oriented explanation of the Dexhune 'Exchange Contract'. A smart contract for listing and trading Dx Tokens. Uses oracle based price mechanisms. 
+
+/// General /// 
+The 'Exchange Contract' is a storage system that has two datasets it stores; 'Listing Slots' and 'Order Slots', each slot contains data that can be updated via various inputs, these inputs produce different outcomes and changes both to the slot and the balances of associated parties. 
+
+/// Listing Slots ///
+A listing slot is managed as follows; 
+
+Slot # : # (uint)
+Token Contract : ###...### (string)
+Reward : (bool)
+Reward Amount : ## (uint)
+Reward Threshold : ## (uint)
+Parity : (bool) 
+Parity Address : ###...### (string)
+Relative Price : (Bool) (void if parity)
+Price : ## (string)
+Balance-x : ## (AVAX) (string)
+Balance-y : ## (TOKEN) (string)
+
+1,000,000 Listing slots in total will exist. 
+
+'Slot #' defines the slot number, each slot is stored as an individual item or entry within the contract. All details are written once with a 'listToken' function, except "Balance-x" and "Balance-y", how "Balance-x" and "Balance-y" are used is explained under the function; "settleOrders".
+The first slot is reserved for "defaultToken" (DXH), which can be set with an onlyOwner function called 'setDefaultToken'.  
+
+'Parity' and 'Parity Address' are concepts explained in the section "Parity".  
+
+! Function: listToken !
+When 'listToken' is called it deducts a fee in DXH from the listing party's balance and sends it to the 'Exchange contract' under DXH's Balance-y [See "settleOrders"]. The fee begins at 1000 DXH and increases by 0.5% with each listing (or nearest whole number), the maximum fee is 1,000,000 DXH. This function requires the following fields; 
+
+- Token contract (string), 
+- Reward (bool), 
+- Reward amount (uint), 
+- Reward threshold (uint),  
+- Parity (bool) (if false then 'relative price' is true), 
+- Parity address (only valid if Parity is true),  
+- Price (string) (Parity must be false).
+ 
+The 'Exchange' checks if a token is already listed, a listed token cannot be listed twice. 
+
+If the address is not an ERC-20 contract address the listing is rejected.
+
+If 'Relative Price' is true then during listing the user can set 'Price' (string), the 'Relative Price' is relative to the "base price" [See E5] [See "queryPrice"]. 
+
+! Function: SetDefaultToken !
+'SetDefaultToken' defines the details of the token in "Slot 1". All other listings start from "Slot 2" upwards, certain functions that depend on the default token cannot work if the default token is not set, such as; listing additional tokens, as this requires a fee paid in DXH. 
+
+The default token has preset details as follows; 
+
+Slot # : 1 (uint)
+Token Contract : ###...### (string)
+Reward : True (bool) 
+Reward Amount : 2 (uint)
+Reward Threshold : 2000 (uint)
+Parity : False (bool) 
+Parity Address : (string)
+Relative Price : True (bool)
+Price : 1 (string)
+Balance-x : ## (AVAX) (string)
+Balance-y : ## (DXH) (string)
+
+'setDefaultToken' requires 1 field; 
+
+- Default address : ###...### (DXH contract address).
+
+/// Order Slots /// 
+
+An order slot is managed as follows;   
+
+Slot #: # (uint)
+Maker Address: ###...### (string) 
+Order type: (bool)
+Token Contract: ###...### (string)
+Price: ## (string)
+Principal: ## (AVAX or TOKEN) (string)
+Pending: ## (AVAX or TOKEN) (string)
+Reward: (bool)
+Reward amount: ## (uint)
+Created at: ####### (uint)
+
+100,000 order slots in total will exist. 
+
+Each order slot is written once a 'makeOrder' function is called, this writes details of the required fields. 
+
+! Function:  makeOrder ! 
+'makeOrder' deducts a stated amount for a stated token, sending it into the 'Exchange contract', ensuring that the order maker has sufficient tokens before doing so. This function requires three fields; 
+
+- Token contract (string), 
+- Amount (string, numerical, recorded as "Principal"),
+- orderType (bool). 
+
+This function searches the contract for Order slots that have not been written and writes the details as follows; 
+
+Maker Address ; The address of the user making the order 
+
+Order Type ; This is a boolean for "buy" or "sell", True is buy, false is sell. This defines how "Principal" and "pending" are used based on "price". 
+
+Token Contract ; Defines which token is being interacted with, only valid if a listing slot has that address.  
+
+Price ; A base price is derived by querying 'getPrice' at a designated 'PriceDAO' contract, whereas each token's price is a number relative to that either preset or at "Parity".  
+
+Principal ; Defines how much is/was deducted from the user's address upon initiation of the order, this is held within the contract. Whether this Principal is in AVAX or the target token is determined by "orderType", if the order is set to 'buy', then AVAX is deducted, if the order is set to 'sell', then the target token is deducted. 
+
+Pending ; Defines how much is to be credited to the maker's address once an order is taken, this amount is only paid if (1) of (2) functions are called; 'takeOrder' or 'settleOrders'. The pending token is also defined by "orderType", if the order is set to 'buy' then the pending token is the target token, whereas if set to 'sell', the pending token is AVAX. 
+
+Reward ; Defines whether or not a reward is paid out to the order taker from the token's Balance-y once the order is taken. 
+
+Reward Amount ; Defines how much the order taker gets once they call 'takeOrder', the payout amount is gotten from the Balance-y of a particular token. The data for this is gotten from the token's listing slot, which is checked upon initiation of the order. 
+
+Reward Threshold; Defines what size of orders are eligible for rewards, [See E1].
+
+Created at ; Saves the block height at which the order was made, this is used when 'clearOrders' is called. 
+
+! Function: takeOrder !
+'takeOrder' once complete; reverts the data in an order slot to its base format as seen earlier, 'takeOrder' deducts the pending amount from the taker's balance and sends it to the maker's address, while also withdrawing the stored 'Principal' deposited by the maker and sending it to the taker's address. The contract ensures that the taker has sufficient funds to cover the pending amount before doing so.  
+
+'takeOrder' requires 2 fields; 
+
+- Token Contract (string)
+- Amount (string, numerical) 
+
+Token Contract ; this defines which token's order slots are to be taken. 
+
+Amount ; this defines what threshold of orders are to be taken.
+
+When 'takeOrder' is called it searches the contract for pending orders of a particular token within a threshold amount, the contract chooses an order to settle either wholly or in part [See E2]. The taker does not define which order to take and cannot discriminate.  
+
+Taking an order "in part" means the taker takes only a portion of the order, and the slot is updated for the remainder [See E2]. Whereas taking an order in full compeletly takes the pending amount, sends the required token and or AVAX to respective parties and reverts the order slot.   
+
+Whether an order is taken in part or in full depends on precedence, the contract will attempt to take an order in full, if no full orders of that exact size exist but larger orders are present then the contract takes the first larger order in part. 
+
+Each order can yield rewards if the target token has rewards enabled, the amount to reward and the threshold are all stored under the token's listing slot and appended to every order.   
+
+! Function: settleOrders ! 
+'settleOrders'  queries all order slots of a particular token and settles them under certain rules and requirements. 
+
+Rule 1 ; Token Liquidity 
+This rule targets "Buys" of a token, using Balance-y of the target token, and thus that balance is used to settle as many pending "buy" orders as possible. The Balance-y defines how much [TOKEN] is allocated by the contract to settle 'buys' of a token.   
+
+Rule 2 ; AVAX Liquidity 
+This rule targets "Sells" of a token, using its Balance-x and attempts to settle all orders using AVAX allocated to it [See E3]. The Balance-x defines how much AVAX is allocated by the contract to settle 'Sells' of a token.
+
+This function requires (2) fields; 
+
+- Token contract ; (string) 
+- Order Type ; (bool)
+
+! Function: deposit !
+This allows a user to increase a token's Balance-x or Balance-y by depositing units of the target token or AVAX into the contract.  
+
+This function has 4 fields; 
+
+- Token contract ; (string)
+- Balance Type ; (bool) 
+- Amount ; (string, numerical)
+- fromAddress ; (string) 
+
+Under Balance Type; "true" denotes Balance-x, whereas "false" denotes Balance-y. 
+Once a user deposits AVAX for a particular token's Balance-x the AVAX is used for all executions of Rule 2, whereas all deposited [TOKEN] in Balance-y is used for executions of Rule 1. 
+
+"fromAddress" allows external contracts to specify which address is the depositor, the external address specifies itself/it's address. 
+
+! Function: clearOrders !
+'clearOrders' targets the "Created at" detail of all pending order slots, if the block height of an order is older than 10 blocks it clears the order, thereby returning the 'Principal' to the maker addresses. The caller pays the fee for the compute and transfers. 
+
+! Function: queryOrder !
+'queryOrder' allows a user to get details of certain orders based on a few parameters such as contract address, maker address and slot number.
+
+This function requires 2 fields; 
+
+- Query Type (uint)
+- Query Details (String)
+
+Query Type specifies what kind of query is being made, if "1" is specified, this is querying the maker address, in "Query Details", the user has to input an address to query, this returns the digits of all slots with orders for that maker. 
+If "2" is specified in the  Query Type; this queries a contract address and the target token's address must be specified, it returns the digits of all slots with orders for that token. 
+If "3" is specified; this queries the particular slot number of an order, it returns the full details of a particular order slot. 
+
+! Function: queryListing !
+'queryListing' allows a user to get the details of certain listed tokens based on a few parameters such as; contract address and slot number. 
+
+This function requires (2) fields; 
+- Query Type (uint)
+- Query Details (string) 
+
+If "1" is specified in Query Type, this indicates a contract address should be in the Query Details, this searches the 'Exchange' for the full details of a slot with that token.
+If "2" is specified, this indicates a specific slot number should be in Query Details, this searches the 'Exchange' for the full details of the particular slot number.   
+
+! Function: queryPrice !
+Price is numerical data that underpins the entire exchange, it cannot be understated how important price is. Price is queried from an external contract called a 'PriceDAO' (a type of decentralized oracle), by looking up the details in 'getPrice' [See E5].
+
+The exchange is triggered to fetch price every (4) minutes, but only when 'makeOrder' is called, if 'makeOrder' is called when a new price needs to be acquired the contract charges the order maker additionally for fetching price, this price is then stored within the contract until it expires in (4) minutes. 
+
+'queryPrice' returns base price. 
+
+/// Parity /// 
+Parity is the second pricing scheme other than "Relative", Parity means the token's value is determined by how much DXH and [TOKEN] is held in a designated "Parity Address". 
+
+The price is gotten by calling 'balanceOf' at the DXH token address in regards to the 'Parity Address' of the listed token, this gives the DXH balance of the 'Parity Address'. The contract then calls 'balanceOf' at the listed token's address in regards to the 'Parity Address', thereby acquiring the [TOKEN] balance of the 'Parity Address' [See E4].
+
+The contract then divides the 'Parity Address's' DXH balance by its [TOKEN] balance, the result is rounded up or down then stored under the token's listing slot as "Price" until the next check, each check uses the same clock as the base price check, but is only triggered when orders of the particular parity token are made, [See E7]
+
+If a Parity token's price check is triggered; the contract first checks the base price before checking the parity price of the initiating token, storing both as required. The order maker pays for both computes.  
+
+! Function: getBalance !
+Returns the total amount of AVAX held by the contract.
+
+! Function: claimUnallocated !
+This allows a user to claim any "unallocated tokens" within the exchange, this first queries a token's Balance-y to get its total self balance, then queries the Principal of all "Sell" orders for that token to get outstanding balances, finally it queries the exchange's total balance of the token by calling 'balanceOf' at the token's contract address in regards to the exchange balance. Once all this is acquired it proceeds to get the difference and credit the caller [See E6].
+
+This function requires (2) fields; 
+
+- Token contract (string)
+- isAVAX (bool)
+
+Inserting "true" in "isAVAX" requires "Token contract" to be blank, this will cause the exchange to query all tokens' Balance-x, which can be more computationally complex, then it queries Principal amount of all "Buy" orders for all tokens to get the outstanding balances. Finally it queries the exchange's total balance of AVAX. Once all this is acquired it proceeds to get the difference and credit the caller [See E6 again]. 
+
+! Function: queryBalance !
+Returns the Balance-x or y of a token. 
+
+Requires (2) fields; 
+
+Contract address (string) 
+Balance type (bool) 
+
+"True" under Balance type indicates the user is querying Balance-x, while "false" indicates a query for Balance-y. 
+
+! Data: listingCost ! 
+Shows the current listing cost for tokens. 
+
+/// Boilerplate Functions ///
+- owner: returns the address of the owner.
+
+- transferOwnership: specifies a new owner, requires Address (string). Is ownerOnly.  
+
+
+/// Examples /// 
+E1: if a reward threshold is set to 1000, this means only 'takes' of 1000[TOKEN] upwards are eligible for rewards, if an order is less than 1000[TOKEN] then the contract gives no rewards to the order taker upon completing the order. If the contract has insufficient tokens to pay out a reward then it does not pay the reward but any other action is completed within the transaction. 
+
+E2 : if User-A makes an order to buy 1000[TOKEN] for 10AVAX, but User-B posts a 'take' for 500 [TOKEN], the taker partially takes the order, updating the once 1000[TOKEN] Pending and 10AVAX Principal order details to 500[TOKEN] pending and 5AVAX Principal, which is the amount left over after the partial 'take'.  
+In the process of this, it sends 500[TOKEN] to the maker's address and 5AVAX to the taker.  
+
+E3 : Each time 'settleOrders' is called using "Rule 1" the implied counterparty is the 'Exchange Contract',  therefore AVAX from the settled order is stored within the exchange contract, the amount of AVAX that was acquired during the order is allocated to the target token's "Balance-x" field. If (10) users place orders in total of 1000AVAX worth of [TOKEN], and such order is settled by the 'settleOrders' function, then '1000' is added to the token's "Balance-x". Vice versa for "Rule 2".
+
+E4 : If a parity address's balance is 1540DXH to 240[TOKEN], the 'Exchange' divides 1540 by 240, therefore the price is; 6.416 to 1. 
+This data is stored under "price" as just "6.416" (4 decimals maximum). 
+
+E5 : A token with the price of "1" implies that the token is worth 1DXH or the same as the base price, in a situation where a user wants to sell 1000 units of such token while the base price is "64", the contract gets the base price and divides their 1000[TOKEN] by 64, giving 15.625, this number is how much AVAX they are owed. 
+
+If an order is set to "buy", then the AVAX amount from the last calculation is deducted from the user and the token amount becomes pending, whereas if set to "sell", then the [TOKEN] amount is deducted from the user and the AVAX amount becomes pending.
+
+In a situation where the price is 5DXH per [TOKEN], once the exchange acquires price it divides DXH price (64) by the token's price (5). So if the user wanted to buy 1000[TOKEN], 1000 would be divided by the relative price from the prior calculation (13), equalling 76.9260AVAX (4 decimals maximum for AVAX). 
+
+Once the user wants to sell; the contract does the same process again but 76.9260AVAX is how much they are owed and 1000[TOKEN] is how much they are selling/have deposited into the contract. 
+
+If the 'PriceDAO' returns a price less than "1", this is still valid. If the base price is 0.5 and a user wishes to trade 1000 units of a token worth 1DXH, the contract divides the order size (1000) by the base price (0.5), giving 2000, this is the AVAX amount for the trade. 
+
+If the token is worth 5DXH while the base price is 0.5, then the contract divides base price (0.5) by the token price (5). This gives 0.1, then the order size (1000) divided by the relative price (0.1) gives 10,000. This becomes the AVAX amount for the trade. 
+
+E6 : If a user attempted to claim unallocated units of [TOKEN] and the contract found 1000[TOKEN] in its Balance-y and 100[TOKEN] in "Sell" orders, that's 1100[TOKEN], if there is a total of 1100[TOKEN] in the contract then the total unclaimed is 0. Whereas if the total balance is 1120[TOKEN], then the contract subtracts 1120 by 1100, equalling; 20. Therefore the total unclaimed is 20[TOKEN] and that is credited to the caller. 
+
+If the user was attempting to claim unallocated units of AVAX, assuming Balance-x held by all tokens is 1,000,000, and all Principal amounts in "Buy" orders is 100,000, that's 1,100,000, while the 'Exchange's' AVAX balance is 1,100,069, it gets the difference and credits the caller with 69AVAX. 
+
+E7: if the clock for base price is due and a parity token gets an order 'make' then the contract checks both base price and price of the parity token. However if a non-parity token gets an order 'make' only the base price is checked. 
+One parity token checking price only checks price for itself and the base price, not for other parity tokens. 
+
+/// Notes ///
+- All trades are to or from AVAX
+
+- If order slots are full a user can call 'clearOrders' to make room. By reverting old orders.
+
+- If a token has no decimals but a user makes an order with decimals, then the order cannot be fully taken because no taker will ever have the fractions needed, the order will be partially taken but the fractions will be eventually cleared using 'clearOrders'. 
+
+- Tokens cannot be worth less than 1DXH.  
+
+- Because the contract pays out rewards from Balance-y, this balance is always being slowly (or quickly) depleted. With DXH daily mints it would take 150,000 transactions to deplete the daily DXH Balance-y. This is assuming that no other DXH exists within the contract from prior days' mints or from listings.  
+
+- Ensure that when the contract is calling external functions it calls a specific bytecode and not function name. 
+
+- Ensure that functions like 'makeOrder' 'takeOrder' and 'deposit' withdraw the stated funds from the caller before doing any changes to the database. 
+
+- Ensure that callers with insufficient balance for a transaction are rejected before execution. 
+
+- Ensure that all transactions that affect balances require approval every time for a specific amount being traded.
+
+- Ensure that users cannot sell "0" of something. 
