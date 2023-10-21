@@ -14,4 +14,4 @@ There are currently (4) proposed versions for the Hybrid-Line-Bus/Network.
 
 
 # Dexhune Distributed Exchange 
-Dexhune is a pilot system for Peng Protocol, which inherits many of the same security and trading concepts of the Hybrid Line proposals but built on a much simpler platform; the EVM. The Dexhune whitepaper can be found [Here](https://files.catbox.moe/yry30k.pdf)
+Dexhune is a pilot system for Peng Protocol, which inherits many of the same security and trading concepts of the Hybrid Line proposals but built on a much simpler platform; the EVM. The Dexhune whitepaper can be found [Here](https://files.catbox.moe/iwn6lg.pdf)
