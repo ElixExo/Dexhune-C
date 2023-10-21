@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: BSD-3-Clause
-/// @title Dexhune Price DAO Logic
+/// @title Dexhune Oracle/Price DAO Logic
 /*
 *    ........................................................
 *    .%%%%%...%%%%%%..%%..%%..%%..%%..%%..%%..%%..%%..%%%%%%.
@@ -10,12 +10,12 @@
 *    ........................................................
 */
 
-pragma solidity ^0.8.18;
+pragma solidity ^0.8.21;
 
 import "./DexhuneBase.sol";
 import "./DexhuneRoot.sol";
 
-error NotEligibleToVote();
+error NotEligible();
 error AlreadyVoted();
 error ProposalDoesNotExist();
 error VotingDeactivated();
@@ -66,6 +66,10 @@ contract DexhunePriceDAO is DexhuneBase, DexhuneRoot {
     }
 
     function proposePrice(string memory _desc, string memory _price) external {
+        if (!ensureEligible()) {
+            revert NotEligible();
+        }
+
         uint256 id = PriceProposals.length;
         if (id > 0) {
             if (!PriceProposals[id - 1].finalized) {
@@ -88,11 +92,11 @@ contract DexhunePriceDAO is DexhuneBase, DexhuneRoot {
 
     function voteUp() external {
         if (!ensureEligible()) {
-            revert NotEligibleToVote();
+            revert NotEligible();
         }
 
         uint256 _id = PriceProposals.length - 1;
-        PriceProposal storage p = ensureProposal(_id);
+        PriceProposal memory p = ensureProposal(_id);
 
         if (block.number >= votingDeadline) {
             revert VotingDeactivated();
@@ -111,7 +115,7 @@ contract DexhunePriceDAO is DexhuneBase, DexhuneRoot {
 
     function voteDown() external {
         if (!ensureEligible()) {
-            revert NotEligibleToVote();
+            revert NotEligible();
         }
         
         uint256 _id = PriceProposals.length - 1;

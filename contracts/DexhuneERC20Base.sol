@@ -12,7 +12,7 @@
 *    ........................................................
 */
 
-pragma solidity ^0.8.18;
+pragma solidity ^0.8.21;
 
 import "./interfaces/IERC20.sol";
 

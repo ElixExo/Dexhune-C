@@ -1,0 +1,236 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "IDexhuneExchange",
+  "sourceName": "contracts/DexhuneExchange.sol",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "tokenAddr",
+          "type": "address"
+        },
+        {
+          "internalType": "bool",
+          "name": "isAVAX",
+          "type": "bool"
+        }
+      ],
+      "name": "claimUnallocated",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "clearOrders",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "fromAddress",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "tokenAddr",
+          "type": "address"
+        },
+        {
+          "internalType": "bool",
+          "name": "balanceType",
+          "type": "bool"
+        },
+        {
+          "internalType": "string",
+          "name": "amount",
+          "type": "string"
+        }
+      ],
+      "name": "deposit",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getBalance",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "tokenContract",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "rewardAmount",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "rewardThreshold",
+          "type": "uint256"
+        },
+        {
+          "internalType": "address",
+          "name": "parityAddr",
+          "type": "address"
+        },
+        {
+          "internalType": "string",
+          "name": "price",
+          "type": "string"
+        }
+      ],
+      "name": "listToken",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "tokenAddr",
+          "type": "address"
+        },
+        {
+          "internalType": "string",
+          "name": "amount",
+          "type": "string"
+        },
+        {
+          "internalType": "bool",
+          "name": "orderType",
+          "type": "bool"
+        }
+      ],
+      "name": "makeOrder",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "contractAddr",
+          "type": "address"
+        },
+        {
+          "internalType": "bool",
+          "name": "balanceType",
+          "type": "bool"
+        }
+      ],
+      "name": "queryBalance",
+      "outputs": [],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint8",
+          "name": "queryType",
+          "type": "uint8"
+        },
+        {
+          "internalType": "string",
+          "name": "queryDetails",
+          "type": "string"
+        }
+      ],
+      "name": "queryListing",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint8",
+          "name": "queryType",
+          "type": "uint8"
+        },
+        {
+          "internalType": "string",
+          "name": "queryDetails",
+          "type": "string"
+        }
+      ],
+      "name": "queryOrder",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "queryPrice",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "tokenAddr",
+          "type": "address"
+        },
+        {
+          "internalType": "bool",
+          "name": "orderType",
+          "type": "bool"
+        }
+      ],
+      "name": "settleOrders",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "tokenAddr",
+          "type": "address"
+        },
+        {
+          "internalType": "string",
+          "name": "amount",
+          "type": "string"
+        }
+      ],
+      "name": "takeOrder",
+      "outputs": [],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}

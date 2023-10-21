@@ -4,6 +4,7 @@
     "description": "Dexhune is a cryptocurrency system built on Avalanche C-Chain, it is designed to enable the creation of price pegged assets via a new form of 'Distributed' Exchange",
     "dependencies": {
         "@morpho-labs/ethers-utils": "^1.2.0",
+        "@prb/math": "^4.0.1",
         "dotenv": "^16.3.1",
         "ts-sinon": "^2.0.2"
     },

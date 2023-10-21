@@ -14,7 +14,7 @@
 *    ........................................................
 */
 
-pragma solidity ^0.8.18;
+pragma solidity ^0.8.21;
 
 interface IERC20 {
     /**
@@ -30,6 +30,22 @@ interface IERC20 {
      * a call to {approve}. `value` is the new allowance.
      */
     event Approval(address indexed owner, address indexed spender, uint256 value);
+
+
+    /**
+     * @dev OPTIONAL Returns the name of the token
+     */
+    function name() external view returns (string memory);
+
+    /**
+     * @dev OPTIONAL Returns the symbol of the token
+     */
+    function symbol() external view returns (string memory);
+
+    /**
+     * @dev OPTIONAL Returns the amount of decimals supported by the token
+     */
+    function decimals() external view returns (uint8);
 
     /**
      * @dev Returns the value of tokens in existence.

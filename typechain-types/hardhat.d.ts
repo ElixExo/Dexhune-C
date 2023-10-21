@@ -21,6 +21,14 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.DexhuneERC20Base__factory>;
     getContractFactory(
+      name: "DexhuneExchange",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.DexhuneExchange__factory>;
+    getContractFactory(
+      name: "IDexhuneExchange",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IDexhuneExchange__factory>;
+    getContractFactory(
       name: "DexhunePriceDAO",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.DexhunePriceDAO__factory>;
@@ -36,6 +44,10 @@ declare module "hardhat/types/runtime" {
       name: "DexhuneRoot",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.DexhuneRoot__factory>;
+    getContractFactory(
+      name: "IERC165",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IERC165__factory>;
     getContractFactory(
       name: "IERC20",
       signerOrOptions?: ethers.Signer | FactoryOptions
@@ -56,6 +68,16 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.DexhuneERC20Base>;
     getContractAt(
+      name: "DexhuneExchange",
+      address: string | ethers.Addressable,
+      signer?: ethers.Signer
+    ): Promise<Contracts.DexhuneExchange>;
+    getContractAt(
+      name: "IDexhuneExchange",
+      address: string | ethers.Addressable,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IDexhuneExchange>;
+    getContractAt(
       name: "DexhunePriceDAO",
       address: string | ethers.Addressable,
       signer?: ethers.Signer
@@ -75,6 +97,11 @@ declare module "hardhat/types/runtime" {
       address: string | ethers.Addressable,
       signer?: ethers.Signer
     ): Promise<Contracts.DexhuneRoot>;
+    getContractAt(
+      name: "IERC165",
+      address: string | ethers.Addressable,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IERC165>;
     getContractAt(
       name: "IERC20",
       address: string | ethers.Addressable,
@@ -95,6 +122,14 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.DexhuneERC20Base>;
     deployContract(
+      name: "DexhuneExchange",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.DexhuneExchange>;
+    deployContract(
+      name: "IDexhuneExchange",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IDexhuneExchange>;
+    deployContract(
       name: "DexhunePriceDAO",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.DexhunePriceDAO>;
@@ -110,6 +145,10 @@ declare module "hardhat/types/runtime" {
       name: "DexhuneRoot",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.DexhuneRoot>;
+    deployContract(
+      name: "IERC165",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IERC165>;
     deployContract(
       name: "IERC20",
       signerOrOptions?: ethers.Signer | FactoryOptions
@@ -130,6 +169,16 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.DexhuneERC20Base>;
     deployContract(
+      name: "DexhuneExchange",
+      args: any[],
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.DexhuneExchange>;
+    deployContract(
+      name: "IDexhuneExchange",
+      args: any[],
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IDexhuneExchange>;
+    deployContract(
       name: "DexhunePriceDAO",
       args: any[],
       signerOrOptions?: ethers.Signer | FactoryOptions
@@ -149,6 +198,11 @@ declare module "hardhat/types/runtime" {
       args: any[],
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.DexhuneRoot>;
+    deployContract(
+      name: "IERC165",
+      args: any[],
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IERC165>;
     deployContract(
       name: "IERC20",
       args: any[],

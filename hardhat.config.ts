@@ -7,7 +7,7 @@ dotEnvConfig();
 
 
 const config: HardhatUserConfig = {
-  solidity: "0.8.18",
+  solidity: "0.8.21",
   etherscan: {
     apiKey: {
       avalancheFujiTestnet: process.env.SNOWTRACE_API_KEY as string

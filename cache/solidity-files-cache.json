@@ -2,12 +2,13 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "C:\\Users\\Prince\\source\\repos\\Peng_Protocol\\dexhune\\contracts\\DexhuneBase.sol": {
-      "lastModificationDate": 1694908248876,
-      "contentHash": "eed91c8cc4069c6b0c67e1693911976c",
+      "lastModificationDate": 1697740970884,
+      "contentHash": "05a56a0c26defb49ea75432a7e9b552f",
       "sourceName": "contracts/DexhuneBase.sol",
       "solcConfig": {
-        "version": "0.8.18",
+        "version": "0.8.21",
         "settings": {
+          "evmVersion": "paris",
           "optimizer": {
             "enabled": false,
             "runs": 200
@@ -30,19 +31,20 @@
       },
       "imports": [],
       "versionPragmas": [
-        "^0.8.18"
+        "^0.8.21"
       ],
       "artifacts": [
         "DexhuneBase"
       ]
     },
     "C:\\Users\\Prince\\source\\repos\\Peng_Protocol\\dexhune\\contracts\\DexhuneRoot.sol": {
-      "lastModificationDate": 1694908248719,
-      "contentHash": "5471bff4dfcdc9e752e6d58c90fd761f",
+      "lastModificationDate": 1697740970875,
+      "contentHash": "26392b49d48a390dcc0ccec1e160b6ba",
       "sourceName": "contracts/DexhuneRoot.sol",
       "solcConfig": {
-        "version": "0.8.18",
+        "version": "0.8.21",
         "settings": {
+          "evmVersion": "paris",
           "optimizer": {
             "enabled": false,
             "runs": 200
@@ -67,7 +69,7 @@
         "./DexhuneBase.sol"
       ],
       "versionPragmas": [
-        "^0.8.18"
+        "^0.8.21"
       ],
       "artifacts": [
         "DexhuneConfig",
@@ -75,12 +77,13 @@
       ]
     },
     "C:\\Users\\Prince\\source\\repos\\Peng_Protocol\\dexhune\\contracts\\DexhunePriceDAO.sol": {
-      "lastModificationDate": 1694908248719,
-      "contentHash": "0855082cc02dd7de21d40c88329529ef",
+      "lastModificationDate": 1697740970876,
+      "contentHash": "d0b371755154a5a6a338a380d781ee68",
       "sourceName": "contracts/DexhunePriceDAO.sol",
       "solcConfig": {
-        "version": "0.8.18",
+        "version": "0.8.21",
         "settings": {
+          "evmVersion": "paris",
           "optimizer": {
             "enabled": false,
             "runs": 200
@@ -106,7 +109,7 @@
         "./DexhuneRoot.sol"
       ],
       "versionPragmas": [
-        "^0.8.18"
+        "^0.8.21"
       ],
       "artifacts": [
         "DexhunePriceDAO",
@@ -114,12 +117,13 @@
       ]
     },
     "C:\\Users\\Prince\\source\\repos\\Peng_Protocol\\dexhune\\contracts\\DexhuneERC20.sol": {
-      "lastModificationDate": 1694945332915,
-      "contentHash": "b62bb3aa51548df89296a95f3cf40e76",
+      "lastModificationDate": 1697740970880,
+      "contentHash": "c8d725b736e1ef0a93bae12e65ae0311",
       "sourceName": "contracts/DexhuneERC20.sol",
       "solcConfig": {
-        "version": "0.8.18",
+        "version": "0.8.21",
         "settings": {
+          "evmVersion": "paris",
           "optimizer": {
             "enabled": false,
             "runs": 200
@@ -144,7 +148,7 @@
         "./DexhuneERC20Base.sol"
       ],
       "versionPragmas": [
-        "^0.8.18"
+        "^0.8.21"
       ],
       "artifacts": [
         "DexhuneERC20"
@@ -155,8 +159,9 @@
       "contentHash": "6a99aeb0ae20e923a36b6b01ff4f4355",
       "sourceName": "contracts/mockups/MockNFT.sol",
       "solcConfig": {
-        "version": "0.8.18",
+        "version": "0.8.21",
         "settings": {
+          "evmVersion": "paris",
           "optimizer": {
             "enabled": false,
             "runs": 200
@@ -184,12 +189,13 @@
       ]
     },
     "C:\\Users\\Prince\\source\\repos\\Peng_Protocol\\dexhune\\contracts\\DexhuneERC20Base.sol": {
-      "lastModificationDate": 1694945834885,
-      "contentHash": "396d62f4b6730ce9cf133ace06bd5359",
+      "lastModificationDate": 1697740970877,
+      "contentHash": "9dd3a117c8b6817613659f994c73e26c",
       "sourceName": "contracts/DexhuneERC20Base.sol",
       "solcConfig": {
-        "version": "0.8.18",
+        "version": "0.8.21",
         "settings": {
+          "evmVersion": "paris",
           "optimizer": {
             "enabled": false,
             "runs": 200
@@ -214,19 +220,20 @@
         "./interfaces/IERC20.sol"
       ],
       "versionPragmas": [
-        "^0.8.18"
+        "^0.8.21"
       ],
       "artifacts": [
         "DexhuneERC20Base"
       ]
     },
     "C:\\Users\\Prince\\source\\repos\\Peng_Protocol\\dexhune\\contracts\\interfaces\\IERC20.sol": {
-      "lastModificationDate": 1694943298948,
-      "contentHash": "3258755120ebcfab4f688cf265ba6331",
+      "lastModificationDate": 1697740970886,
+      "contentHash": "5996c87a3e81ae7715508fc828b77aed",
       "sourceName": "contracts/interfaces/IERC20.sol",
       "solcConfig": {
-        "version": "0.8.18",
+        "version": "0.8.21",
         "settings": {
+          "evmVersion": "paris",
           "optimizer": {
             "enabled": false,
             "runs": 200
@@ -249,11 +256,1001 @@
       },
       "imports": [],
       "versionPragmas": [
-        "^0.8.18"
+        "^0.8.21"
       ],
       "artifacts": [
         "IERC20"
       ]
+    },
+    "C:\\Users\\Prince\\source\\repos\\Peng_Protocol\\dexhune\\contracts\\DexhuneExchange.sol": {
+      "lastModificationDate": 1697741541339,
+      "contentHash": "7015249d5352bcf443349fb3d748e923",
+      "sourceName": "contracts/DexhuneExchange.sol",
+      "solcConfig": {
+        "version": "0.8.21",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./interfaces/IERC20.sol",
+        "./libraries/ERC165Checker.sol",
+        "@prb/math/src/UD60x18.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.21"
+      ],
+      "artifacts": [
+        "DexhuneExchange",
+        "IDexhuneExchange"
+      ]
+    },
+    "C:\\Users\\Prince\\source\\repos\\Peng_Protocol\\dexhune\\contracts\\libraries\\ERC165Checker.sol": {
+      "lastModificationDate": 1697740970887,
+      "contentHash": "339f4ecdea3e5a1b3839255f2aed01e0",
+      "sourceName": "contracts/libraries/ERC165Checker.sol",
+      "solcConfig": {
+        "version": "0.8.21",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../interfaces/IERC165.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.21"
+      ],
+      "artifacts": [
+        "ERC165Checker"
+      ]
+    },
+    "C:\\Users\\Prince\\source\\repos\\Peng_Protocol\\dexhune\\node_modules\\@prb\\math\\src\\UD60x18.sol": {
+      "lastModificationDate": 1697682270703,
+      "contentHash": "55aeee8a1cf7cf9fd8a0176bd06b739f",
+      "sourceName": "@prb/math/src/UD60x18.sol",
+      "solcConfig": {
+        "version": "0.8.21",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./ud60x18/Casting.sol",
+        "./ud60x18/Constants.sol",
+        "./ud60x18/Conversions.sol",
+        "./ud60x18/Errors.sol",
+        "./ud60x18/Helpers.sol",
+        "./ud60x18/Math.sol",
+        "./ud60x18/ValueType.sol"
+      ],
+      "versionPragmas": [
+        ">=0.8.19"
+      ],
+      "artifacts": []
+    },
+    "C:\\Users\\Prince\\source\\repos\\Peng_Protocol\\dexhune\\contracts\\interfaces\\IERC165.sol": {
+      "lastModificationDate": 1697740970886,
+      "contentHash": "f3386a2f7b53a21f1fb03701bcc63733",
+      "sourceName": "contracts/interfaces/IERC165.sol",
+      "solcConfig": {
+        "version": "0.8.21",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.21"
+      ],
+      "artifacts": [
+        "IERC165"
+      ]
+    },
+    "C:\\Users\\Prince\\source\\repos\\Peng_Protocol\\dexhune\\node_modules\\@prb\\math\\src\\ud60x18\\Casting.sol": {
+      "lastModificationDate": 1697682270628,
+      "contentHash": "210f9ed8d979a7449cdb5b7adb003808",
+      "sourceName": "@prb/math/src/ud60x18/Casting.sol",
+      "solcConfig": {
+        "version": "0.8.21",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./Errors.sol",
+        "../Common.sol",
+        "../sd1x18/Constants.sol",
+        "../sd1x18/ValueType.sol",
+        "../sd59x18/Constants.sol",
+        "../sd59x18/ValueType.sol",
+        "../ud2x18/Constants.sol",
+        "../ud2x18/ValueType.sol",
+        "./ValueType.sol"
+      ],
+      "versionPragmas": [
+        ">=0.8.19"
+      ],
+      "artifacts": []
+    },
+    "C:\\Users\\Prince\\source\\repos\\Peng_Protocol\\dexhune\\node_modules\\@prb\\math\\src\\ud60x18\\Conversions.sol": {
+      "lastModificationDate": 1697682270657,
+      "contentHash": "7d6126ed4b68e5c939cf0af5cd237b66",
+      "sourceName": "@prb/math/src/ud60x18/Conversions.sol",
+      "solcConfig": {
+        "version": "0.8.21",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./Constants.sol",
+        "./Errors.sol",
+        "./ValueType.sol"
+      ],
+      "versionPragmas": [
+        ">=0.8.19"
+      ],
+      "artifacts": []
+    },
+    "C:\\Users\\Prince\\source\\repos\\Peng_Protocol\\dexhune\\node_modules\\@prb\\math\\src\\ud60x18\\Helpers.sol": {
+      "lastModificationDate": 1697682270687,
+      "contentHash": "f17f113af284236759bc9217ed544728",
+      "sourceName": "@prb/math/src/ud60x18/Helpers.sol",
+      "solcConfig": {
+        "version": "0.8.21",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./Casting.sol",
+        "./ValueType.sol"
+      ],
+      "versionPragmas": [
+        ">=0.8.19"
+      ],
+      "artifacts": []
+    },
+    "C:\\Users\\Prince\\source\\repos\\Peng_Protocol\\dexhune\\node_modules\\@prb\\math\\src\\ud60x18\\Errors.sol": {
+      "lastModificationDate": 1697682270665,
+      "contentHash": "63cbb9480bb14e0824736d5c109aa7ce",
+      "sourceName": "@prb/math/src/ud60x18/Errors.sol",
+      "solcConfig": {
+        "version": "0.8.21",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./ValueType.sol"
+      ],
+      "versionPragmas": [
+        ">=0.8.19"
+      ],
+      "artifacts": []
+    },
+    "C:\\Users\\Prince\\source\\repos\\Peng_Protocol\\dexhune\\node_modules\\@prb\\math\\src\\ud60x18\\Constants.sol": {
+      "lastModificationDate": 1697682270653,
+      "contentHash": "282d93a05c3ed412d5a3b74a4ad05d6d",
+      "sourceName": "@prb/math/src/ud60x18/Constants.sol",
+      "solcConfig": {
+        "version": "0.8.21",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./ValueType.sol"
+      ],
+      "versionPragmas": [
+        ">=0.8.19"
+      ],
+      "artifacts": []
+    },
+    "C:\\Users\\Prince\\source\\repos\\Peng_Protocol\\dexhune\\node_modules\\@prb\\math\\src\\ud60x18\\ValueType.sol": {
+      "lastModificationDate": 1697682270729,
+      "contentHash": "2cdd6d9529412185283eb7d955e95cbe",
+      "sourceName": "@prb/math/src/ud60x18/ValueType.sol",
+      "solcConfig": {
+        "version": "0.8.21",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./Casting.sol",
+        "./Helpers.sol",
+        "./Math.sol"
+      ],
+      "versionPragmas": [
+        ">=0.8.19"
+      ],
+      "artifacts": []
+    },
+    "C:\\Users\\Prince\\source\\repos\\Peng_Protocol\\dexhune\\node_modules\\@prb\\math\\src\\ud60x18\\Math.sol": {
+      "lastModificationDate": 1697682270691,
+      "contentHash": "925bb9fcc75f579cf3e9dd58fa10a90c",
+      "sourceName": "@prb/math/src/ud60x18/Math.sol",
+      "solcConfig": {
+        "version": "0.8.21",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../Common.sol",
+        "./Errors.sol",
+        "./Casting.sol",
+        "./Constants.sol",
+        "./ValueType.sol"
+      ],
+      "versionPragmas": [
+        ">=0.8.19"
+      ],
+      "artifacts": []
+    },
+    "C:\\Users\\Prince\\source\\repos\\Peng_Protocol\\dexhune\\node_modules\\@prb\\math\\src\\Common.sol": {
+      "lastModificationDate": 1697682270631,
+      "contentHash": "d77a476e938b130819f9bb3bd2932e57",
+      "sourceName": "@prb/math/src/Common.sol",
+      "solcConfig": {
+        "version": "0.8.21",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        ">=0.8.19"
+      ],
+      "artifacts": []
+    },
+    "C:\\Users\\Prince\\source\\repos\\Peng_Protocol\\dexhune\\node_modules\\@prb\\math\\src\\sd1x18\\Constants.sol": {
+      "lastModificationDate": 1697682270635,
+      "contentHash": "3a00d7986d0f1f5fd47ac9f2dc1475ce",
+      "sourceName": "@prb/math/src/sd1x18/Constants.sol",
+      "solcConfig": {
+        "version": "0.8.21",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./ValueType.sol"
+      ],
+      "versionPragmas": [
+        ">=0.8.19"
+      ],
+      "artifacts": []
+    },
+    "C:\\Users\\Prince\\source\\repos\\Peng_Protocol\\dexhune\\node_modules\\@prb\\math\\src\\sd1x18\\ValueType.sol": {
+      "lastModificationDate": 1697682270723,
+      "contentHash": "f0d7fec0238b9623cd5432462fba5c7f",
+      "sourceName": "@prb/math/src/sd1x18/ValueType.sol",
+      "solcConfig": {
+        "version": "0.8.21",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./Casting.sol"
+      ],
+      "versionPragmas": [
+        ">=0.8.19"
+      ],
+      "artifacts": []
+    },
+    "C:\\Users\\Prince\\source\\repos\\Peng_Protocol\\dexhune\\node_modules\\@prb\\math\\src\\sd59x18\\Constants.sol": {
+      "lastModificationDate": 1697682270648,
+      "contentHash": "7fc7d96c638cf5317dbba7ae8c07300d",
+      "sourceName": "@prb/math/src/sd59x18/Constants.sol",
+      "solcConfig": {
+        "version": "0.8.21",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./ValueType.sol"
+      ],
+      "versionPragmas": [
+        ">=0.8.19"
+      ],
+      "artifacts": []
+    },
+    "C:\\Users\\Prince\\source\\repos\\Peng_Protocol\\dexhune\\node_modules\\@prb\\math\\src\\ud2x18\\Constants.sol": {
+      "lastModificationDate": 1697682270651,
+      "contentHash": "93bafe3a5bfec3c48c72e3b6dff0b5ac",
+      "sourceName": "@prb/math/src/ud2x18/Constants.sol",
+      "solcConfig": {
+        "version": "0.8.21",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./ValueType.sol"
+      ],
+      "versionPragmas": [
+        ">=0.8.19"
+      ],
+      "artifacts": []
+    },
+    "C:\\Users\\Prince\\source\\repos\\Peng_Protocol\\dexhune\\node_modules\\@prb\\math\\src\\sd59x18\\ValueType.sol": {
+      "lastModificationDate": 1697682270725,
+      "contentHash": "a8cbdd366dbe50e8199a8d59109c94ab",
+      "sourceName": "@prb/math/src/sd59x18/ValueType.sol",
+      "solcConfig": {
+        "version": "0.8.21",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./Casting.sol",
+        "./Helpers.sol",
+        "./Math.sol"
+      ],
+      "versionPragmas": [
+        ">=0.8.19"
+      ],
+      "artifacts": []
+    },
+    "C:\\Users\\Prince\\source\\repos\\Peng_Protocol\\dexhune\\node_modules\\@prb\\math\\src\\ud2x18\\ValueType.sol": {
+      "lastModificationDate": 1697682270727,
+      "contentHash": "4bf392abdd32a2c1d83ad65c640ac7bd",
+      "sourceName": "@prb/math/src/ud2x18/ValueType.sol",
+      "solcConfig": {
+        "version": "0.8.21",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./Casting.sol"
+      ],
+      "versionPragmas": [
+        ">=0.8.19"
+      ],
+      "artifacts": []
+    },
+    "C:\\Users\\Prince\\source\\repos\\Peng_Protocol\\dexhune\\node_modules\\@prb\\math\\src\\sd1x18\\Casting.sol": {
+      "lastModificationDate": 1697682270622,
+      "contentHash": "fdf620cd0842991c797eef17265b5138",
+      "sourceName": "@prb/math/src/sd1x18/Casting.sol",
+      "solcConfig": {
+        "version": "0.8.21",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../Common.sol",
+        "./Errors.sol",
+        "../sd59x18/ValueType.sol",
+        "../ud2x18/ValueType.sol",
+        "../ud60x18/ValueType.sol",
+        "./ValueType.sol"
+      ],
+      "versionPragmas": [
+        ">=0.8.19"
+      ],
+      "artifacts": []
+    },
+    "C:\\Users\\Prince\\source\\repos\\Peng_Protocol\\dexhune\\node_modules\\@prb\\math\\src\\sd1x18\\Errors.sol": {
+      "lastModificationDate": 1697682270659,
+      "contentHash": "01ce16eb254b596aa49047e21d548541",
+      "sourceName": "@prb/math/src/sd1x18/Errors.sol",
+      "solcConfig": {
+        "version": "0.8.21",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./ValueType.sol"
+      ],
+      "versionPragmas": [
+        ">=0.8.19"
+      ],
+      "artifacts": []
+    },
+    "C:\\Users\\Prince\\source\\repos\\Peng_Protocol\\dexhune\\node_modules\\@prb\\math\\src\\sd59x18\\Helpers.sol": {
+      "lastModificationDate": 1697682270674,
+      "contentHash": "7d1863a86f1dd22889ee2c28737b3456",
+      "sourceName": "@prb/math/src/sd59x18/Helpers.sol",
+      "solcConfig": {
+        "version": "0.8.21",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./Casting.sol",
+        "./ValueType.sol"
+      ],
+      "versionPragmas": [
+        ">=0.8.19"
+      ],
+      "artifacts": []
+    },
+    "C:\\Users\\Prince\\source\\repos\\Peng_Protocol\\dexhune\\node_modules\\@prb\\math\\src\\sd59x18\\Casting.sol": {
+      "lastModificationDate": 1697682270624,
+      "contentHash": "cad7d3fe4dba2c04d2c7c481e6e0e210",
+      "sourceName": "@prb/math/src/sd59x18/Casting.sol",
+      "solcConfig": {
+        "version": "0.8.21",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./Errors.sol",
+        "../Common.sol",
+        "../sd1x18/Constants.sol",
+        "../sd1x18/ValueType.sol",
+        "../ud2x18/Constants.sol",
+        "../ud2x18/ValueType.sol",
+        "../ud60x18/ValueType.sol",
+        "./ValueType.sol"
+      ],
+      "versionPragmas": [
+        ">=0.8.19"
+      ],
+      "artifacts": []
+    },
+    "C:\\Users\\Prince\\source\\repos\\Peng_Protocol\\dexhune\\node_modules\\@prb\\math\\src\\sd59x18\\Math.sol": {
+      "lastModificationDate": 1697682270689,
+      "contentHash": "9ba39059764f9bac4b29f829c0dec4db",
+      "sourceName": "@prb/math/src/sd59x18/Math.sol",
+      "solcConfig": {
+        "version": "0.8.21",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../Common.sol",
+        "./Errors.sol",
+        "./Constants.sol",
+        "./Helpers.sol",
+        "./ValueType.sol"
+      ],
+      "versionPragmas": [
+        ">=0.8.19"
+      ],
+      "artifacts": []
+    },
+    "C:\\Users\\Prince\\source\\repos\\Peng_Protocol\\dexhune\\node_modules\\@prb\\math\\src\\sd59x18\\Errors.sol": {
+      "lastModificationDate": 1697682270661,
+      "contentHash": "a7e94006142e69ba7db582ef8ea8a777",
+      "sourceName": "@prb/math/src/sd59x18/Errors.sol",
+      "solcConfig": {
+        "version": "0.8.21",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./ValueType.sol"
+      ],
+      "versionPragmas": [
+        ">=0.8.19"
+      ],
+      "artifacts": []
+    },
+    "C:\\Users\\Prince\\source\\repos\\Peng_Protocol\\dexhune\\node_modules\\@prb\\math\\src\\ud2x18\\Casting.sol": {
+      "lastModificationDate": 1697682270626,
+      "contentHash": "5b5adfd1cd28d449eccc56ed83738365",
+      "sourceName": "@prb/math/src/ud2x18/Casting.sol",
+      "solcConfig": {
+        "version": "0.8.21",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../Common.sol",
+        "./Errors.sol",
+        "../sd1x18/Constants.sol",
+        "../sd1x18/ValueType.sol",
+        "../sd59x18/ValueType.sol",
+        "../ud2x18/ValueType.sol",
+        "../ud60x18/ValueType.sol",
+        "./ValueType.sol"
+      ],
+      "versionPragmas": [
+        ">=0.8.19"
+      ],
+      "artifacts": []
+    },
+    "C:\\Users\\Prince\\source\\repos\\Peng_Protocol\\dexhune\\node_modules\\@prb\\math\\src\\ud2x18\\Errors.sol": {
+      "lastModificationDate": 1697682270663,
+      "contentHash": "b114bc752027098a098fe200d9600fa4",
+      "sourceName": "@prb/math/src/ud2x18/Errors.sol",
+      "solcConfig": {
+        "version": "0.8.21",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./ValueType.sol"
+      ],
+      "versionPragmas": [
+        ">=0.8.19"
+      ],
+      "artifacts": []
     }
   }
 }
