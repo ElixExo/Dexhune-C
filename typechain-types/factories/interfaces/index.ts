@@ -3,3 +3,4 @@
 /* eslint-disable */
 export { IERC165__factory } from "./IERC165__factory";
 export { IERC20__factory } from "./IERC20__factory";
+export { IPriceDAO__factory } from "./IPriceDAO__factory";

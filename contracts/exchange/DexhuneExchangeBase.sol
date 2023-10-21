@@ -53,7 +53,7 @@ contract DexhuneExchangeBase {
     }
 
     struct Order {
-        address makerAddr;
+        address payable makerAddr;
         bool orderType;
 
         uint256 created;
@@ -75,6 +75,8 @@ contract DexhuneExchangeBase {
     error OnlyOwnerMustSetDefaultToken();
     error TokenNotSupported_TooManyDecimals();
     error DepositFailed();
+
+    error InsufficientBalanceForListing(uint256 listingPrice);
 
     error UnauthorizedAccount(address account);
 }

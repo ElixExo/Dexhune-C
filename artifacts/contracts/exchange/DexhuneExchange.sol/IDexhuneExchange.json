@@ -1,7 +1,7 @@
 {
   "_format": "hh-sol-artifact-1",
   "contractName": "IDexhuneExchange",
-  "sourceName": "contracts/DexhuneExchange.sol",
+  "sourceName": "contracts/exchange/DexhuneExchange.sol",
   "abi": [
     {
       "inputs": [

@@ -14,9 +14,7 @@ pragma solidity ^0.8.21;
 
 import "./../interfaces/IERC20.sol";
 import "./../interfaces/IPriceDAO.sol";
-import "./../libraries/ERC165Checker.sol";
 import "./DexhuneExchangeBase.sol";
-import "./../utils/ERC20Normalizer.sol";
 import { UD60x18, div, convert, wrap, unwrap } from "@prb/math/src/UD60x18.sol";
 
 /** 
@@ -38,9 +36,7 @@ interface IDexhuneExchange {
     function listToken(address tokenContract, uint256 rewardAmount, uint256 rewardThreshold, address parityAddr, string memory price) external;
 }
 
-// 
-
-contract DexhuneExchange is DexhuneExchangeBase, ERC20Normalizer {
+contract DexhuneExchange is DexhuneExchangeBase {
     Token[] private _tokens;
     Order[] private _orders;
 
@@ -55,16 +51,20 @@ contract DexhuneExchange is DexhuneExchangeBase, ERC20Normalizer {
     
     uint256 _price;
     uint256 _lastPriceCheck;
+    uint256 _listingPrice = INITIAL_LISTING_PRICE;
 
-    uint256 private constant NATIVE_TOKEN_DECIMALS = 18;
+    uint8 private constant NATIVE_TOKEN_DECIMALS = 18;
     uint256 private constant MAX_ORDER_COUNT = 100_000;
     uint256 private constant MAX_TOKEN_COUNT = 1_000_000;
     uint256 private constant ORDER_LIFESPAN = 40 seconds;
     uint256 private constant PRICE_CHECK_INTERVAL = 4 minutes;
+
+    uint256 private constant LISTING_PRICE_INCREASE_BY_THOUSAND = 5;
+    uint256 private constant INITIAL_LISTING_PRICE = 1000; // DXH
+    uint256 private constant MAX_LISTING_FEE = 1_000_000;
     
     constructor() {
         _owner = msg.sender;
-        // _erc20InterfaceId = type(IERC20).interfaceId;
     }
 
     function viewToken(address tokenAddr) external view returns (TokenDataModel memory) {
@@ -85,24 +85,40 @@ contract DexhuneExchange is DexhuneExchangeBase, ERC20Normalizer {
         return _displayToken(tokenNo);
     }
 
-    function listToken(address contractAddr, PricingScheme scheme, uint256 reward, uint256 rewardThreshold, address parityAddr, string memory price) external {
+    function getBalance() external view returns(uint256) {
+        return address(this).balance;
+    }
+
+    function queryBalance(address tokenAddr, bool isAVAX) external view returns (uint256) {
+        Token memory token = _fetchToken(tokenAddr);
+
+        if (isAVAX) {
+            return token.xBalance;
+        } else {
+            return token.yBalance;
+        }
+    }
+
+    function listToken(address tokenAddr, PricingScheme scheme, uint256 reward, uint256 rewardThreshold, address parityAddr, string memory price) external {
         if (_tokens.length == 0) {
             if (msg.sender != _owner) {
                 revert OnlyOwnerMustSetDefaultToken();
             }
         }
 
-        uint256 index = _tokenMap[contractAddr];
+        address addr = tokenAddr;
+
+        uint256 index = _tokenMap[addr];
 
         if (index != 0 && _tokens.length > 0) {
-            revert TokenAlreadyExists(contractAddr);
+            revert TokenAlreadyExists(addr);
         }
 
         if (_tokens.length >= MAX_TOKEN_COUNT) {
             revert TokenLimitReached();
         }
         
-        IERC20 tokenInstance = IERC20(contractAddr);
+        IERC20 tokenInstance = IERC20(addr);
         uint8 decimals;
         string memory name;
         string memory sym;
@@ -111,10 +127,10 @@ contract DexhuneExchange is DexhuneExchangeBase, ERC20Normalizer {
             try tokenInstance.decimals() returns (uint8 _dec) {
                 decimals = _dec;
             } catch {
-                decimals = 18;
+                decimals = NATIVE_TOKEN_DECIMALS;
             }
 
-            if (decimals > 18) {
+            if (decimals > NATIVE_TOKEN_DECIMALS) {
                 revert TokenNotSupported_TooManyDecimals();
             }
 
@@ -139,15 +155,25 @@ contract DexhuneExchange is DexhuneExchangeBase, ERC20Normalizer {
             revert ParityShouldNotHavePrice();
         }
 
+        // Token memory def = _tokens[0];
+        
+        // if (!_withdraw(def.addr, msg.sender, _listingPrice)) {
+        //     revert InsufficientBalanceForListing(_listingPrice);
+        // }
+        
+        // uint256 lPrice = (_listingPrice * LISTING_PRICE_INCREASE_BY_THOUSAND) / 1000;
+        // _listingPrice += lPrice;
+        _chargeForListing();
+
         Token memory token = Token(
             name, sym, decimals, scalar, 
-            contractAddr, parityAddr,
+            addr, parityAddr,
             scheme, reward, rewardThreshold,
             nPrice, 0, 0, 0
         );
 
         _tokens.push(token);
-        _tokenMap[contractAddr] = index + 1;
+        _tokenMap[token.addr] = _tokens.length - 1;
     }
     
     function createBuyOrder(address tokenAddr) external payable {
@@ -197,7 +223,7 @@ contract DexhuneExchange is DexhuneExchangeBase, ERC20Normalizer {
             reward = token.reward;
         }
 
-        Order memory order = Order(msg.sender, orderType, block.timestamp, reward, price, amount, pending);
+        Order memory order = Order(payable(msg.sender), orderType, block.timestamp, reward, price, amount, pending);
         _orders.push(order);
 
         uint256[] storage uorders = _ordersByUser[msg.sender];
@@ -208,19 +234,21 @@ contract DexhuneExchange is DexhuneExchangeBase, ERC20Normalizer {
         torders.push(index);
     }
 
-    function deposit(address tokenAddr, address fromAddress, bool balanceType) external payable {
+    function deposit(address tokenAddr) external payable {
         Token memory token = _fetchToken(tokenAddr);
         uint256 amount = msg.value;
+
+        token.xBalance += amount;
+    }
+
+    function depositToken(address tokenAddr, address fromAddress, uint256 amount) external {
+        Token memory token = _fetchToken(tokenAddr);
 
         if (!_withdraw(token.addr, fromAddress, amount)) {
             revert DepositFailed();
         }
 
-        if (balanceType) {
-            token.xBalance += amount;
-        } else {
-            token.yBalance += amount;
-        }
+        token.yBalance += amount;
     }
 
     function settleOrders(address tokenAddr, bool orderType) external {
@@ -243,7 +271,7 @@ contract DexhuneExchange is DexhuneExchangeBase, ERC20Normalizer {
             if (orderType) {
                 (settled, balance) = _settleBuyOrder(token, order, balance);
             } else {
-                (settled, balance) = _settleSellOrder(token, order, balance);
+                (settled, balance) = _settleSellOrder(order, balance);
             }
 
             if (!settled) {
@@ -284,7 +312,7 @@ contract DexhuneExchange is DexhuneExchangeBase, ERC20Normalizer {
         return (!isPartial, balance);
     }
 
-    function _settleSellOrder(Token memory token, Order memory order, uint256 balance) private returns (bool settled, uint256 remBalance) {
+    function _settleSellOrder(Order memory order, uint256 balance) private returns (bool settled, uint256 remBalance) {
         uint256 amount;
         bool isPartial = balance < order.principal;
 
@@ -312,98 +340,10 @@ contract DexhuneExchange is DexhuneExchangeBase, ERC20Normalizer {
         }
     }
 
-    function _sendAmount(address to, uint256 amount) private returns(bool) {
+    function _sendAmount(address payable to, uint256 amount) private returns(bool) {
         (bool sent, ) = to.call{value: amount}("");
 
         return sent;
-    }
-
-    // function _settleBuyOrders(Token token) private {
-    //     uint256[] memory norders = _ordersByToken[token.addr];
-    //     Order memory order;
-
-    //     uint256 amount;
-    //     bool settled;
-    //     uint256 balance = token.yBalance;
-
-    //     for (int i = norders.length - 1; balance > 0 && i >= 0; i--) {
-    //         uint256 n = norders[i];
-            
-    //         order = _orders[n];
-            
-    //         if (!order.orderType) {
-    //             continue;
-    //         }
-
-    //         settled = order.principal > balance;
-    //         if (settled) {
-    //             amount = balance;
-    //         } else {
-    //             amount = order.principal;
-    //         }
-
-    //         IERC20 inst = IERC20(token.addr);
-
-    //         try inst.transfer(order.makerAddr, amount) {
-    //             balance -= amount;
-    //             // order.pending = 
-    //         } catch {
-    //             continue;
-    //         }
-
-    //         if (!settled) {
-    //             continue;
-    //         }
-
-    //         if (i != norders.length - 1) {
-    //             norders[i] = norders[norders.length - 1];
-    //         }
-
-    //         if (n != _orders.length - 1) {
-    //             _orders[n] = _orders[_orders.length - 1];
-    //         }
-
-    //         norders.pop();
-    //         _orders.pop();
-    //     }
-    // }
-    
-    // function clearOrders() {
-    //     uint256[] memory uorders = _ordersByUser[msg.sender];
-    //     uint256 reverted;
-
-    //     if (uorders.length > 0) {
-
-    //     }
-    // }
-
-    // function _revertOrder(uint256 index) private {
-    //     Order memory order = _orders[index];
-        
-    // }
-
-
-
-    // function queryOrder(uint256 queryType, ) {
-
-    // }
-
-    function parseString(string memory value) external pure returns (uint256) {
-        uint256 res = _parseNumber(value);
-
-        return res;
-    }
-
-    function divide(string memory val1, string memory val2) external pure returns(uint256) {
-        uint256 res1 = _parseNumber(val1);
-        uint256 res2 = _parseNumber(val2);
-
-        UD60x18 num1 = wrap(res1);
-        UD60x18 num2 = wrap(res2);
-        
-        uint256 res3 = unwrap(div(num1, num2));
-
-        return res3;
     }
 
     function _normalize(uint256 amount, uint256 scalar) private pure returns(uint256) {
@@ -422,6 +362,17 @@ contract DexhuneExchange is DexhuneExchangeBase, ERC20Normalizer {
                 scalar = 10 ** (18 - decimals);
             }
         }
+    }
+
+    function _chargeForListing() private {
+         Token memory def = _tokens[0];
+        
+        if (!_withdraw(def.addr, msg.sender, _listingPrice)) {
+            revert InsufficientBalanceForListing(_listingPrice);
+        }
+        
+        uint256 lPrice = (_listingPrice * LISTING_PRICE_INCREASE_BY_THOUSAND) / 1000;
+        _listingPrice += lPrice;
     }
 
 
@@ -484,10 +435,6 @@ contract DexhuneExchange is DexhuneExchangeBase, ERC20Normalizer {
             token.parityAddr, token.reward, 
             token.rewardThreshold, token.scheme, token.price, orderCount);
     }
-
-    // function _getTokenId(address tokenAddr) {
-
-    // }
 
     function _div(uint256 num1, uint256 num2) private pure returns(uint256) {
         UD60x18 n1 = wrap(num1);

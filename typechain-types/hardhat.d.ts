@@ -21,14 +21,6 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.DexhuneERC20Base__factory>;
     getContractFactory(
-      name: "DexhuneExchange",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.DexhuneExchange__factory>;
-    getContractFactory(
-      name: "IDexhuneExchange",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.IDexhuneExchange__factory>;
-    getContractFactory(
       name: "DexhunePriceDAO",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.DexhunePriceDAO__factory>;
@@ -45,6 +37,18 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.DexhuneRoot__factory>;
     getContractFactory(
+      name: "DexhuneExchange",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.DexhuneExchange__factory>;
+    getContractFactory(
+      name: "IDexhuneExchange",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IDexhuneExchange__factory>;
+    getContractFactory(
+      name: "DexhuneExchangeBase",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.DexhuneExchangeBase__factory>;
+    getContractFactory(
       name: "IERC165",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.IERC165__factory>;
@@ -53,9 +57,17 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.IERC20__factory>;
     getContractFactory(
+      name: "IPriceDAO",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IPriceDAO__factory>;
+    getContractFactory(
       name: "MockNFT",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.MockNFT__factory>;
+    getContractFactory(
+      name: "ERC20Normalizer",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.ERC20Normalizer__factory>;
 
     getContractAt(
       name: "DexhuneERC20",
@@ -67,16 +79,6 @@ declare module "hardhat/types/runtime" {
       address: string | ethers.Addressable,
       signer?: ethers.Signer
     ): Promise<Contracts.DexhuneERC20Base>;
-    getContractAt(
-      name: "DexhuneExchange",
-      address: string | ethers.Addressable,
-      signer?: ethers.Signer
-    ): Promise<Contracts.DexhuneExchange>;
-    getContractAt(
-      name: "IDexhuneExchange",
-      address: string | ethers.Addressable,
-      signer?: ethers.Signer
-    ): Promise<Contracts.IDexhuneExchange>;
     getContractAt(
       name: "DexhunePriceDAO",
       address: string | ethers.Addressable,
@@ -98,6 +100,21 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.DexhuneRoot>;
     getContractAt(
+      name: "DexhuneExchange",
+      address: string | ethers.Addressable,
+      signer?: ethers.Signer
+    ): Promise<Contracts.DexhuneExchange>;
+    getContractAt(
+      name: "IDexhuneExchange",
+      address: string | ethers.Addressable,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IDexhuneExchange>;
+    getContractAt(
+      name: "DexhuneExchangeBase",
+      address: string | ethers.Addressable,
+      signer?: ethers.Signer
+    ): Promise<Contracts.DexhuneExchangeBase>;
+    getContractAt(
       name: "IERC165",
       address: string | ethers.Addressable,
       signer?: ethers.Signer
@@ -108,10 +125,20 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.IERC20>;
     getContractAt(
+      name: "IPriceDAO",
+      address: string | ethers.Addressable,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IPriceDAO>;
+    getContractAt(
       name: "MockNFT",
       address: string | ethers.Addressable,
       signer?: ethers.Signer
     ): Promise<Contracts.MockNFT>;
+    getContractAt(
+      name: "ERC20Normalizer",
+      address: string | ethers.Addressable,
+      signer?: ethers.Signer
+    ): Promise<Contracts.ERC20Normalizer>;
 
     deployContract(
       name: "DexhuneERC20",
@@ -121,14 +148,6 @@ declare module "hardhat/types/runtime" {
       name: "DexhuneERC20Base",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.DexhuneERC20Base>;
-    deployContract(
-      name: "DexhuneExchange",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.DexhuneExchange>;
-    deployContract(
-      name: "IDexhuneExchange",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.IDexhuneExchange>;
     deployContract(
       name: "DexhunePriceDAO",
       signerOrOptions?: ethers.Signer | FactoryOptions
@@ -146,6 +165,18 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.DexhuneRoot>;
     deployContract(
+      name: "DexhuneExchange",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.DexhuneExchange>;
+    deployContract(
+      name: "IDexhuneExchange",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IDexhuneExchange>;
+    deployContract(
+      name: "DexhuneExchangeBase",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.DexhuneExchangeBase>;
+    deployContract(
       name: "IERC165",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.IERC165>;
@@ -154,9 +185,17 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.IERC20>;
     deployContract(
+      name: "IPriceDAO",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IPriceDAO>;
+    deployContract(
       name: "MockNFT",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.MockNFT>;
+    deployContract(
+      name: "ERC20Normalizer",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.ERC20Normalizer>;
 
     deployContract(
       name: "DexhuneERC20",
@@ -168,16 +207,6 @@ declare module "hardhat/types/runtime" {
       args: any[],
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.DexhuneERC20Base>;
-    deployContract(
-      name: "DexhuneExchange",
-      args: any[],
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.DexhuneExchange>;
-    deployContract(
-      name: "IDexhuneExchange",
-      args: any[],
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.IDexhuneExchange>;
     deployContract(
       name: "DexhunePriceDAO",
       args: any[],
@@ -199,6 +228,21 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.DexhuneRoot>;
     deployContract(
+      name: "DexhuneExchange",
+      args: any[],
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.DexhuneExchange>;
+    deployContract(
+      name: "IDexhuneExchange",
+      args: any[],
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IDexhuneExchange>;
+    deployContract(
+      name: "DexhuneExchangeBase",
+      args: any[],
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.DexhuneExchangeBase>;
+    deployContract(
       name: "IERC165",
       args: any[],
       signerOrOptions?: ethers.Signer | FactoryOptions
@@ -209,10 +253,20 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.IERC20>;
     deployContract(
+      name: "IPriceDAO",
+      args: any[],
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IPriceDAO>;
+    deployContract(
       name: "MockNFT",
       args: any[],
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.MockNFT>;
+    deployContract(
+      name: "ERC20Normalizer",
+      args: any[],
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.ERC20Normalizer>;
 
     // default types
     getContractFactory(

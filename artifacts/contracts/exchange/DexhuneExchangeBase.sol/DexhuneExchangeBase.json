@@ -1,0 +1,100 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "DexhuneExchangeBase",
+  "sourceName": "contracts/exchange/DexhuneExchangeBase.sol",
+  "abi": [
+    {
+      "inputs": [],
+      "name": "DepositFailed",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "FailedStringToNumberConversion",
+      "type": "error"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "balance",
+          "type": "uint256"
+        }
+      ],
+      "name": "InsufficientBalance",
+      "type": "error"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "listingPrice",
+          "type": "uint256"
+        }
+      ],
+      "name": "InsufficientBalanceForListing",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "InvalidTokenContract",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "OnlyOwnerMustSetDefaultToken",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "OrderLimitReachedTryLater",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "ParityShouldNotHavePrice",
+      "type": "error"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "contractAddr",
+          "type": "address"
+        }
+      ],
+      "name": "TokenAlreadyExists",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "TokenLimitReached",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "TokenNotListed",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "TokenNotSupported_TooManyDecimals",
+      "type": "error"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        }
+      ],
+      "name": "UnauthorizedAccount",
+      "type": "error"
+    }
+  ],
+  "bytecode": "0x6080604052348015600f57600080fd5b50603f80601d6000396000f3fe6080604052600080fdfea2646970667358221220e8e1047b0f159ffafc33774379fba3d074ccf5379c2d74a9ab4d13b1344f7a6664736f6c63430008150033",
+  "deployedBytecode": "0x6080604052600080fdfea2646970667358221220e8e1047b0f159ffafc33774379fba3d074ccf5379c2d74a9ab4d13b1344f7a6664736f6c63430008150033",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}
