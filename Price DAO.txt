@@ -1,0 +1,114 @@
+/// Premise /// 
+A DAO acting as an oracle for distributed exchanges. 
+
+/// General ///
+The price DAO presents exchange rates of DXH to AVAX supplied by holders of a set NFT collection. 
+
+! Data: getPrice ! 
+Shows the current agreed 'price' (string). 
+
+! Data: NFTCollection! 
+Shows the current allowed NFT Collection for proposing and voting (string). 
+
+! Function: setNFTCollection ! 
+ownerOnly, sets the NFT collection whose holders are allowed to call 'proposePrice', 'voteUp' and 'voteDown'. 
+
+! Function: proposePrice ! 
+Can only be called by a valid holders of a set NFT collection, creates a proposal with the contract to change the data of 'getPrice', (string). Requires a majority vote to pass. 
+Only one proposal can be made at a time.
+
+All proposals expire after 150 transaction blocks (10 minutes). After expiry no votes are valid. 
+
+Stores the address of the proposer. 
+
+Requires (1) field; 
+
+- Price (string) 
+
+Calls 'balanceOf' at the set NFT collection's contract for the proposer's address, to determine if the proposer owns an item from the set NFT collection. If the proposer is valid then the transaction is accepted and a proposal is created with the price detail they submitted. 
+
+! Data: proposal ! 
+Each proposal is stored as follows; 
+
+price (string) :  ...
+votesUp (uint256) :  ...
+votesDown (uint256) :  ...
+finalized (bool) : ...
+addresses (string) : ... 
+items (uint256) : ...
+proposerAddress (string) : ...
+
+"items" stores the NFT items from addresses that voted, "addresses" stores the addresses that voted, "proposerAddress" stores the address of the proposer. 
+
+"price" is the data submitted for price update. 
+
+! Function: voteUp ! 
+Adds a 'voteUp' to the current active proposal. 
+Records the NFT item numbers held by the address upon initiation, records the voter address. The same item cannot vote twice regardless of address. 
+
+Calls 'walletOfOwner' at the set NFT collection's contract for the voter's address to get the items owned by them, each item owned is recorded as an individual vote, each item is recorded with the proposal. Records the owner address in the proposal. An address with no items is invalid and the 'voteUp' is rejected.  
+
+! Function: voteDown ! 
+Adds a 'voteDown' to the current active proposal. 
+Records the NFT item numbers held by the address upon initiation, records the voter address. The same item cannot vote twice regardless of address. 
+
+Calls 'walletOfOwner' at the set NFT collection's contract for the voter's address to get the items owned by them, each item owned is recorded as an individual vote, each item is recorded with the proposal. Records the owner address in the proposal. An address with no items is invalid and the 'voteUp' is rejected.  
+
+! Function: finalize ! 
+Checks all addresses that voted if they still own an NFT of the target collection. Then carries out the decision of the vote, requires >51% 'voteUp' to pass, once passed the (string) used to proposePrice becomes the new price. 
+
+Each finalization withdraws a target ERC-20 from the 'PriceDAO' address to the address of the proposer. 
+This calls 'transfer' at the target ERC-20's contract from the 'priceDAO' address to the proposer's address. The amount sent is; 
+
+Total number of votes * 20. 
+
+Both up or down votes are counted for rewards. If insufficient tokens exist in the contract then no reward is paid but the proposal updates the 'getPrice' data. 
+
+Each proposal can be finalized after 75 blocks (5 minutes).
+
+! Data: rewardToken ! 
+Shows the current token address set for rewards. 
+
+! Data: proposalExpiresAt ! 
+Shows when the current proposal will expire. 
+
+! Data: wenFinalize !
+Shows when the current proposal is eligible for finalization. 
+
+! Function: setRewardToken ! 
+Sets which token to send to a price proposer after their proposal is finalized. 
+
+! Function: setNFTCollection ! 
+Sets which NFT collection can propose and vote. 
+
+! Data: NFTCollection ! 
+Shows the current NFT collection whose holders can propose or vote. 
+
+/// Boilerplate Functions ///
+- owner: returns the address of the owner.
+
+- transferOwnership: specifies a new owner, requires; Address (string). 
+
+
+/// Notes /// 
+- The NFT collection is 'Peng', this gives them value. 
+
+- If someone were to gain majority vote and decided to set the price to something insane like 0.005DXH to 1AVAX that would deteriorate trust in the exchange, while (presumably) allowing them to upsell their tokens and exploit the contract. while DXH cannot be broken down into fractions, the way DXH-Dx exchange contract uses these prices offsets that limitation, [See E5 in "Exchange Contract"].
+
+- As the project progresses it becomes more expensive to acquire a 'Peng' NFT, which reduces the potential for attacks. 
+
+- If 20 addresses vote and the proposal passes, then the proposer gets 400DXH. So the maximum payout should be 20,000DXH if all 1000 Pengs vote. (But the likelihood of all Pengs voting is very low). 
+
+- Dynamic rewards are necessary for incentivizing more participants, early on with very few voters the rewards will be tiny (with the assumption that little liquidity exists on the exchange, but over time rewards will grow with the voterbase and sufficient liquidity should exist on the exchange otherwise participants wouldn't bother to vote/propose). 
+
+- The equation for the price is; 
+
+Price-XAU / 10000 = Price-USD
+
+Price-AVAX / Price-USD = DXH Price 
+
+So if 1XAU is $1980, 1DXH would be worth $0.198, if AVAX price is $12.710, then DXH price is 64. 
+
+The price data is submitted simply as ; "64.1919". 
+
+- Keep in mind DXH has no decimals. 

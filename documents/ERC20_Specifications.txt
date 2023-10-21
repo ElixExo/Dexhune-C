@@ -15,10 +15,10 @@ For this to happen the 'Mint' function has to be called.
 However, dividends cease after 40 years (after 315360000 blocks or being called 3650 times). Each mint interval in blocks is; 86,400 blocks. 
 
 ! PerpetualMintToExchange !
-The contract should have a second mint function that specifically targets the 'Exchange contract', minting 1,400,000DXH to the 'Exchange Contract', this is available every day or every 21600 blocks, and can be called in perpetuity. 
+The contract should have a second mint function that specifically targets the 'Exchange contract', minting 300,00DXH to the 'Exchange Contract', this is available every day or every 21600 blocks, and can be called in perpetuity. 
 
 ! PerpetualMintToDAO ! 
-The contract should have a third mint function that specifically targets the 'Price DAO', minting 5760DXH every 21600 blocks, and can be called in perpetuity.   
+The contract should have a third mint function that specifically targets the 'Price DAO', minting 300,000DXH every 21600 blocks, and can be called in perpetuity.   
 
 
 /// Notes ///
