@@ -1212,8 +1212,8 @@
       "artifacts": []
     },
     "C:\\Users\\Prince\\source\\repos\\Peng_Protocol\\dexhune\\contracts\\exchange\\DexhuneExchange.sol": {
-      "lastModificationDate": 1697914608482,
-      "contentHash": "ef19ee1b4251e418c019211c1af8239b",
+      "lastModificationDate": 1698017206698,
+      "contentHash": "7bb6830def66c673e398c74878fcfdcb",
       "sourceName": "contracts/exchange/DexhuneExchange.sol",
       "solcConfig": {
         "version": "0.8.21",
@@ -1290,8 +1290,8 @@
       ]
     },
     "C:\\Users\\Prince\\source\\repos\\Peng_Protocol\\dexhune\\contracts\\exchange\\DexhuneExchangeBase.sol": {
-      "lastModificationDate": 1697914156478,
-      "contentHash": "d0a1e82459fd2bb06939d3b127386442",
+      "lastModificationDate": 1698004796616,
+      "contentHash": "ea5d94111ffd87403bc444d94ce8968f",
       "sourceName": "contracts/exchange/DexhuneExchangeBase.sol",
       "solcConfig": {
         "version": "0.8.21",
@@ -1317,7 +1317,9 @@
           }
         }
       },
-      "imports": [],
+      "imports": [
+        "./../interfaces/IERC20.sol"
+      ],
       "versionPragmas": [
         "^0.8.21"
       ],

@@ -14,6 +14,11 @@
       "type": "error"
     },
     {
+      "inputs": [],
+      "name": "FailedToTakeOrder",
+      "type": "error"
+    },
+    {
       "inputs": [
         {
           "internalType": "uint256",
@@ -38,6 +43,11 @@
     {
       "inputs": [],
       "name": "InvalidTokenContract",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "NoSuitableOrderFound",
       "type": "error"
     },
     {
@@ -91,10 +101,55 @@
       ],
       "name": "UnauthorizedAccount",
       "type": "error"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "oldOwner",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "TransferredOwnership",
+      "type": "event"
+    },
+    {
+      "inputs": [],
+      "name": "owner",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_address",
+          "type": "address"
+        }
+      ],
+      "name": "transferOwnership",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
     }
   ],
-  "bytecode": "0x6080604052348015600f57600080fd5b50603f80601d6000396000f3fe6080604052600080fdfea2646970667358221220e8e1047b0f159ffafc33774379fba3d074ccf5379c2d74a9ab4d13b1344f7a6664736f6c63430008150033",
-  "deployedBytecode": "0x6080604052600080fdfea2646970667358221220e8e1047b0f159ffafc33774379fba3d074ccf5379c2d74a9ab4d13b1344f7a6664736f6c63430008150033",
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
   "linkReferences": {},
   "deployedLinkReferences": {}
 }

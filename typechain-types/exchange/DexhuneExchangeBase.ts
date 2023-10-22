@@ -3,8 +3,12 @@
 /* eslint-disable */
 import type {
   BaseContract,
+  BytesLike,
   FunctionFragment,
+  Result,
   Interface,
+  EventFragment,
+  AddressLike,
   ContractRunner,
   ContractMethod,
   Listener,
@@ -13,10 +17,41 @@ import type {
   TypedContractEvent,
   TypedDeferredTopicFilter,
   TypedEventLog,
+  TypedLogDescription,
   TypedListener,
+  TypedContractMethod,
 } from "../common";
 
-export interface DexhuneExchangeBaseInterface extends Interface {}
+export interface DexhuneExchangeBaseInterface extends Interface {
+  getFunction(nameOrSignature: "owner" | "transferOwnership"): FunctionFragment;
+
+  getEvent(nameOrSignatureOrTopic: "TransferredOwnership"): EventFragment;
+
+  encodeFunctionData(functionFragment: "owner", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "transferOwnership",
+    values: [AddressLike]
+  ): string;
+
+  decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "transferOwnership",
+    data: BytesLike
+  ): Result;
+}
+
+export namespace TransferredOwnershipEvent {
+  export type InputTuple = [oldOwner: AddressLike, newOwner: AddressLike];
+  export type OutputTuple = [oldOwner: string, newOwner: string];
+  export interface OutputObject {
+    oldOwner: string;
+    newOwner: string;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
+}
 
 export interface DexhuneExchangeBase extends BaseContract {
   connect(runner?: ContractRunner | null): DexhuneExchangeBase;
@@ -61,9 +96,43 @@ export interface DexhuneExchangeBase extends BaseContract {
     event?: TCEvent
   ): Promise<this>;
 
+  owner: TypedContractMethod<[], [string], "view">;
+
+  transferOwnership: TypedContractMethod<
+    [_address: AddressLike],
+    [void],
+    "nonpayable"
+  >;
+
   getFunction<T extends ContractMethod = ContractMethod>(
     key: string | FunctionFragment
   ): T;
 
-  filters: {};
+  getFunction(
+    nameOrSignature: "owner"
+  ): TypedContractMethod<[], [string], "view">;
+  getFunction(
+    nameOrSignature: "transferOwnership"
+  ): TypedContractMethod<[_address: AddressLike], [void], "nonpayable">;
+
+  getEvent(
+    key: "TransferredOwnership"
+  ): TypedContractEvent<
+    TransferredOwnershipEvent.InputTuple,
+    TransferredOwnershipEvent.OutputTuple,
+    TransferredOwnershipEvent.OutputObject
+  >;
+
+  filters: {
+    "TransferredOwnership(address,address)": TypedContractEvent<
+      TransferredOwnershipEvent.InputTuple,
+      TransferredOwnershipEvent.OutputTuple,
+      TransferredOwnershipEvent.OutputObject
+    >;
+    TransferredOwnership: TypedContractEvent<
+      TransferredOwnershipEvent.InputTuple,
+      TransferredOwnershipEvent.OutputTuple,
+      TransferredOwnershipEvent.OutputObject
+    >;
+  };
 }

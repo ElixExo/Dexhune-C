@@ -8,6 +8,7 @@ import type {
   FunctionFragment,
   Result,
   Interface,
+  EventFragment,
   AddressLike,
   ContractRunner,
   ContractMethod,
@@ -17,6 +18,7 @@ import type {
   TypedContractEvent,
   TypedDeferredTopicFilter,
   TypedEventLog,
+  TypedLogDescription,
   TypedListener,
   TypedContractMethod,
 } from "../../common";
@@ -63,18 +65,29 @@ export declare namespace DexhuneExchangeBase {
 export interface DexhuneExchangeInterface extends Interface {
   getFunction(
     nameOrSignature:
+      | "clearOrders"
       | "createBuyOrder"
       | "createSellOrder"
       | "deposit"
       | "depositToken"
       | "getBalance"
       | "listToken"
+      | "owner"
       | "queryBalance"
       | "settleOrders"
+      | "takeBuyOrder"
+      | "takeSellOrder"
+      | "transferOwnership"
       | "viewToken(address)"
       | "viewToken(uint256)"
   ): FunctionFragment;
 
+  getEvent(nameOrSignatureOrTopic: "TransferredOwnership"): EventFragment;
+
+  encodeFunctionData(
+    functionFragment: "clearOrders",
+    values?: undefined
+  ): string;
   encodeFunctionData(
     functionFragment: "createBuyOrder",
     values: [AddressLike]
@@ -106,6 +119,7 @@ export interface DexhuneExchangeInterface extends Interface {
       string
     ]
   ): string;
+  encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "queryBalance",
     values: [AddressLike, boolean]
@@ -113,6 +127,18 @@ export interface DexhuneExchangeInterface extends Interface {
   encodeFunctionData(
     functionFragment: "settleOrders",
     values: [AddressLike, boolean]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "takeBuyOrder",
+    values: [AddressLike, BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "takeSellOrder",
+    values: [AddressLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "transferOwnership",
+    values: [AddressLike]
   ): string;
   encodeFunctionData(
     functionFragment: "viewToken(address)",
@@ -123,6 +149,10 @@ export interface DexhuneExchangeInterface extends Interface {
     values: [BigNumberish]
   ): string;
 
+  decodeFunctionResult(
+    functionFragment: "clearOrders",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "createBuyOrder",
     data: BytesLike
@@ -138,12 +168,25 @@ export interface DexhuneExchangeInterface extends Interface {
   ): Result;
   decodeFunctionResult(functionFragment: "getBalance", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "listToken", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "queryBalance",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
     functionFragment: "settleOrders",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "takeBuyOrder",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "takeSellOrder",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "transferOwnership",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -154,6 +197,19 @@ export interface DexhuneExchangeInterface extends Interface {
     functionFragment: "viewToken(uint256)",
     data: BytesLike
   ): Result;
+}
+
+export namespace TransferredOwnershipEvent {
+  export type InputTuple = [oldOwner: AddressLike, newOwner: AddressLike];
+  export type OutputTuple = [oldOwner: string, newOwner: string];
+  export interface OutputObject {
+    oldOwner: string;
+    newOwner: string;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
 }
 
 export interface DexhuneExchange extends BaseContract {
@@ -199,6 +255,8 @@ export interface DexhuneExchange extends BaseContract {
     event?: TCEvent
   ): Promise<this>;
 
+  clearOrders: TypedContractMethod<[], [void], "nonpayable">;
+
   createBuyOrder: TypedContractMethod<
     [tokenAddr: AddressLike],
     [void],
@@ -234,6 +292,8 @@ export interface DexhuneExchange extends BaseContract {
     "nonpayable"
   >;
 
+  owner: TypedContractMethod<[], [string], "view">;
+
   queryBalance: TypedContractMethod<
     [tokenAddr: AddressLike, isAVAX: boolean],
     [bigint],
@@ -242,6 +302,24 @@ export interface DexhuneExchange extends BaseContract {
 
   settleOrders: TypedContractMethod<
     [tokenAddr: AddressLike, orderType: boolean],
+    [void],
+    "nonpayable"
+  >;
+
+  takeBuyOrder: TypedContractMethod<
+    [tokenAddr: AddressLike, amount: BigNumberish],
+    [void],
+    "nonpayable"
+  >;
+
+  takeSellOrder: TypedContractMethod<
+    [tokenAddr: AddressLike],
+    [void],
+    "payable"
+  >;
+
+  transferOwnership: TypedContractMethod<
+    [_address: AddressLike],
     [void],
     "nonpayable"
   >;
@@ -262,6 +340,9 @@ export interface DexhuneExchange extends BaseContract {
     key: string | FunctionFragment
   ): T;
 
+  getFunction(
+    nameOrSignature: "clearOrders"
+  ): TypedContractMethod<[], [void], "nonpayable">;
   getFunction(
     nameOrSignature: "createBuyOrder"
   ): TypedContractMethod<[tokenAddr: AddressLike], [void], "payable">;
@@ -300,6 +381,9 @@ export interface DexhuneExchange extends BaseContract {
     "nonpayable"
   >;
   getFunction(
+    nameOrSignature: "owner"
+  ): TypedContractMethod<[], [string], "view">;
+  getFunction(
     nameOrSignature: "queryBalance"
   ): TypedContractMethod<
     [tokenAddr: AddressLike, isAVAX: boolean],
@@ -313,6 +397,19 @@ export interface DexhuneExchange extends BaseContract {
     [void],
     "nonpayable"
   >;
+  getFunction(
+    nameOrSignature: "takeBuyOrder"
+  ): TypedContractMethod<
+    [tokenAddr: AddressLike, amount: BigNumberish],
+    [void],
+    "nonpayable"
+  >;
+  getFunction(
+    nameOrSignature: "takeSellOrder"
+  ): TypedContractMethod<[tokenAddr: AddressLike], [void], "payable">;
+  getFunction(
+    nameOrSignature: "transferOwnership"
+  ): TypedContractMethod<[_address: AddressLike], [void], "nonpayable">;
   getFunction(
     nameOrSignature: "viewToken(address)"
   ): TypedContractMethod<
@@ -328,5 +425,24 @@ export interface DexhuneExchange extends BaseContract {
     "view"
   >;
 
-  filters: {};
+  getEvent(
+    key: "TransferredOwnership"
+  ): TypedContractEvent<
+    TransferredOwnershipEvent.InputTuple,
+    TransferredOwnershipEvent.OutputTuple,
+    TransferredOwnershipEvent.OutputObject
+  >;
+
+  filters: {
+    "TransferredOwnership(address,address)": TypedContractEvent<
+      TransferredOwnershipEvent.InputTuple,
+      TransferredOwnershipEvent.OutputTuple,
+      TransferredOwnershipEvent.OutputObject
+    >;
+    TransferredOwnership: TypedContractEvent<
+      TransferredOwnershipEvent.InputTuple,
+      TransferredOwnershipEvent.OutputTuple,
+      TransferredOwnershipEvent.OutputObject
+    >;
+  };
 }
