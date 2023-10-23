@@ -21,6 +21,11 @@
 				"type": "error"
 			},
 			{
+				"inputs": [],
+				"name": "FailedToTakeOrder",
+				"type": "error"
+			},
+			{
 				"inputs": [
 					{
 						"internalType": "uint256",
@@ -45,6 +50,11 @@
 			{
 				"inputs": [],
 				"name": "InvalidTokenContract",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "NoSuitableOrderFound",
 				"type": "error"
 			},
 			{
@@ -119,6 +129,32 @@
 				],
 				"name": "UnauthorizedAccount",
 				"type": "error"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "oldOwner",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "newOwner",
+						"type": "address"
+					}
+				],
+				"name": "TransferredOwnership",
+				"type": "event"
+			},
+			{
+				"inputs": [],
+				"name": "clearOrders",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
 			},
 			{
 				"inputs": [
@@ -239,6 +275,19 @@
 				"type": "function"
 			},
 			{
+				"inputs": [],
+				"name": "owner",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
 				"inputs": [
 					{
 						"internalType": "address",
@@ -276,6 +325,50 @@
 					}
 				],
 				"name": "settleOrders",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "tokenAddr",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"name": "takeBuyOrder",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "tokenAddr",
+						"type": "address"
+					}
+				],
+				"name": "takeSellOrder",
+				"outputs": [],
+				"stateMutability": "payable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "_address",
+						"type": "address"
+					}
+				],
+				"name": "transferOwnership",
 				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
@@ -642,19 +735,19 @@
 			]
 		},
 		"contracts/exchange/DexhuneExchange.sol": {
-			"keccak256": "0xce319edac6624b1d3bb5e16212b3908d0e31561ea1be3f0166a6853ac1d7e3ef",
+			"keccak256": "0x1b95acc6a3b88e8a5eaea85d468d388f63626f79e3755fdb4dac663353d5d863",
 			"license": "BSD-3-Clause",
 			"urls": [
-				"bzz-raw://b48f68282aabc87e56be600df4570e1eeb5b4cad778eae22890b6fbcf3b8166f",
-				"dweb:/ipfs/QmWqW9L4hcpZ57HHjRW1t2b2AMidUp9ZbPrmDEwTZqmG9h"
+				"bzz-raw://7a0d701bd27119db1de4e7873b553009e2ad936b39793a58349c52b79770194c",
+				"dweb:/ipfs/QmXCP5ietWVLNtKLRZWTPY4SZaPgkDcDgGZ7Lv4dmU2fX2"
 			]
 		},
 		"contracts/exchange/DexhuneExchangeBase.sol": {
-			"keccak256": "0x93867001058e8770552becd9565012c9605a326f5d63f157b9a758973cca9b8a",
+			"keccak256": "0x7ff105cbd0a90e3130ec412a21fa3862cf3a27972192fa80153e7f854adaafa4",
 			"license": "BSD-3-Clause",
 			"urls": [
-				"bzz-raw://5df210e4c24fce82dddc2cc50977591c380726d68ff7b99f2fffa968ce1fe067",
-				"dweb:/ipfs/QmZcDGx8iu5SVd21CmL7YGZNECFYXSvhzNFcaMwR9dfcye"
+				"bzz-raw://c8ade9656e43fd290308ef5f363f28a770277dda64f777c7573ce92139daedcd",
+				"dweb:/ipfs/QmaUHhZB5rgrSaaYgmX8iSfYFzbuxSYtVagHAaeSuK8YEn"
 			]
 		},
 		"contracts/interfaces/IERC20.sol": {

@@ -221,6 +221,10 @@ contract DexhuneExchange is DexhuneExchangeBase {
         bool found;
         uint256 index;
 
+        if (norders.length <= 0) {
+            return (false, order, 0);
+        }
+
         for (uint256 i = norders.length - 1; i >= 0; i--) {
             uint256 n = norders[i];
             order = _orders[n];
@@ -291,6 +295,10 @@ contract DexhuneExchange is DexhuneExchangeBase {
 
         bool settled;
         uint256 balance = orderType ? token.yBalance : token.xBalance;
+
+        if (norders.length <= 0) {
+            return;
+        }
         
         for (uint i = norders.length - 1; balance > 0 && i >= 0; i--) {
             uint256 n = norders[i];
@@ -325,6 +333,10 @@ contract DexhuneExchange is DexhuneExchangeBase {
         uint256 n;
         uint256 timestamp = block.timestamp;
         Order memory order;
+
+        if (_orders.length <= 0) {
+            return;
+        }
         
 
         if (userOnly) {
