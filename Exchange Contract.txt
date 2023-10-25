@@ -119,12 +119,12 @@ Created at ; Saves the block height at which the order was made, this is used wh
 
 - Token Contract (string)
 - Amount (string, numerical) 
-
+- OrderType (bool)
 Token Contract ; this defines which token's order slots are to be taken. 
 
 Amount ; this defines what threshold of orders are to be taken.
 
-When 'takeOrder' is called it searches the contract for pending orders of a particular token within a threshold amount, the contract chooses an order to settle either wholly or in part [See E2]. The taker does not define which order to take and cannot discriminate.  
+When 'takeOrder' is called it searches the contract for pending orders of a particular token within a threshold amount and order type, the contract chooses an order to settle either wholly or in part [See E2]. The taker does not define which order to take and cannot discriminate.  
 
 Taking an order "in part" means the taker takes only a portion of the order, and the slot is updated for the remainder [See E2]. Whereas taking an order in full compeletly takes the pending amount, sends the required token and or AVAX to respective parties and reverts the order slot.   
 
