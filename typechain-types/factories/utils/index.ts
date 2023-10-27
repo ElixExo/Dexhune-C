@@ -2,3 +2,4 @@
 /* tslint:disable */
 /* eslint-disable */
 export { ERC20Normalizer__factory } from "./ERC20Normalizer__factory";
+export { Ownable__factory } from "./Ownable__factory";

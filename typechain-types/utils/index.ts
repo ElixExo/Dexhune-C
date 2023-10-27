@@ -2,3 +2,4 @@
 /* tslint:disable */
 /* eslint-disable */
 export type { ERC20Normalizer } from "./ERC20Normalizer";
+export type { Ownable } from "./Ownable";

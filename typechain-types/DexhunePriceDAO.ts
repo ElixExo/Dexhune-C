@@ -23,26 +23,23 @@ import type {
   TypedContractMethod,
 } from "./common";
 
-export declare namespace DexhuneBase {
+export declare namespace DexhunePriceDAOBase {
   export type PriceProposalStruct = {
-    description: string;
+    proposerAddr: AddressLike;
     value: string;
-    votesUp: BigNumberish;
-    votesDown: BigNumberish;
+    description: string;
     finalized: boolean;
   };
 
   export type PriceProposalStructOutput = [
-    description: string,
+    proposerAddr: string,
     value: string,
-    votesUp: bigint,
-    votesDown: bigint,
+    description: string,
     finalized: boolean
   ] & {
-    description: string;
+    proposerAddr: string;
     value: string;
-    votesUp: bigint;
-    votesDown: bigint;
+    description: string;
     finalized: boolean;
   };
 }
@@ -50,20 +47,14 @@ export declare namespace DexhuneBase {
 export interface DexhunePriceDAOInterface extends Interface {
   getFunction(
     nameOrSignature:
-      | "NFTCollections"
-      | "PriceProposals"
-      | "addNFTCollection"
-      | "cooldownTimeout"
-      | "currentProposal"
+      | "assignNFTCollection"
+      | "assignTokenAddress"
       | "finalizeProposal"
       | "getPrice"
+      | "latestProposal"
       | "owner"
       | "proposalExpiresAt"
       | "proposePrice"
-      | "removeNFTCollection"
-      | "setCooldownTimeout"
-      | "setTransferTimeout"
-      | "transferCooldown"
       | "transferOwnership"
       | "voteDown"
       | "voteUp"
@@ -72,41 +63,34 @@ export interface DexhunePriceDAOInterface extends Interface {
 
   getEvent(
     nameOrSignatureOrTopic:
-      | "PriceUpdated"
+      | "AssignedNFTCollection"
+      | "AssignedToken"
       | "ProposalCreated"
-      | "ProposalFinalized"
+      | "ProposalDenied"
+      | "ProposalPassed"
+      | "RewardedProposer"
+      | "TransferredOwnership"
       | "VotedDown"
       | "VotedUp"
-      | "addedNFTCollection"
-      | "removedNFTCollection"
-      | "transferredOwnership"
   ): EventFragment;
 
   encodeFunctionData(
-    functionFragment: "NFTCollections",
-    values: [BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "PriceProposals",
-    values: [BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "addNFTCollection",
+    functionFragment: "assignNFTCollection",
     values: [AddressLike]
   ): string;
   encodeFunctionData(
-    functionFragment: "cooldownTimeout",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "currentProposal",
-    values?: undefined
+    functionFragment: "assignTokenAddress",
+    values: [AddressLike]
   ): string;
   encodeFunctionData(
     functionFragment: "finalizeProposal",
     values?: undefined
   ): string;
   encodeFunctionData(functionFragment: "getPrice", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "latestProposal",
+    values?: undefined
+  ): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "proposalExpiresAt",
@@ -115,22 +99,6 @@ export interface DexhunePriceDAOInterface extends Interface {
   encodeFunctionData(
     functionFragment: "proposePrice",
     values: [string, string]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "removeNFTCollection",
-    values: [BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "setCooldownTimeout",
-    values: [BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "setTransferTimeout",
-    values: [boolean]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "transferCooldown",
-    values?: undefined
   ): string;
   encodeFunctionData(
     functionFragment: "transferOwnership",
@@ -144,23 +112,11 @@ export interface DexhunePriceDAOInterface extends Interface {
   ): string;
 
   decodeFunctionResult(
-    functionFragment: "NFTCollections",
+    functionFragment: "assignNFTCollection",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "PriceProposals",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "addNFTCollection",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "cooldownTimeout",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "currentProposal",
+    functionFragment: "assignTokenAddress",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -168,6 +124,10 @@ export interface DexhunePriceDAOInterface extends Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "getPrice", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "latestProposal",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "proposalExpiresAt",
@@ -175,22 +135,6 @@ export interface DexhunePriceDAOInterface extends Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "proposePrice",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "removeNFTCollection",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "setCooldownTimeout",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "setTransferTimeout",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "transferCooldown",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -205,12 +149,23 @@ export interface DexhunePriceDAOInterface extends Interface {
   ): Result;
 }
 
-export namespace PriceUpdatedEvent {
-  export type InputTuple = [oldPrice: string, newPrice: string];
-  export type OutputTuple = [oldPrice: string, newPrice: string];
+export namespace AssignedNFTCollectionEvent {
+  export type InputTuple = [addr: AddressLike];
+  export type OutputTuple = [addr: string];
   export interface OutputObject {
-    oldPrice: string;
-    newPrice: string;
+    addr: string;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
+}
+
+export namespace AssignedTokenEvent {
+  export type InputTuple = [addr: AddressLike];
+  export type OutputTuple = [addr: string];
+  export interface OutputObject {
+    addr: string;
   }
   export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
   export type Filter = TypedDeferredTopicFilter<Event>;
@@ -220,13 +175,17 @@ export namespace PriceUpdatedEvent {
 
 export namespace ProposalCreatedEvent {
   export type InputTuple = [
-    id: BigNumberish,
+    price: string,
     description: string,
     proposer: AddressLike
   ];
-  export type OutputTuple = [id: bigint, description: string, proposer: string];
+  export type OutputTuple = [
+    price: string,
+    description: string,
+    proposer: string
+  ];
   export interface OutputObject {
-    id: bigint;
+    price: string;
     description: string;
     proposer: string;
   }
@@ -236,12 +195,56 @@ export namespace ProposalCreatedEvent {
   export type LogDescription = TypedLogDescription<Event>;
 }
 
-export namespace ProposalFinalizedEvent {
-  export type InputTuple = [id: BigNumberish, passed: boolean];
-  export type OutputTuple = [id: bigint, passed: boolean];
+export namespace ProposalDeniedEvent {
+  export type InputTuple = [_for: BigNumberish, _against: BigNumberish];
+  export type OutputTuple = [_for: bigint, _against: bigint];
   export interface OutputObject {
-    id: bigint;
-    passed: boolean;
+    _for: bigint;
+    _against: bigint;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
+}
+
+export namespace ProposalPassedEvent {
+  export type InputTuple = [
+    _for: BigNumberish,
+    _against: BigNumberish,
+    newPrice: string
+  ];
+  export type OutputTuple = [_for: bigint, _against: bigint, newPrice: string];
+  export interface OutputObject {
+    _for: bigint;
+    _against: bigint;
+    newPrice: string;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
+}
+
+export namespace RewardedProposerEvent {
+  export type InputTuple = [addr: AddressLike, amount: BigNumberish];
+  export type OutputTuple = [addr: string, amount: bigint];
+  export interface OutputObject {
+    addr: string;
+    amount: bigint;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
+}
+
+export namespace TransferredOwnershipEvent {
+  export type InputTuple = [oldOwner: AddressLike, newOwner: AddressLike];
+  export type OutputTuple = [oldOwner: string, newOwner: string];
+  export interface OutputObject {
+    oldOwner: string;
+    newOwner: string;
   }
   export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
   export type Filter = TypedDeferredTopicFilter<Event>;
@@ -250,11 +253,11 @@ export namespace ProposalFinalizedEvent {
 }
 
 export namespace VotedDownEvent {
-  export type InputTuple = [voter: AddressLike, proposalId: BigNumberish];
-  export type OutputTuple = [voter: string, proposalId: bigint];
+  export type InputTuple = [voter: AddressLike, votes: BigNumberish];
+  export type OutputTuple = [voter: string, votes: bigint];
   export interface OutputObject {
     voter: string;
-    proposalId: bigint;
+    votes: bigint;
   }
   export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
   export type Filter = TypedDeferredTopicFilter<Event>;
@@ -263,50 +266,11 @@ export namespace VotedDownEvent {
 }
 
 export namespace VotedUpEvent {
-  export type InputTuple = [voter: AddressLike, proposalId: BigNumberish];
-  export type OutputTuple = [voter: string, proposalId: bigint];
+  export type InputTuple = [voter: AddressLike, votes: BigNumberish];
+  export type OutputTuple = [voter: string, votes: bigint];
   export interface OutputObject {
     voter: string;
-    proposalId: bigint;
-  }
-  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
-  export type Filter = TypedDeferredTopicFilter<Event>;
-  export type Log = TypedEventLog<Event>;
-  export type LogDescription = TypedLogDescription<Event>;
-}
-
-export namespace addedNFTCollectionEvent {
-  export type InputTuple = [id: BigNumberish, collectionAddress: AddressLike];
-  export type OutputTuple = [id: bigint, collectionAddress: string];
-  export interface OutputObject {
-    id: bigint;
-    collectionAddress: string;
-  }
-  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
-  export type Filter = TypedDeferredTopicFilter<Event>;
-  export type Log = TypedEventLog<Event>;
-  export type LogDescription = TypedLogDescription<Event>;
-}
-
-export namespace removedNFTCollectionEvent {
-  export type InputTuple = [id: BigNumberish, collectionAddress: AddressLike];
-  export type OutputTuple = [id: bigint, collectionAddress: string];
-  export interface OutputObject {
-    id: bigint;
-    collectionAddress: string;
-  }
-  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
-  export type Filter = TypedDeferredTopicFilter<Event>;
-  export type Log = TypedEventLog<Event>;
-  export type LogDescription = TypedLogDescription<Event>;
-}
-
-export namespace transferredOwnershipEvent {
-  export type InputTuple = [from: AddressLike, to: AddressLike];
-  export type OutputTuple = [from: string, to: string];
-  export interface OutputObject {
-    from: string;
-    to: string;
+    votes: bigint;
   }
   export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
   export type Filter = TypedDeferredTopicFilter<Event>;
@@ -357,69 +321,37 @@ export interface DexhunePriceDAO extends BaseContract {
     event?: TCEvent
   ): Promise<this>;
 
-  NFTCollections: TypedContractMethod<[arg0: BigNumberish], [string], "view">;
-
-  PriceProposals: TypedContractMethod<
-    [arg0: BigNumberish],
-    [
-      [string, string, bigint, bigint, boolean] & {
-        description: string;
-        value: string;
-        votesUp: bigint;
-        votesDown: bigint;
-        finalized: boolean;
-      }
-    ],
-    "view"
-  >;
-
-  addNFTCollection: TypedContractMethod<
-    [_contractAddress: AddressLike],
+  assignNFTCollection: TypedContractMethod<
+    [addr: AddressLike],
     [void],
     "nonpayable"
   >;
 
-  cooldownTimeout: TypedContractMethod<[], [bigint], "view">;
-
-  currentProposal: TypedContractMethod<
-    [],
-    [DexhuneBase.PriceProposalStructOutput],
-    "view"
+  assignTokenAddress: TypedContractMethod<
+    [addr: AddressLike],
+    [void],
+    "nonpayable"
   >;
 
   finalizeProposal: TypedContractMethod<[], [void], "nonpayable">;
 
   getPrice: TypedContractMethod<[], [string], "view">;
 
+  latestProposal: TypedContractMethod<
+    [],
+    [DexhunePriceDAOBase.PriceProposalStructOutput],
+    "view"
+  >;
+
   owner: TypedContractMethod<[], [string], "view">;
 
   proposalExpiresAt: TypedContractMethod<[], [bigint], "view">;
 
   proposePrice: TypedContractMethod<
-    [_desc: string, _price: string],
+    [price: string, description: string],
     [void],
     "nonpayable"
   >;
-
-  removeNFTCollection: TypedContractMethod<
-    [_index: BigNumberish],
-    [void],
-    "nonpayable"
-  >;
-
-  setCooldownTimeout: TypedContractMethod<
-    [_timeout: BigNumberish],
-    [void],
-    "nonpayable"
-  >;
-
-  setTransferTimeout: TypedContractMethod<
-    [_enabled: boolean],
-    [void],
-    "nonpayable"
-  >;
-
-  transferCooldown: TypedContractMethod<[], [boolean], "view">;
 
   transferOwnership: TypedContractMethod<
     [_address: AddressLike],
@@ -438,38 +370,24 @@ export interface DexhunePriceDAO extends BaseContract {
   ): T;
 
   getFunction(
-    nameOrSignature: "NFTCollections"
-  ): TypedContractMethod<[arg0: BigNumberish], [string], "view">;
+    nameOrSignature: "assignNFTCollection"
+  ): TypedContractMethod<[addr: AddressLike], [void], "nonpayable">;
   getFunction(
-    nameOrSignature: "PriceProposals"
-  ): TypedContractMethod<
-    [arg0: BigNumberish],
-    [
-      [string, string, bigint, bigint, boolean] & {
-        description: string;
-        value: string;
-        votesUp: bigint;
-        votesDown: bigint;
-        finalized: boolean;
-      }
-    ],
-    "view"
-  >;
-  getFunction(
-    nameOrSignature: "addNFTCollection"
-  ): TypedContractMethod<[_contractAddress: AddressLike], [void], "nonpayable">;
-  getFunction(
-    nameOrSignature: "cooldownTimeout"
-  ): TypedContractMethod<[], [bigint], "view">;
-  getFunction(
-    nameOrSignature: "currentProposal"
-  ): TypedContractMethod<[], [DexhuneBase.PriceProposalStructOutput], "view">;
+    nameOrSignature: "assignTokenAddress"
+  ): TypedContractMethod<[addr: AddressLike], [void], "nonpayable">;
   getFunction(
     nameOrSignature: "finalizeProposal"
   ): TypedContractMethod<[], [void], "nonpayable">;
   getFunction(
     nameOrSignature: "getPrice"
   ): TypedContractMethod<[], [string], "view">;
+  getFunction(
+    nameOrSignature: "latestProposal"
+  ): TypedContractMethod<
+    [],
+    [DexhunePriceDAOBase.PriceProposalStructOutput],
+    "view"
+  >;
   getFunction(
     nameOrSignature: "owner"
   ): TypedContractMethod<[], [string], "view">;
@@ -478,19 +396,11 @@ export interface DexhunePriceDAO extends BaseContract {
   ): TypedContractMethod<[], [bigint], "view">;
   getFunction(
     nameOrSignature: "proposePrice"
-  ): TypedContractMethod<[_desc: string, _price: string], [void], "nonpayable">;
-  getFunction(
-    nameOrSignature: "removeNFTCollection"
-  ): TypedContractMethod<[_index: BigNumberish], [void], "nonpayable">;
-  getFunction(
-    nameOrSignature: "setCooldownTimeout"
-  ): TypedContractMethod<[_timeout: BigNumberish], [void], "nonpayable">;
-  getFunction(
-    nameOrSignature: "setTransferTimeout"
-  ): TypedContractMethod<[_enabled: boolean], [void], "nonpayable">;
-  getFunction(
-    nameOrSignature: "transferCooldown"
-  ): TypedContractMethod<[], [boolean], "view">;
+  ): TypedContractMethod<
+    [price: string, description: string],
+    [void],
+    "nonpayable"
+  >;
   getFunction(
     nameOrSignature: "transferOwnership"
   ): TypedContractMethod<[_address: AddressLike], [void], "nonpayable">;
@@ -505,11 +415,18 @@ export interface DexhunePriceDAO extends BaseContract {
   ): TypedContractMethod<[], [bigint], "view">;
 
   getEvent(
-    key: "PriceUpdated"
+    key: "AssignedNFTCollection"
   ): TypedContractEvent<
-    PriceUpdatedEvent.InputTuple,
-    PriceUpdatedEvent.OutputTuple,
-    PriceUpdatedEvent.OutputObject
+    AssignedNFTCollectionEvent.InputTuple,
+    AssignedNFTCollectionEvent.OutputTuple,
+    AssignedNFTCollectionEvent.OutputObject
+  >;
+  getEvent(
+    key: "AssignedToken"
+  ): TypedContractEvent<
+    AssignedTokenEvent.InputTuple,
+    AssignedTokenEvent.OutputTuple,
+    AssignedTokenEvent.OutputObject
   >;
   getEvent(
     key: "ProposalCreated"
@@ -519,11 +436,32 @@ export interface DexhunePriceDAO extends BaseContract {
     ProposalCreatedEvent.OutputObject
   >;
   getEvent(
-    key: "ProposalFinalized"
+    key: "ProposalDenied"
   ): TypedContractEvent<
-    ProposalFinalizedEvent.InputTuple,
-    ProposalFinalizedEvent.OutputTuple,
-    ProposalFinalizedEvent.OutputObject
+    ProposalDeniedEvent.InputTuple,
+    ProposalDeniedEvent.OutputTuple,
+    ProposalDeniedEvent.OutputObject
+  >;
+  getEvent(
+    key: "ProposalPassed"
+  ): TypedContractEvent<
+    ProposalPassedEvent.InputTuple,
+    ProposalPassedEvent.OutputTuple,
+    ProposalPassedEvent.OutputObject
+  >;
+  getEvent(
+    key: "RewardedProposer"
+  ): TypedContractEvent<
+    RewardedProposerEvent.InputTuple,
+    RewardedProposerEvent.OutputTuple,
+    RewardedProposerEvent.OutputObject
+  >;
+  getEvent(
+    key: "TransferredOwnership"
+  ): TypedContractEvent<
+    TransferredOwnershipEvent.InputTuple,
+    TransferredOwnershipEvent.OutputTuple,
+    TransferredOwnershipEvent.OutputObject
   >;
   getEvent(
     key: "VotedDown"
@@ -539,41 +477,31 @@ export interface DexhunePriceDAO extends BaseContract {
     VotedUpEvent.OutputTuple,
     VotedUpEvent.OutputObject
   >;
-  getEvent(
-    key: "addedNFTCollection"
-  ): TypedContractEvent<
-    addedNFTCollectionEvent.InputTuple,
-    addedNFTCollectionEvent.OutputTuple,
-    addedNFTCollectionEvent.OutputObject
-  >;
-  getEvent(
-    key: "removedNFTCollection"
-  ): TypedContractEvent<
-    removedNFTCollectionEvent.InputTuple,
-    removedNFTCollectionEvent.OutputTuple,
-    removedNFTCollectionEvent.OutputObject
-  >;
-  getEvent(
-    key: "transferredOwnership"
-  ): TypedContractEvent<
-    transferredOwnershipEvent.InputTuple,
-    transferredOwnershipEvent.OutputTuple,
-    transferredOwnershipEvent.OutputObject
-  >;
 
   filters: {
-    "PriceUpdated(string,string)": TypedContractEvent<
-      PriceUpdatedEvent.InputTuple,
-      PriceUpdatedEvent.OutputTuple,
-      PriceUpdatedEvent.OutputObject
+    "AssignedNFTCollection(address)": TypedContractEvent<
+      AssignedNFTCollectionEvent.InputTuple,
+      AssignedNFTCollectionEvent.OutputTuple,
+      AssignedNFTCollectionEvent.OutputObject
     >;
-    PriceUpdated: TypedContractEvent<
-      PriceUpdatedEvent.InputTuple,
-      PriceUpdatedEvent.OutputTuple,
-      PriceUpdatedEvent.OutputObject
+    AssignedNFTCollection: TypedContractEvent<
+      AssignedNFTCollectionEvent.InputTuple,
+      AssignedNFTCollectionEvent.OutputTuple,
+      AssignedNFTCollectionEvent.OutputObject
     >;
 
-    "ProposalCreated(uint256,string,address)": TypedContractEvent<
+    "AssignedToken(address)": TypedContractEvent<
+      AssignedTokenEvent.InputTuple,
+      AssignedTokenEvent.OutputTuple,
+      AssignedTokenEvent.OutputObject
+    >;
+    AssignedToken: TypedContractEvent<
+      AssignedTokenEvent.InputTuple,
+      AssignedTokenEvent.OutputTuple,
+      AssignedTokenEvent.OutputObject
+    >;
+
+    "ProposalCreated(string,string,address)": TypedContractEvent<
       ProposalCreatedEvent.InputTuple,
       ProposalCreatedEvent.OutputTuple,
       ProposalCreatedEvent.OutputObject
@@ -584,18 +512,51 @@ export interface DexhunePriceDAO extends BaseContract {
       ProposalCreatedEvent.OutputObject
     >;
 
-    "ProposalFinalized(uint256,bool)": TypedContractEvent<
-      ProposalFinalizedEvent.InputTuple,
-      ProposalFinalizedEvent.OutputTuple,
-      ProposalFinalizedEvent.OutputObject
+    "ProposalDenied(uint16,uint16)": TypedContractEvent<
+      ProposalDeniedEvent.InputTuple,
+      ProposalDeniedEvent.OutputTuple,
+      ProposalDeniedEvent.OutputObject
     >;
-    ProposalFinalized: TypedContractEvent<
-      ProposalFinalizedEvent.InputTuple,
-      ProposalFinalizedEvent.OutputTuple,
-      ProposalFinalizedEvent.OutputObject
+    ProposalDenied: TypedContractEvent<
+      ProposalDeniedEvent.InputTuple,
+      ProposalDeniedEvent.OutputTuple,
+      ProposalDeniedEvent.OutputObject
     >;
 
-    "VotedDown(address,uint256)": TypedContractEvent<
+    "ProposalPassed(uint16,uint16,string)": TypedContractEvent<
+      ProposalPassedEvent.InputTuple,
+      ProposalPassedEvent.OutputTuple,
+      ProposalPassedEvent.OutputObject
+    >;
+    ProposalPassed: TypedContractEvent<
+      ProposalPassedEvent.InputTuple,
+      ProposalPassedEvent.OutputTuple,
+      ProposalPassedEvent.OutputObject
+    >;
+
+    "RewardedProposer(address,uint256)": TypedContractEvent<
+      RewardedProposerEvent.InputTuple,
+      RewardedProposerEvent.OutputTuple,
+      RewardedProposerEvent.OutputObject
+    >;
+    RewardedProposer: TypedContractEvent<
+      RewardedProposerEvent.InputTuple,
+      RewardedProposerEvent.OutputTuple,
+      RewardedProposerEvent.OutputObject
+    >;
+
+    "TransferredOwnership(address,address)": TypedContractEvent<
+      TransferredOwnershipEvent.InputTuple,
+      TransferredOwnershipEvent.OutputTuple,
+      TransferredOwnershipEvent.OutputObject
+    >;
+    TransferredOwnership: TypedContractEvent<
+      TransferredOwnershipEvent.InputTuple,
+      TransferredOwnershipEvent.OutputTuple,
+      TransferredOwnershipEvent.OutputObject
+    >;
+
+    "VotedDown(address,uint16)": TypedContractEvent<
       VotedDownEvent.InputTuple,
       VotedDownEvent.OutputTuple,
       VotedDownEvent.OutputObject
@@ -606,7 +567,7 @@ export interface DexhunePriceDAO extends BaseContract {
       VotedDownEvent.OutputObject
     >;
 
-    "VotedUp(address,uint256)": TypedContractEvent<
+    "VotedUp(address,uint16)": TypedContractEvent<
       VotedUpEvent.InputTuple,
       VotedUpEvent.OutputTuple,
       VotedUpEvent.OutputObject
@@ -615,39 +576,6 @@ export interface DexhunePriceDAO extends BaseContract {
       VotedUpEvent.InputTuple,
       VotedUpEvent.OutputTuple,
       VotedUpEvent.OutputObject
-    >;
-
-    "addedNFTCollection(uint256,address)": TypedContractEvent<
-      addedNFTCollectionEvent.InputTuple,
-      addedNFTCollectionEvent.OutputTuple,
-      addedNFTCollectionEvent.OutputObject
-    >;
-    addedNFTCollection: TypedContractEvent<
-      addedNFTCollectionEvent.InputTuple,
-      addedNFTCollectionEvent.OutputTuple,
-      addedNFTCollectionEvent.OutputObject
-    >;
-
-    "removedNFTCollection(uint256,address)": TypedContractEvent<
-      removedNFTCollectionEvent.InputTuple,
-      removedNFTCollectionEvent.OutputTuple,
-      removedNFTCollectionEvent.OutputObject
-    >;
-    removedNFTCollection: TypedContractEvent<
-      removedNFTCollectionEvent.InputTuple,
-      removedNFTCollectionEvent.OutputTuple,
-      removedNFTCollectionEvent.OutputObject
-    >;
-
-    "transferredOwnership(address,address)": TypedContractEvent<
-      transferredOwnershipEvent.InputTuple,
-      transferredOwnershipEvent.OutputTuple,
-      transferredOwnershipEvent.OutputObject
-    >;
-    transferredOwnership: TypedContractEvent<
-      transferredOwnershipEvent.InputTuple,
-      transferredOwnershipEvent.OutputTuple,
-      transferredOwnershipEvent.OutputObject
     >;
   };
 }
