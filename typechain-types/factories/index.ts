@@ -2,7 +2,6 @@
 /* tslint:disable */
 /* eslint-disable */
 export * as dexhuneExchangeSol from "./DexhuneExchange.sol";
-export * as exchange from "./exchange";
 export * as interfaces from "./interfaces";
 export * as mockups from "./mockups";
 export * as utils from "./utils";

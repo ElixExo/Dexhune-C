@@ -15,26 +15,6 @@ pragma solidity ^0.8.21;
 import "./interfaces/IERC20.sol";
 import "./interfaces/IPriceDAO.sol";
 import "./DexhuneExchangeBase.sol";
-import { UD60x18, div, convert, wrap, unwrap } from "@prb/math/src/UD60x18.sol";
-
-/** 
- * @dev Derived interface as specified Dexhune documents 
-*/
-interface IDexhuneExchange {
-    function makeOrder(address tokenAddr, string memory amount, bool orderType) external;
-    function takeOrder(address tokenAddr, string memory amount) external view;
-    function settleOrders(address tokenAddr, bool orderType) external;
-    function deposit(address fromAddress, address tokenAddr, bool balanceType, string memory amount) external;
-    function clearOrders() external;
-    function queryOrder(uint8 queryType, string memory queryDetails) external;
-    function queryListing(uint8 queryType, string memory queryDetails) external;
-    function queryPrice() external returns(uint256);
-    function getBalance() external view returns(uint256);
-    function claimUnallocated(address tokenAddr, bool isAVAX) external;
-    function queryBalance(address contractAddr, bool balanceType) external view;
-
-    function listToken(address tokenContract, uint256 rewardAmount, uint256 rewardThreshold, address parityAddr, string memory price) external;
-}
 
 contract DexhuneExchange is DexhuneExchangeBase {
     uint256 listingCost = INITIAL_LISTING_PRICE;
@@ -151,12 +131,19 @@ contract DexhuneExchange is DexhuneExchangeBase {
     function createBuyOrder(address tokenAddr) external payable {
         uint256 amount = msg.value;
         Token memory token = _fetchToken(tokenAddr);
+        token.xBalance += amount;
 
         _createOrder(token, true, amount);
     }
 
     function createSellOrder(address tokenAddr, uint256 amount) external {
         Token memory token = _fetchToken(tokenAddr);
+
+        if (!_withdrawToken(token.instance, msg.sender, amount)) {
+            revert DepositFailed();
+        }
+
+        token.yBalance += amount;
 
         _createOrder(token, false, amount);
     }
@@ -211,7 +198,7 @@ contract DexhuneExchange is DexhuneExchangeBase {
             revert NoSuitableOrderFound();
         }
 
-        _takeOrder(order, true, orderIndex, amount, tokenAddr);
+        _takeOrder(order, false, orderIndex, amount, tokenAddr);
     }
 
     function _findSuitableOrder(address tokenAddr, uint256 amount) private view returns (bool success, Order memory, uint256) {
@@ -247,12 +234,27 @@ contract DexhuneExchange is DexhuneExchangeBase {
     
         uint256 delta = order.pending - amount;
         uint256 principalDelta = order.principal;
-        
 
+        uint256 nativeDelta;
+        uint256 tokenDelta;
+
+        
+        
         if (isPartial) {
             uint256 nPrice = _normalize(token.price, NATIVE_TOKEN_DECIMALS);
             uint256 nDelta = _normalize(delta, token.dec);
-            principalDelta = _denormalize(nDelta / nPrice, token.dec);
+            uint8 principalDec = orderType ? NATIVE_TOKEN_DECIMALS : token.dec;
+
+            
+            principalDelta = _denormalize(_div(nDelta, nPrice), principalDec);
+        }
+
+        if (orderType) {
+            nativeDelta = principalDelta;
+            tokenDelta = delta;
+        } else {
+            nativeDelta = delta;
+            tokenDelta = principalDelta;
         }
 
         address payable avaxAddr;
@@ -266,7 +268,7 @@ contract DexhuneExchange is DexhuneExchangeBase {
             tkAddr = payable(msg.sender);
         }
 
-
+        // TODO: Add reward to the delta
         if (!_sendToken(token.instance, tkAddr, principalDelta)) {
             revert FailedToTakeOrder();
         }
@@ -275,11 +277,26 @@ contract DexhuneExchange is DexhuneExchangeBase {
             revert FailedToTakeOrder();
         }
 
+        token.xBalance -= delta;
+        token.yBalance -= principalDelta;
+
         if (isPartial) {
             order.pending -= delta;
             order.principal -= principalDelta;
         } else {
             _removeItem(_orders, index);
+        }
+
+        if (token.reward <= 0) {
+            return;
+        }
+
+        if (tokenDelta < token.rewardThreshold) {
+            return;
+        }
+
+        if (!_sendToken(token.instance, tkAddr, token.reward)) {
+            revert FailedToSendReward();
         }
     }
 
@@ -312,6 +329,12 @@ contract DexhuneExchange is DexhuneExchangeBase {
             
             _removeItem(norders, i);
             _removeItem(_orders, n);
+        }
+
+        if (orderType) {
+            token.yBalance = balance;
+        } else {
+            token.xBalance = balance;
         }
     }
 
@@ -359,15 +382,20 @@ contract DexhuneExchange is DexhuneExchangeBase {
     }
 
     function _revertOrder(Order memory order, uint256 index) private returns (bool) {
+        Token memory token = _fetchToken(order.tokenAddr);
+
         if (order.orderType) { // Buy
             if (!_sendAVAX(order.makerAddr, order.principal)) {
                 return false;
             }
+
+            token.xBalance -= order.principal;
         } else {
-            Token memory token = _fetchToken(order.tokenAddr);
             if (!_sendToken(token.instance, order.makerAddr, order.principal)) {
                 return false;
             }
+
+            token.yBalance -= order.principal;
         }
 
         _removeItem(_orders, index);
@@ -380,7 +408,11 @@ contract DexhuneExchange is DexhuneExchangeBase {
 
         if (token.scheme == PricingScheme.Relative) {
             _ensurePrice();
-            price = _div(_price, token.price);
+
+            uint256 xPrice = _normalize(_price, NATIVE_TOKEN_DECIMALS);
+            uint256 tPrice = _normalize(token.price, token.dec);
+            price = _denormalize(_div(xPrice, tPrice), NATIVE_TOKEN_DECIMALS);
+
         } else if (token.scheme == PricingScheme.Parity) {
             bool canUpdate = block.timestamp - token.lastPriceCheck >= PRICE_CHECK_INTERVAL;
 
@@ -393,16 +425,29 @@ contract DexhuneExchange is DexhuneExchangeBase {
                 uint256 tBalance = tokenInst.balanceOf(token.parityAddr);
                 uint256 dxhBalance = dxhInst.balanceOf(token.parityAddr);
 
-                token.price = price = _div(dxhBalance, tBalance);
+                tBalance = _normalize(tBalance, token.dec);
+                dxhBalance = _normalize(dxhBalance, dxh.dec);
+
+                token.price = price = _denormalize(_div(dxhBalance, tBalance), NATIVE_TOKEN_DECIMALS);
                 token.lastPriceCheck = block.timestamp;
             }
         }
 
         uint256 pending;
+        uint256 nAmount;
 
-        uint256 nPrice = _normalize(price, token.dec);
-        uint256 nAmount = _normalize(amount, NATIVE_TOKEN_DECIMALS);
-        pending = _denormalize(nPrice * nAmount, token.dec);
+        uint256 nPrice = _normalize(price, NATIVE_TOKEN_DECIMALS);
+        // 1 AVAX = 20tk
+        // 60tk = 60/20 * 1 = 3 AVAX
+
+        if (orderType) {
+            // Buy
+            nAmount = _normalize(amount, NATIVE_TOKEN_DECIMALS);
+            pending = _denormalize(_mul(nPrice, nAmount), token.dec);
+        } else {
+            nAmount = _normalize(amount, token.dec);
+            pending = _denormalize(_div(nAmount, nPrice), token.dec);
+        }
 
 
         uint reward;
@@ -468,10 +513,8 @@ contract DexhuneExchange is DexhuneExchangeBase {
             amount = order.pending;
         }
 
-        // IERC20 inst = IERC20(token.addr);
         IERC20 inst = token.instance;
         
-
         try inst.transfer(order.makerAddr, amount) {
             balance -= amount;
 
@@ -480,8 +523,7 @@ contract DexhuneExchange is DexhuneExchangeBase {
 
                 uint256 pending = _normalize(order.pending, token.dec);
                 uint256 price = _normalize(order.price, NATIVE_TOKEN_DECIMALS);
-
-                order.principal = _denormalize(pending / price, token.dec);
+                order.principal = _denormalize(_div(pending, price), NATIVE_TOKEN_DECIMALS);
             }
         } catch {
             return (false, balance);
@@ -506,10 +548,9 @@ contract DexhuneExchange is DexhuneExchangeBase {
             if (isPartial) {
                 order.pending -= amount;
 
-                uint256 pending = _normalize(order.pending, token.dec);
+                uint256 pending = _normalize(order.pending, NATIVE_TOKEN_DECIMALS);
                 uint256 price = _normalize(order.price, NATIVE_TOKEN_DECIMALS);
-
-                order.principal = _denormalize(pending / price, token.dec);
+                order.principal = _denormalize(_div(pending, price), token.dec);
             }
 
             return (true, balance);
@@ -518,30 +559,14 @@ contract DexhuneExchange is DexhuneExchangeBase {
         return (false, balance);
     }
 
-    function _normalize(uint256 amount, uint256 scalar) private pure returns(uint256) {
-        return scalar == 1 ? amount : amount * scalar;
-    }
-
-    function _denormalize(uint256 amount, uint256 scalar) private pure returns(uint256) {
-        return scalar == 1 ? amount : amount / scalar;
-    }
-
-    function _computeScalar(uint256 decimals) private pure returns(uint256 scalar) {
-        if (decimals == 18) {
-            scalar = 1;
-        } else {
-            unchecked {
-                scalar = 10 ** (18 - decimals);
-            }
-        }
-    }
-
     function _chargeForListing() private {
          Token memory def = _tokens[0];
         
         if (!_withdrawToken(def.instance, msg.sender, listingCost)) {
             revert InsufficientBalanceForListing(listingCost);
         }
+
+        def.yBalance += listingCost;
         
         uint256 lPrice = (listingCost * LISTING_PRICE_INCREASE_BY_THOUSAND) / 1000;
         listingCost += lPrice;
@@ -580,8 +605,6 @@ contract DexhuneExchange is DexhuneExchangeBase {
         return _tokens[index - 1];
     }
 
-
-
     function _displayToken(uint256 index) private view returns(TokenDataModel memory) {
         Token memory token = _tokens[index];
         uint256 orderCount = _ordersByToken[token.addr].length;
@@ -591,66 +614,4 @@ contract DexhuneExchange is DexhuneExchangeBase {
             token.parityAddr, token.reward, 
             token.rewardThreshold, token.scheme, token.price, orderCount);
     }
-
-    function _div(uint256 num1, uint256 num2) private pure returns(uint256) {
-        UD60x18 n1 = wrap(num1);
-        UD60x18 n2 = wrap(num2);
-
-        return unwrap(div(n1, n2));
-    }
-
-    function _parseNumber(string memory value) private pure returns(uint256) {
-        (uint256 num, bool success) = _tryParseNumber(value);
-
-        if (!success) {
-            revert FailedStringToNumberConversion();
-        }
-
-        return num;
-    }
-
-    function _tryParseNumber(string memory value) private pure returns(uint256, bool) {
-        uint256 xres; uint256 res;
-        bytes memory buffer = bytes(value);
-        uint8 b;
-        
-        bool hasErr;
-        bool hasDec;
-        uint8 dec = 0;
-    
-        for (uint i = 0; i < buffer.length && !hasErr; i++) {
-            b = uint8(buffer[i]);
-            
-            if (b >= 48 && b <= 57) {
-                xres = res;
-
-                if (hasDec) {
-                    dec--;
-                } else {
-                    res *= 10;
-                }
-
-                res += (b - 48) * 10 ** dec;
-
-                if (xres > res) {
-                    // Detect overflow
-                    hasErr = true;
-                }
-            } else if (b == 46) {
-                if (hasDec) {
-                    hasErr = true;
-                }
-
-                hasDec = true;
-                dec = 18;
-                res *= 10 ** dec;
-            }
-        }
-
-        if (!hasDec) {
-            res *= 1e18;
-        }
-
-        return (res, hasErr);
-    }   
 }

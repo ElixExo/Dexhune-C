@@ -53,12 +53,12 @@ export interface DexhunePriceDAOInterface extends Interface {
       | "getPrice"
       | "latestProposal"
       | "owner"
-      | "proposalExpiresAt"
+      | "proposalEndsAfter"
       | "proposePrice"
       | "transferOwnership"
       | "voteDown"
       | "voteUp"
-      | "votingEndsAt"
+      | "votingEndsAfter"
   ): FunctionFragment;
 
   getEvent(
@@ -93,7 +93,7 @@ export interface DexhunePriceDAOInterface extends Interface {
   ): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(
-    functionFragment: "proposalExpiresAt",
+    functionFragment: "proposalEndsAfter",
     values?: undefined
   ): string;
   encodeFunctionData(
@@ -107,7 +107,7 @@ export interface DexhunePriceDAOInterface extends Interface {
   encodeFunctionData(functionFragment: "voteDown", values?: undefined): string;
   encodeFunctionData(functionFragment: "voteUp", values?: undefined): string;
   encodeFunctionData(
-    functionFragment: "votingEndsAt",
+    functionFragment: "votingEndsAfter",
     values?: undefined
   ): string;
 
@@ -130,7 +130,7 @@ export interface DexhunePriceDAOInterface extends Interface {
   ): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "proposalExpiresAt",
+    functionFragment: "proposalEndsAfter",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -144,7 +144,7 @@ export interface DexhunePriceDAOInterface extends Interface {
   decodeFunctionResult(functionFragment: "voteDown", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "voteUp", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "votingEndsAt",
+    functionFragment: "votingEndsAfter",
     data: BytesLike
   ): Result;
 }
@@ -345,7 +345,7 @@ export interface DexhunePriceDAO extends BaseContract {
 
   owner: TypedContractMethod<[], [string], "view">;
 
-  proposalExpiresAt: TypedContractMethod<[], [bigint], "view">;
+  proposalEndsAfter: TypedContractMethod<[], [bigint], "view">;
 
   proposePrice: TypedContractMethod<
     [price: string, description: string],
@@ -363,7 +363,7 @@ export interface DexhunePriceDAO extends BaseContract {
 
   voteUp: TypedContractMethod<[], [void], "nonpayable">;
 
-  votingEndsAt: TypedContractMethod<[], [bigint], "view">;
+  votingEndsAfter: TypedContractMethod<[], [bigint], "view">;
 
   getFunction<T extends ContractMethod = ContractMethod>(
     key: string | FunctionFragment
@@ -392,7 +392,7 @@ export interface DexhunePriceDAO extends BaseContract {
     nameOrSignature: "owner"
   ): TypedContractMethod<[], [string], "view">;
   getFunction(
-    nameOrSignature: "proposalExpiresAt"
+    nameOrSignature: "proposalEndsAfter"
   ): TypedContractMethod<[], [bigint], "view">;
   getFunction(
     nameOrSignature: "proposePrice"
@@ -411,7 +411,7 @@ export interface DexhunePriceDAO extends BaseContract {
     nameOrSignature: "voteUp"
   ): TypedContractMethod<[], [void], "nonpayable">;
   getFunction(
-    nameOrSignature: "votingEndsAt"
+    nameOrSignature: "votingEndsAfter"
   ): TypedContractMethod<[], [bigint], "view">;
 
   getEvent(

@@ -43,12 +43,24 @@ contract DexhunePriceDAO is DexhunePriceDAOBase {
         return _proposal;
     }
 
-    function votingEndsAt() public view returns (uint256) {
-        return _votingDeadline;
+    function votingEndsAfter() public view returns (uint256) {
+        uint256 timestamp = block.timestamp;
+
+        if (_votingDeadline < timestamp) {
+            return 0;
+        }
+        
+        return _votingDeadline - timestamp;
     }
 
-    function proposalExpiresAt() public view returns (uint256) {
-        return _deadline;
+    function proposalEndsAfter() public view returns (uint256) {
+        uint256 timestamp = block.timestamp;
+
+        if (_deadline < timestamp) {
+            return 0;
+        }
+
+        return _deadline - timestamp;
     }
 
     function proposePrice(string memory price, string memory description) external {        

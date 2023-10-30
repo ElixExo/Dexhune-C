@@ -3,8 +3,6 @@
 /* eslint-disable */
 import type * as dexhuneExchangeSol from "./DexhuneExchange.sol";
 export type { dexhuneExchangeSol };
-import type * as exchange from "./exchange";
-export type { exchange };
 import type * as interfaces from "./interfaces";
 export type { interfaces };
 import type * as mockups from "./mockups";
