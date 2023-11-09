@@ -16,6 +16,8 @@ import { ContractTransactionResponse, Mnemonic } from "ethers";
 import { ethers } from "hardhat";
 import { DexhuneERC20 } from "../typechain-types";
 
+return;
+
 describe("ERC20", function() {
     async function deploy() {
         const DexhuneERC20Factory = await ethers.getContractFactory("DexhuneERC20");

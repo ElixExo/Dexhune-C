@@ -31,11 +31,6 @@ const _abi = [
   },
   {
     inputs: [],
-    name: "ProposalDoesNotExist",
-    type: "error",
-  },
-  {
-    inputs: [],
     name: "ProposalHasExpired",
     type: "error",
   },
@@ -53,11 +48,6 @@ const _abi = [
       },
     ],
     name: "UnauthorizedAccount",
-    type: "error",
-  },
-  {
-    inputs: [],
-    name: "VotingDeactivated",
     type: "error",
   },
   {
@@ -259,7 +249,33 @@ const _abi = [
   },
   {
     inputs: [],
+    name: "nftAddress",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
     name: "owner",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "tokenAddress",
     outputs: [
       {
         internalType: "address",

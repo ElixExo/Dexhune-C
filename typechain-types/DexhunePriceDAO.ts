@@ -52,9 +52,11 @@ export interface DexhunePriceDAOInterface extends Interface {
       | "finalizeProposal"
       | "getPrice"
       | "latestProposal"
+      | "nftAddress"
       | "owner"
       | "proposalEndsAfter"
       | "proposePrice"
+      | "tokenAddress"
       | "transferOwnership"
       | "voteDown"
       | "voteUp"
@@ -91,6 +93,10 @@ export interface DexhunePriceDAOInterface extends Interface {
     functionFragment: "latestProposal",
     values?: undefined
   ): string;
+  encodeFunctionData(
+    functionFragment: "nftAddress",
+    values?: undefined
+  ): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "proposalEndsAfter",
@@ -99,6 +105,10 @@ export interface DexhunePriceDAOInterface extends Interface {
   encodeFunctionData(
     functionFragment: "proposePrice",
     values: [string, string]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "tokenAddress",
+    values?: undefined
   ): string;
   encodeFunctionData(
     functionFragment: "transferOwnership",
@@ -128,6 +138,7 @@ export interface DexhunePriceDAOInterface extends Interface {
     functionFragment: "latestProposal",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "nftAddress", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "proposalEndsAfter",
@@ -135,6 +146,10 @@ export interface DexhunePriceDAOInterface extends Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "proposePrice",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "tokenAddress",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -343,6 +358,8 @@ export interface DexhunePriceDAO extends BaseContract {
     "view"
   >;
 
+  nftAddress: TypedContractMethod<[], [string], "view">;
+
   owner: TypedContractMethod<[], [string], "view">;
 
   proposalEndsAfter: TypedContractMethod<[], [bigint], "view">;
@@ -352,6 +369,8 @@ export interface DexhunePriceDAO extends BaseContract {
     [void],
     "nonpayable"
   >;
+
+  tokenAddress: TypedContractMethod<[], [string], "view">;
 
   transferOwnership: TypedContractMethod<
     [_address: AddressLike],
@@ -389,6 +408,9 @@ export interface DexhunePriceDAO extends BaseContract {
     "view"
   >;
   getFunction(
+    nameOrSignature: "nftAddress"
+  ): TypedContractMethod<[], [string], "view">;
+  getFunction(
     nameOrSignature: "owner"
   ): TypedContractMethod<[], [string], "view">;
   getFunction(
@@ -401,6 +423,9 @@ export interface DexhunePriceDAO extends BaseContract {
     [void],
     "nonpayable"
   >;
+  getFunction(
+    nameOrSignature: "tokenAddress"
+  ): TypedContractMethod<[], [string], "view">;
   getFunction(
     nameOrSignature: "transferOwnership"
   ): TypedContractMethod<[_address: AddressLike], [void], "nonpayable">;

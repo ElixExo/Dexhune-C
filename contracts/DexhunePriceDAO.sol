@@ -68,7 +68,7 @@ contract DexhunePriceDAO is DexhunePriceDAOBase {
             revert NotEligible();
         }
 
-        if (_proposal.finalized) {
+        if (!_proposal.finalized) {
             if (_deadline > block.timestamp) {
                 revert ProposalIsStillActive();
             }
@@ -109,16 +109,18 @@ contract DexhunePriceDAO is DexhunePriceDAOBase {
             revert ProposalAlreadyFinalized();
         }
 
-        uint16 up;
-        uint16 down;
+        
+
+        uint16 up = 0;
+        uint16 down = 0;
         
         int16 value;
         uint16 balance;
 
         address voterAddr;
 
-        for (uint256 i = _voters.length - 1; i >= 0; i--) {
-            voterAddr = _voters[i];
+        for (uint256 i = _voters.length; i > 0; i--) {
+            voterAddr = _voters[i - 1];
             value = _votes[voterAddr];
             
             unchecked {
@@ -135,6 +137,7 @@ contract DexhunePriceDAO is DexhunePriceDAOBase {
                 down += uint16(-value);
             }
         }
+
 
         _proposal.finalized = true;
 

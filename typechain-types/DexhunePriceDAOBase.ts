@@ -28,7 +28,9 @@ export interface DexhunePriceDAOBaseInterface extends Interface {
     nameOrSignature:
       | "assignNFTCollection"
       | "assignTokenAddress"
+      | "nftAddress"
       | "owner"
+      | "tokenAddress"
       | "transferOwnership"
   ): FunctionFragment;
 
@@ -53,7 +55,15 @@ export interface DexhunePriceDAOBaseInterface extends Interface {
     functionFragment: "assignTokenAddress",
     values: [AddressLike]
   ): string;
+  encodeFunctionData(
+    functionFragment: "nftAddress",
+    values?: undefined
+  ): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "tokenAddress",
+    values?: undefined
+  ): string;
   encodeFunctionData(
     functionFragment: "transferOwnership",
     values: [AddressLike]
@@ -67,7 +77,12 @@ export interface DexhunePriceDAOBaseInterface extends Interface {
     functionFragment: "assignTokenAddress",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "nftAddress", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "tokenAddress",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "transferOwnership",
     data: BytesLike
@@ -258,7 +273,11 @@ export interface DexhunePriceDAOBase extends BaseContract {
     "nonpayable"
   >;
 
+  nftAddress: TypedContractMethod<[], [string], "view">;
+
   owner: TypedContractMethod<[], [string], "view">;
+
+  tokenAddress: TypedContractMethod<[], [string], "view">;
 
   transferOwnership: TypedContractMethod<
     [_address: AddressLike],
@@ -277,7 +296,13 @@ export interface DexhunePriceDAOBase extends BaseContract {
     nameOrSignature: "assignTokenAddress"
   ): TypedContractMethod<[addr: AddressLike], [void], "nonpayable">;
   getFunction(
+    nameOrSignature: "nftAddress"
+  ): TypedContractMethod<[], [string], "view">;
+  getFunction(
     nameOrSignature: "owner"
+  ): TypedContractMethod<[], [string], "view">;
+  getFunction(
+    nameOrSignature: "tokenAddress"
   ): TypedContractMethod<[], [string], "view">;
   getFunction(
     nameOrSignature: "transferOwnership"

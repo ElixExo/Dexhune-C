@@ -20,8 +20,8 @@ abstract contract DexhunePriceDAOBase is Ownable {
     IERC20 internal _token;
     IERC721 internal _nft;
 
-    address nftAddress;
-    address tokenAddress;
+    address public nftAddress;
+    address public tokenAddress;
 
     function assignNFTCollection(address addr) external ownerOnly {
         IERC721 nft = IERC721(addr);
@@ -94,18 +94,6 @@ abstract contract DexhunePriceDAOBase is Ownable {
     /// @param votes Total amount of votees cast
     event VotedDown(address voter, uint16 votes);
 
-    // /// @notice Voting result of the Proposal
-    // /// @dev Notifies that a proposal has been finalized
-    // /// @param id Id of the proposal
-    // /// @param passed Result of the voting on proposal, passed defines that the proposal is accepted by the voters
-    // event ProposalFinalized(uint256 id, bool passed);
-
-    // /// @notice The price has been updated
-    // /// @dev Notifies that the price has been updated
-    // /// @param oldPrice The previous price that was replaced
-    // /// @param newPrice The new price replacing the previous price
-    // event PriceUpdated(string oldPrice, string newPrice);
-
     /// @notice A proposal has been denied
     /// @param _for Total amount of votes cast in favour
     /// @param _against Total amount of votes cast against
@@ -121,14 +109,10 @@ abstract contract DexhunePriceDAOBase is Ownable {
     /// @param addr Address of the proposer
     /// @param amount Amount sent to the proposer
     event RewardedProposer(address addr, uint256 amount);
-    
-
 
     error NoActiveProposal();
     error NotEligible();
     error AlreadyVoted();
-    error ProposalDoesNotExist();
-    error VotingDeactivated();
     error ProposalIsStillActive();
     error ProposalHasExpired();
     error ProposalAlreadyFinalized();

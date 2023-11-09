@@ -25,10 +25,6 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.DexhuneExchange__factory>;
     getContractFactory(
-      name: "IDexhuneExchange",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.IDexhuneExchange__factory>;
-    getContractFactory(
       name: "DexhuneExchangeBase",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.DexhuneExchangeBase__factory>;
@@ -56,6 +52,10 @@ declare module "hardhat/types/runtime" {
       name: "IPriceDAO",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.IPriceDAO__factory>;
+    getContractFactory(
+      name: "MockERC20",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.MockERC20__factory>;
     getContractFactory(
       name: "MockNFT",
       signerOrOptions?: ethers.Signer | FactoryOptions
@@ -85,11 +85,6 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.DexhuneExchange>;
     getContractAt(
-      name: "IDexhuneExchange",
-      address: string | ethers.Addressable,
-      signer?: ethers.Signer
-    ): Promise<Contracts.IDexhuneExchange>;
-    getContractAt(
       name: "DexhuneExchangeBase",
       address: string | ethers.Addressable,
       signer?: ethers.Signer
@@ -124,6 +119,11 @@ declare module "hardhat/types/runtime" {
       address: string | ethers.Addressable,
       signer?: ethers.Signer
     ): Promise<Contracts.IPriceDAO>;
+    getContractAt(
+      name: "MockERC20",
+      address: string | ethers.Addressable,
+      signer?: ethers.Signer
+    ): Promise<Contracts.MockERC20>;
     getContractAt(
       name: "MockNFT",
       address: string | ethers.Addressable,
@@ -153,10 +153,6 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.DexhuneExchange>;
     deployContract(
-      name: "IDexhuneExchange",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.IDexhuneExchange>;
-    deployContract(
       name: "DexhuneExchangeBase",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.DexhuneExchangeBase>;
@@ -184,6 +180,10 @@ declare module "hardhat/types/runtime" {
       name: "IPriceDAO",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.IPriceDAO>;
+    deployContract(
+      name: "MockERC20",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.MockERC20>;
     deployContract(
       name: "MockNFT",
       signerOrOptions?: ethers.Signer | FactoryOptions
@@ -213,11 +213,6 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.DexhuneExchange>;
     deployContract(
-      name: "IDexhuneExchange",
-      args: any[],
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.IDexhuneExchange>;
-    deployContract(
       name: "DexhuneExchangeBase",
       args: any[],
       signerOrOptions?: ethers.Signer | FactoryOptions
@@ -252,6 +247,11 @@ declare module "hardhat/types/runtime" {
       args: any[],
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.IPriceDAO>;
+    deployContract(
+      name: "MockERC20",
+      args: any[],
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.MockERC20>;
     deployContract(
       name: "MockNFT",
       args: any[],

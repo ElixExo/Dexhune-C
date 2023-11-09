@@ -21,6 +21,11 @@ contract MockNFT {
         wallets[user] = count;
     }
 
+    function mintAmount(address user, uint256 amount) external {
+        uint256 count = wallets[user];
+        wallets[user] = count + amount;
+    }
+
     function balanceOf(address owner) external view returns (uint256 balance) {
         return wallets[owner];
     }

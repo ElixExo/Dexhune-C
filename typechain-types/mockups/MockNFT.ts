@@ -3,6 +3,7 @@
 /* eslint-disable */
 import type {
   BaseContract,
+  BigNumberish,
   BytesLike,
   FunctionFragment,
   Result,
@@ -21,16 +22,23 @@ import type {
 } from "../common";
 
 export interface MockNFTInterface extends Interface {
-  getFunction(nameOrSignature: "balanceOf" | "mint"): FunctionFragment;
+  getFunction(
+    nameOrSignature: "balanceOf" | "mint" | "mintAmount"
+  ): FunctionFragment;
 
   encodeFunctionData(
     functionFragment: "balanceOf",
     values: [AddressLike]
   ): string;
   encodeFunctionData(functionFragment: "mint", values: [AddressLike]): string;
+  encodeFunctionData(
+    functionFragment: "mintAmount",
+    values: [AddressLike, BigNumberish]
+  ): string;
 
   decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "mint", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "mintAmount", data: BytesLike): Result;
 }
 
 export interface MockNFT extends BaseContract {
@@ -80,6 +88,12 @@ export interface MockNFT extends BaseContract {
 
   mint: TypedContractMethod<[user: AddressLike], [void], "nonpayable">;
 
+  mintAmount: TypedContractMethod<
+    [user: AddressLike, amount: BigNumberish],
+    [void],
+    "nonpayable"
+  >;
+
   getFunction<T extends ContractMethod = ContractMethod>(
     key: string | FunctionFragment
   ): T;
@@ -90,6 +104,13 @@ export interface MockNFT extends BaseContract {
   getFunction(
     nameOrSignature: "mint"
   ): TypedContractMethod<[user: AddressLike], [void], "nonpayable">;
+  getFunction(
+    nameOrSignature: "mintAmount"
+  ): TypedContractMethod<
+    [user: AddressLike, amount: BigNumberish],
+    [void],
+    "nonpayable"
+  >;
 
   filters: {};
 }
