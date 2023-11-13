@@ -119,12 +119,13 @@ Created at ; Saves the block height at which the order was made, this is used wh
 
 - Token Contract (string)
 - Amount (string, numerical) 
+- OrderType (bool)
 
 Token Contract ; this defines which token's order slots are to be taken. 
 
 Amount ; this defines what threshold of orders are to be taken.
 
-When 'takeOrder' is called it searches the contract for pending orders of a particular token within a threshold amount, the contract chooses an order to settle either wholly or in part [See E2]. The taker does not define which order to take and cannot discriminate.  
+When 'takeOrder' is called it searches the contract for pending orders of a particular token within a threshold amount and order type, the contract chooses an order to settle either wholly or in part [See E2]. The taker does not define which order to take and cannot discriminate.  
 
 Taking an order "in part" means the taker takes only a portion of the order, and the slot is updated for the remainder [See E2]. Whereas taking an order in full compeletly takes the pending amount, sends the required token and or AVAX to respective parties and reverts the order slot.   
 
@@ -135,8 +136,8 @@ Each order can yield rewards if the target token has rewards enabled, the amount
 ! Function: settleOrders ! 
 'settleOrders'  queries all order slots of a particular token and settles them under certain rules and requirements. 
 
-Rule 1 ; Token Liquidity  
-This rule targets "Buys" of a token, using Balance-y of the target token, and thus that balance is used to settle as many pending "buy" orders as possible. The Balance-y defines how much [TOKEN] is allocated by the contract to settle 'buys' of a token.   
+Rule 1 ; Token Liquidity 
+This rule targets "Buys" of a token, using Balance-y of the target token, and thus that balance is used to settle as many pending "buy" orders as possible. The Balance-y defines how much [TOKEN] is allocated by the contract to settle 'buys' of a token [See "deposit"].   
 
 Rule 2 ; AVAX Liquidity 
 This rule targets "Sells" of a token, using its Balance-x and attempts to settle all orders using AVAX allocated to it [See E3]. The Balance-x defines how much AVAX is allocated by the contract to settle 'Sells' of a token.
@@ -147,19 +148,17 @@ This function requires (2) fields;
 - Order Type ; (bool)
 
 ! Function: deposit !
-This allows a user to increase a token's Balance-x or Balance-y by depositing units of the target token or AVAX into the contract.  
+This allows a user to increase a token's Balance-x by depositing units of AVAX into the contract specifically for a target token.  
 
-This function has 4 fields; 
+This function has 2 fields; 
 
-- Token contract ; (string)
-- Balance Type ; (bool) 
-- Amount ; (string, numerical)
+- Token contract (address) 
+- Amount ; (uint)
 - fromAddress ; (string) 
 
-Under Balance Type; "true" denotes Balance-x, whereas "false" denotes Balance-y. 
-Once a user deposits AVAX for a particular token's Balance-x the AVAX is used for all executions of Rule 2, whereas all deposited [TOKEN] in Balance-y is used for executions of Rule 1. 
+"Token contract" implies that the exchange will search all listing slots for one with that token before assigning the deposited AVAX. 
 
-"fromAddress" allows external contracts to specify which address is the depositor, the external address specifies itself/it's address. 
+Note; all unallocated units of [TOKEN] are considered Balance-y and therefore require no special deposit function, Balance-y is added by transfer, [See E8]
 
 ! Function: clearOrders !
 'clearOrders' targets the "Created at" detail of all pending order slots, if the block height of an order is older than 10 blocks it clears the order, thereby returning the 'Principal' to the maker addresses. The caller pays the fee for the compute and transfers. 
@@ -206,14 +205,7 @@ If a Parity token's price check is triggered; the contract first checks the base
 Returns the total amount of AVAX held by the contract.
 
 ! Function: claimUnallocated !
-This allows a user to claim any "unallocated tokens" within the exchange, this first queries a token's Balance-y to get its total self balance, then queries the Principal of all "Sell" orders for that token to get outstanding balances, finally it queries the exchange's total balance of the token by calling 'balanceOf' at the token's contract address in regards to the exchange balance. Once all this is acquired it proceeds to get the difference and credit the caller [See E6].
-
-This function requires (2) fields; 
-
-- Token contract (string)
-- isAVAX (bool)
-
-Inserting "true" in "isAVAX" requires "Token contract" to be blank, this will cause the exchange to query all tokens' Balance-x, which can be more computationally complex, then it queries Principal amount of all "Buy" orders for all tokens to get the outstanding balances. Finally it queries the exchange's total balance of AVAX. Once all this is acquired it proceeds to get the difference and credit the caller [See E6 again]. 
+This allows a user to claim any "unallocated" AVAX within the exchange, this first queries all Balance-x for all tokens to get total self balance of AVAX, then queries the Principal of all "Buy" orders for that token to get outstanding balances, finally it queries the exchange's total balance of AVAX. Once all this is acquired it proceeds to get the difference and credit the caller [See E6].
 
 ! Function: queryBalance !
 Returns the Balance-x or y of a token. 
@@ -257,12 +249,15 @@ If the 'PriceDAO' returns a price less than "1", this is still valid. If the bas
 
 If the token is worth 5DXH while the base price is 0.5, then the contract divides base price (0.5) by the token price (5). This gives 0.1, then the order size (1000) divided by the relative price (0.1) gives 10,000. This becomes the AVAX amount for the trade. 
 
-E6 : If a user attempted to claim unallocated units of [TOKEN] and the contract found 1000[TOKEN] in its Balance-y and 100[TOKEN] in "Sell" orders, that's 1100[TOKEN], if there is a total of 1100[TOKEN] in the contract then the total unclaimed is 0. Whereas if the total balance is 1120[TOKEN], then the contract subtracts 1120 by 1100, equalling; 20. Therefore the total unclaimed is 20[TOKEN] and that is credited to the caller. 
+E6 : If a user attempted to claim unallocated units of AVAX, assuming Balance-x held by all tokens is 1,000,000, and all Principal amounts in "Buy" orders is 100,000, that's 1,100,000, while the 'Exchange's' AVAX balance is 1,100,069, it gets the difference and credits the caller with 69AVAX. 
 
-If the user was attempting to claim unallocated units of AVAX, assuming Balance-x held by all tokens is 1,000,000, and all Principal amounts in "Buy" orders is 100,000, that's 1,100,000, while the 'Exchange's' AVAX balance is 1,100,069, it gets the difference and credits the caller with 69AVAX. 
+Note: Unallocated [TOKEN] cannot be claimed, only unallocated AVAX. 
 
-E7: if the clock for base price is due and a parity token gets an order 'make' then the contract checks both base price and price of the parity token. However if a non-parity token gets an order 'make' only the base price is checked. 
+E7 : if the clock for base price is due and a parity token gets an order 'make' then the contract checks both base price and price of the parity token. However if a non-parity token gets an order 'make' only the base price is checked. 
 One parity token checking price only checks price for itself and the base price, not for other parity tokens. 
+
+E8 : if 1,000,000 [TOKEN] exists in the contract, while 10,000 [TOKEN] is stored as principal in "Sell" orders, this means the total unallocated [TOKEN] is 990,000. Therefore the Balance-y which can be used to issue rewards and settle orders is 990,000. 
+If someone transfers 10,000 [TOKEN] to the contract without using 'makeOrder' then it is considered unallocated. 
 
 /// Notes ///
 - All trades are to or from AVAX
