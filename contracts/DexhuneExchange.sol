@@ -49,8 +49,6 @@ contract DexhuneExchange is DexhuneExchangeBase {
         owner = msg.sender;
     }
 
-    
-
     function viewToken(address tokenAddr) external view returns (TokenDataModel memory) {
         uint256 index = _tokenMap[tokenAddr];
 
