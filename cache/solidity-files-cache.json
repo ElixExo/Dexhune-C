@@ -226,8 +226,8 @@
       ]
     },
     "C:\\Users\\Prince\\source\\repos\\Peng_Protocol\\dexhune\\contracts\\DexhuneExchangeBase.sol": {
-      "lastModificationDate": 1698704704306,
-      "contentHash": "0bdfb4088532ad5b95522225eb5ab0c6",
+      "lastModificationDate": 1700462209188,
+      "contentHash": "a69c224356e0a54a963cd6c79e3b4196",
       "sourceName": "contracts/DexhuneExchangeBase.sol",
       "solcConfig": {
         "version": "0.8.21",
@@ -256,6 +256,7 @@
       "imports": [
         "./utils/Ownable.sol",
         "./interfaces/IERC20.sol",
+        "./interfaces/IPriceDAO.sol",
         "@prb/math/src/UD60x18.sol"
       ],
       "versionPragmas": [
@@ -1141,8 +1142,8 @@
       "artifacts": []
     },
     "C:\\Users\\Prince\\source\\repos\\Peng_Protocol\\dexhune\\contracts\\DexhuneExchange.sol": {
-      "lastModificationDate": 1698704704306,
-      "contentHash": "2c7ae1fba33f5216d2070c499bf7c53a",
+      "lastModificationDate": 1700486602509,
+      "contentHash": "0162f1c9bb3d52df6679368bd2eec396",
       "sourceName": "contracts/DexhuneExchange.sol",
       "solcConfig": {
         "version": "0.8.21",
@@ -1291,44 +1292,6 @@
         "IERC165"
       ]
     },
-    "C:\\Users\\Prince\\source\\repos\\Peng_Protocol\\dexhune\\contracts\\libraries\\ERC165Checker.sol": {
-      "lastModificationDate": 1697740970887,
-      "contentHash": "339f4ecdea3e5a1b3839255f2aed01e0",
-      "sourceName": "contracts/libraries/ERC165Checker.sol",
-      "solcConfig": {
-        "version": "0.8.21",
-        "settings": {
-          "evmVersion": "paris",
-          "optimizer": {
-            "enabled": false,
-            "runs": 200
-          },
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [
-        "../interfaces/IERC165.sol"
-      ],
-      "versionPragmas": [
-        "^0.8.21"
-      ],
-      "artifacts": [
-        "ERC165Checker"
-      ]
-    },
     "C:\\Users\\Prince\\source\\repos\\Peng_Protocol\\dexhune\\contracts\\mockups\\MockNFT.sol": {
       "lastModificationDate": 1699526799355,
       "contentHash": "27c2b3e9213e98089e0eb3077e86b2e4",
@@ -1400,8 +1363,8 @@
       ]
     },
     "C:\\Users\\Prince\\source\\repos\\Peng_Protocol\\dexhune\\contracts\\mockups\\MockERC20.sol": {
-      "lastModificationDate": 1699529178075,
-      "contentHash": "b29d8a10de4cb7cdd4d5e570f9368d20",
+      "lastModificationDate": 1700400817624,
+      "contentHash": "ec61e2d09769e1dfe71ebfd58cc559c6",
       "sourceName": "contracts/mockups/MockERC20.sol",
       "solcConfig": {
         "version": "0.8.21",
@@ -1433,6 +1396,42 @@
       "versionPragmas": [],
       "artifacts": [
         "MockERC20"
+      ]
+    },
+    "C:\\Users\\Prince\\source\\repos\\Peng_Protocol\\dexhune\\contracts\\mockups\\MockOracle.sol": {
+      "lastModificationDate": 1700400364482,
+      "contentHash": "4b0bb170157af41056aeb0df7fea1aa9",
+      "sourceName": "contracts/mockups/MockOracle.sol",
+      "solcConfig": {
+        "version": "0.8.21",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../interfaces/IPriceDAO.sol"
+      ],
+      "versionPragmas": [],
+      "artifacts": [
+        "MockOracle"
       ]
     }
   }

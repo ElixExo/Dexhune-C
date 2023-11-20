@@ -61,6 +61,10 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.MockNFT__factory>;
     getContractFactory(
+      name: "MockOracle",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.MockOracle__factory>;
+    getContractFactory(
       name: "ERC20Normalizer",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.ERC20Normalizer__factory>;
@@ -130,6 +134,11 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.MockNFT>;
     getContractAt(
+      name: "MockOracle",
+      address: string | ethers.Addressable,
+      signer?: ethers.Signer
+    ): Promise<Contracts.MockOracle>;
+    getContractAt(
       name: "ERC20Normalizer",
       address: string | ethers.Addressable,
       signer?: ethers.Signer
@@ -189,6 +198,10 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.MockNFT>;
     deployContract(
+      name: "MockOracle",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.MockOracle>;
+    deployContract(
       name: "ERC20Normalizer",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.ERC20Normalizer>;
@@ -257,6 +270,11 @@ declare module "hardhat/types/runtime" {
       args: any[],
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.MockNFT>;
+    deployContract(
+      name: "MockOracle",
+      args: any[],
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.MockOracle>;
     deployContract(
       name: "ERC20Normalizer",
       args: any[],

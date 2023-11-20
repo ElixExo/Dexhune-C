@@ -13,6 +13,7 @@
 pragma solidity ^0.8.21;
 import "./utils/Ownable.sol";
 import "./interfaces/IERC20.sol";
+import "./interfaces/IPriceDAO.sol";
 import { mul, div, convert, wrap, unwrap, UD60x18 } from "@prb/math/src/UD60x18.sol";
 
 abstract contract DexhuneExchangeBase is Ownable {
@@ -109,7 +110,7 @@ abstract contract DexhuneExchangeBase is Ownable {
             res *= 1e18;
         }
 
-        return (res, hasErr);
+        return (res, !hasErr);
     }   
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -135,12 +136,24 @@ abstract contract DexhuneExchangeBase is Ownable {
         arr.pop();
     }
 
-    function _normalize(uint256 amount, uint256 scalar) internal pure returns(uint256) {
-        return scalar == 1 ? amount : amount * scalar;
+    function _scaleUp(uint256 amount, uint256 decimals) internal pure returns(uint256) {
+        // TODO: Add this to a mapping
+        return decimals == 1 ? amount : amount *  10 ** decimals;
     }
 
-    function _denormalize(uint256 amount, uint256 scalar) internal pure returns(uint256) {
-        return scalar == 1 ? amount : amount / scalar;
+    function _scaleDown(uint256 amount, uint256 decimals) internal pure returns(uint256) {
+        // TODO: Add this to a mapping
+        return decimals == 1 ? amount : amount / 10 ** decimals;
+    }
+
+
+
+    function _normalize(uint256 amount, uint256 decimals) internal pure returns(uint256) {
+        return decimals == 1 ? amount : amount * _computeScalar(decimals);
+    }
+
+    function _denormalize(uint256 amount, uint256 decimals) internal pure returns(uint256) {
+        return decimals == 1 ? amount : amount / _computeScalar(decimals);
     }
 
     function _computeScalar(uint256 decimals) internal pure returns(uint256 scalar) {
@@ -213,6 +226,7 @@ abstract contract DexhuneExchangeBase is Ownable {
     error TokenLimitReached();
     error OrderLimitReachedTryLater();
     error TokenNotListed();
+    error OrderDoesNotExist();
     error InvalidTokenContract();
     error ParityShouldNotHavePrice();
     error InsufficientBalance(uint256 balance);
@@ -222,6 +236,5 @@ abstract contract DexhuneExchangeBase is Ownable {
     error NoSuitableOrderFound();
     error FailedToTakeOrder();
     error FailedToSendReward();
-
     error InsufficientBalanceForListing(uint256 listingPrice);
 }

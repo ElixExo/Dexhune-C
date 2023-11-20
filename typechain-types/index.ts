@@ -32,6 +32,8 @@ export type { MockERC20 } from "./mockups/MockERC20";
 export { MockERC20__factory } from "./factories/mockups/MockERC20__factory";
 export type { MockNFT } from "./mockups/MockNFT";
 export { MockNFT__factory } from "./factories/mockups/MockNFT__factory";
+export type { MockOracle } from "./mockups/MockOracle";
+export { MockOracle__factory } from "./factories/mockups/MockOracle__factory";
 export type { ERC20Normalizer } from "./utils/ERC20Normalizer";
 export { ERC20Normalizer__factory } from "./factories/utils/ERC20Normalizer__factory";
 export type { Ownable } from "./utils/Ownable";

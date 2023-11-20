@@ -32,6 +32,7 @@ export interface MockERC20Interface extends Interface {
       | "decimals"
       | "name"
       | "setBalance"
+      | "setDecimals"
       | "symbol"
       | "totalSupply"
       | "transfer"
@@ -58,6 +59,10 @@ export interface MockERC20Interface extends Interface {
     functionFragment: "setBalance",
     values: [AddressLike, BigNumberish]
   ): string;
+  encodeFunctionData(
+    functionFragment: "setDecimals",
+    values: [BigNumberish]
+  ): string;
   encodeFunctionData(functionFragment: "symbol", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "totalSupply",
@@ -78,6 +83,10 @@ export interface MockERC20Interface extends Interface {
   decodeFunctionResult(functionFragment: "decimals", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "name", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "setBalance", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "setDecimals",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "symbol", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "totalSupply",
@@ -193,6 +202,8 @@ export interface MockERC20 extends BaseContract {
     "nonpayable"
   >;
 
+  setDecimals: TypedContractMethod<[dec: BigNumberish], [void], "nonpayable">;
+
   symbol: TypedContractMethod<[], [string], "view">;
 
   totalSupply: TypedContractMethod<[], [bigint], "view">;
@@ -243,6 +254,9 @@ export interface MockERC20 extends BaseContract {
     [void],
     "nonpayable"
   >;
+  getFunction(
+    nameOrSignature: "setDecimals"
+  ): TypedContractMethod<[dec: BigNumberish], [void], "nonpayable">;
   getFunction(
     nameOrSignature: "symbol"
   ): TypedContractMethod<[], [string], "view">;

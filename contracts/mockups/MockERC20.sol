@@ -15,6 +15,7 @@ import "../interfaces/IERC20.sol";
 
 contract MockERC20 is IERC20 {
     mapping(address => uint256) balances;
+    uint8 private _decimals = 18;
 
     function setBalance(address addr, uint256 balance) external {
         balances[addr] = balance;
@@ -32,8 +33,12 @@ contract MockERC20 is IERC20 {
         return "MCKERC20";
     }
 
-    function decimals() external pure override returns (uint8) {
-        return 0;
+    function decimals() external view override returns (uint8) {
+        return _decimals;
+    }
+
+    function setDecimals(uint8 dec) external {
+        _decimals = dec;
     }
 
     function totalSupply() external pure override returns (uint256) {

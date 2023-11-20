@@ -24,6 +24,37 @@ import type {
 } from "./common";
 
 export declare namespace DexhuneExchangeBase {
+  export type OrderStruct = {
+    makerAddr: AddressLike;
+    tokenAddr: AddressLike;
+    orderType: boolean;
+    created: BigNumberish;
+    rewardAmount: BigNumberish;
+    price: BigNumberish;
+    principal: BigNumberish;
+    pending: BigNumberish;
+  };
+
+  export type OrderStructOutput = [
+    makerAddr: string,
+    tokenAddr: string,
+    orderType: boolean,
+    created: bigint,
+    rewardAmount: bigint,
+    price: bigint,
+    principal: bigint,
+    pending: bigint
+  ] & {
+    makerAddr: string;
+    tokenAddr: string;
+    orderType: boolean;
+    created: bigint;
+    rewardAmount: bigint;
+    price: bigint;
+    principal: bigint;
+    pending: bigint;
+  };
+
   export type TokenDataModelStruct = {
     tokenNo: BigNumberish;
     name: string;
@@ -65,25 +96,34 @@ export declare namespace DexhuneExchangeBase {
 export interface DexhuneExchangeInterface extends Interface {
   getFunction(
     nameOrSignature:
+      | "assignPriceDao"
       | "clearOrders"
       | "createBuyOrder"
       | "createSellOrder"
       | "deposit"
       | "depositToken"
+      | "depositTokenFrom"
       | "getBalance"
       | "listToken"
+      | "listingCost"
       | "owner"
       | "queryBalance"
       | "settleOrders"
       | "takeBuyOrder"
       | "takeSellOrder"
       | "transferOwnership"
-      | "viewToken(address)"
-      | "viewToken(uint256)"
+      | "viewOrder"
+      | "viewPrice"
+      | "viewToken"
+      | "viewTokenByIndex"
   ): FunctionFragment;
 
   getEvent(nameOrSignatureOrTopic: "TransferredOwnership"): EventFragment;
 
+  encodeFunctionData(
+    functionFragment: "assignPriceDao",
+    values: [AddressLike]
+  ): string;
   encodeFunctionData(
     functionFragment: "clearOrders",
     values?: undefined
@@ -102,6 +142,10 @@ export interface DexhuneExchangeInterface extends Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "depositToken",
+    values: [AddressLike, BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "depositTokenFrom",
     values: [AddressLike, AddressLike, BigNumberish]
   ): string;
   encodeFunctionData(
@@ -118,6 +162,10 @@ export interface DexhuneExchangeInterface extends Interface {
       AddressLike,
       string
     ]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "listingCost",
+    values?: undefined
   ): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(
@@ -141,14 +189,23 @@ export interface DexhuneExchangeInterface extends Interface {
     values: [AddressLike]
   ): string;
   encodeFunctionData(
-    functionFragment: "viewToken(address)",
+    functionFragment: "viewOrder",
+    values: [AddressLike, BigNumberish]
+  ): string;
+  encodeFunctionData(functionFragment: "viewPrice", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "viewToken",
     values: [AddressLike]
   ): string;
   encodeFunctionData(
-    functionFragment: "viewToken(uint256)",
+    functionFragment: "viewTokenByIndex",
     values: [BigNumberish]
   ): string;
 
+  decodeFunctionResult(
+    functionFragment: "assignPriceDao",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "clearOrders",
     data: BytesLike
@@ -166,8 +223,16 @@ export interface DexhuneExchangeInterface extends Interface {
     functionFragment: "depositToken",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(
+    functionFragment: "depositTokenFrom",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "getBalance", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "listToken", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "listingCost",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "queryBalance",
@@ -189,12 +254,11 @@ export interface DexhuneExchangeInterface extends Interface {
     functionFragment: "transferOwnership",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "viewOrder", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "viewPrice", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "viewToken", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "viewToken(address)",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "viewToken(uint256)",
+    functionFragment: "viewTokenByIndex",
     data: BytesLike
   ): Result;
 }
@@ -255,6 +319,12 @@ export interface DexhuneExchange extends BaseContract {
     event?: TCEvent
   ): Promise<this>;
 
+  assignPriceDao: TypedContractMethod<
+    [addr: AddressLike],
+    [void],
+    "nonpayable"
+  >;
+
   clearOrders: TypedContractMethod<[], [void], "nonpayable">;
 
   createBuyOrder: TypedContractMethod<
@@ -272,6 +342,12 @@ export interface DexhuneExchange extends BaseContract {
   deposit: TypedContractMethod<[tokenAddr: AddressLike], [void], "payable">;
 
   depositToken: TypedContractMethod<
+    [tokenAddr: AddressLike, amount: BigNumberish],
+    [void],
+    "nonpayable"
+  >;
+
+  depositTokenFrom: TypedContractMethod<
     [tokenAddr: AddressLike, fromAddress: AddressLike, amount: BigNumberish],
     [void],
     "nonpayable"
@@ -291,6 +367,8 @@ export interface DexhuneExchange extends BaseContract {
     [void],
     "nonpayable"
   >;
+
+  listingCost: TypedContractMethod<[], [bigint], "view">;
 
   owner: TypedContractMethod<[], [string], "view">;
 
@@ -324,13 +402,21 @@ export interface DexhuneExchange extends BaseContract {
     "nonpayable"
   >;
 
-  "viewToken(address)": TypedContractMethod<
+  viewOrder: TypedContractMethod<
+    [tokenAddr: AddressLike, index: BigNumberish],
+    [DexhuneExchangeBase.OrderStructOutput],
+    "view"
+  >;
+
+  viewPrice: TypedContractMethod<[], [bigint], "view">;
+
+  viewToken: TypedContractMethod<
     [tokenAddr: AddressLike],
     [DexhuneExchangeBase.TokenDataModelStructOutput],
     "view"
   >;
 
-  "viewToken(uint256)": TypedContractMethod<
+  viewTokenByIndex: TypedContractMethod<
     [tokenNo: BigNumberish],
     [DexhuneExchangeBase.TokenDataModelStructOutput],
     "view"
@@ -340,6 +426,9 @@ export interface DexhuneExchange extends BaseContract {
     key: string | FunctionFragment
   ): T;
 
+  getFunction(
+    nameOrSignature: "assignPriceDao"
+  ): TypedContractMethod<[addr: AddressLike], [void], "nonpayable">;
   getFunction(
     nameOrSignature: "clearOrders"
   ): TypedContractMethod<[], [void], "nonpayable">;
@@ -358,6 +447,13 @@ export interface DexhuneExchange extends BaseContract {
   ): TypedContractMethod<[tokenAddr: AddressLike], [void], "payable">;
   getFunction(
     nameOrSignature: "depositToken"
+  ): TypedContractMethod<
+    [tokenAddr: AddressLike, amount: BigNumberish],
+    [void],
+    "nonpayable"
+  >;
+  getFunction(
+    nameOrSignature: "depositTokenFrom"
   ): TypedContractMethod<
     [tokenAddr: AddressLike, fromAddress: AddressLike, amount: BigNumberish],
     [void],
@@ -380,6 +476,9 @@ export interface DexhuneExchange extends BaseContract {
     [void],
     "nonpayable"
   >;
+  getFunction(
+    nameOrSignature: "listingCost"
+  ): TypedContractMethod<[], [bigint], "view">;
   getFunction(
     nameOrSignature: "owner"
   ): TypedContractMethod<[], [string], "view">;
@@ -411,14 +510,24 @@ export interface DexhuneExchange extends BaseContract {
     nameOrSignature: "transferOwnership"
   ): TypedContractMethod<[_address: AddressLike], [void], "nonpayable">;
   getFunction(
-    nameOrSignature: "viewToken(address)"
+    nameOrSignature: "viewOrder"
+  ): TypedContractMethod<
+    [tokenAddr: AddressLike, index: BigNumberish],
+    [DexhuneExchangeBase.OrderStructOutput],
+    "view"
+  >;
+  getFunction(
+    nameOrSignature: "viewPrice"
+  ): TypedContractMethod<[], [bigint], "view">;
+  getFunction(
+    nameOrSignature: "viewToken"
   ): TypedContractMethod<
     [tokenAddr: AddressLike],
     [DexhuneExchangeBase.TokenDataModelStructOutput],
     "view"
   >;
   getFunction(
-    nameOrSignature: "viewToken(uint256)"
+    nameOrSignature: "viewTokenByIndex"
   ): TypedContractMethod<
     [tokenNo: BigNumberish],
     [DexhuneExchangeBase.TokenDataModelStructOutput],

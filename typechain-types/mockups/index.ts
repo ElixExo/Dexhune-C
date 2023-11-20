@@ -3,3 +3,4 @@
 /* eslint-disable */
 export type { MockERC20 } from "./MockERC20";
 export type { MockNFT } from "./MockNFT";
+export type { MockOracle } from "./MockOracle";

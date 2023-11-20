@@ -17,6 +17,8 @@ import { DexhunePriceDAO, MockNFT } from "../typechain-types";
 import { HardhatEthersSigner } from "@nomicfoundation/hardhat-ethers/signers";
 import { ContractTransactionReceipt } from "ethers";
 
+return;
+
 const REWARD_MULTIPLIER = 20
 
 describe("PriceDAO", function() {

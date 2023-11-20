@@ -3,3 +3,4 @@
 /* eslint-disable */
 export { MockERC20__factory } from "./MockERC20__factory";
 export { MockNFT__factory } from "./MockNFT__factory";
+export { MockOracle__factory } from "./MockOracle__factory";

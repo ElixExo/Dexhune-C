@@ -68,6 +68,11 @@ const _abi = [
   },
   {
     inputs: [],
+    name: "OrderDoesNotExist",
+    type: "error",
+  },
+  {
+    inputs: [],
     name: "OrderLimitReachedTryLater",
     type: "error",
   },
