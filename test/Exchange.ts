@@ -57,7 +57,7 @@ describe("Exchange", () => {
             const initialBalance = 1_000_000;
 
             // Set DXH first
-            await exchange.listToken(await dxh.getAddress(), 1, 0, 0, ZeroAddress, "1");
+            await exchange.listToken(await dxh.getAddress(), 0, 0, "1");
                 
 
             for (let i = 1; i < tokens.length; i++) {
@@ -65,9 +65,10 @@ describe("Exchange", () => {
                 const addr = await tk.getAddress();
 
                 await dxh.setBalance(owner, initialBalance);
-                await exchange.listToken(addr, 1, 0, 0, ZeroAddress, "1");
+                await exchange.listToken(addr, 0, 0, "1");
 
                 const balance = Number(await dxh.balanceOf(owner));
+                
                 expect(initialBalance - balance).eq(priceProjection);
                 priceProjection += Math.floor((priceProjection * increaseRatio));
             }
@@ -79,9 +80,9 @@ describe("Exchange", () => {
 
             const oraclePrice = Math.random() * 99_999;
             await oracle.setPrice(oraclePrice.toFixed(18).toString());
-            exchange.assignPriceDao(await oracle.getAddress());
+            exchange.assignPriceDAO(await oracle.getAddress());
         
-            await exchange.listToken(await dxh.getAddress(), 0, 0, 0, ZeroAddress, "1");
+            await exchange.listToken(await dxh.getAddress(), 0, 0, "1");
 
 
             // Note: Allowance is not considered in this test
@@ -93,7 +94,7 @@ describe("Exchange", () => {
 
 
             await dxh.setBalance(owner, 10000);
-            await exchange.listToken(tkAddr, 0, 0, 0, ZeroAddress, price.toFixed(18).toString());
+            await exchange.listToken(tkAddr, 0, 0, price.toFixed(18).toString());
             
             await tk.setBalance(await owner.getAddress(), 10000);
             await exchange.depositToken(tkAddr, 10000);
@@ -105,7 +106,8 @@ describe("Exchange", () => {
             const orderPrice = oraclePrice / price;
             const pending = buyAmount / orderPrice;
 
-            const order = await exchange.viewOrder(tkAddr, 0);
+            
+            const order = await exchange.viewOrderByToken(tkAddr, 0);
             
             expect((Number(order.price) / 1e18).toFixed(4)).eq(orderPrice.toFixed(4), "Order price is not accurate");
             expect((Number(order.pending) / 1e18).toFixed(4)).eq(pending.toFixed(4), "Pending price is not accurate");
@@ -118,9 +120,9 @@ describe("Exchange", () => {
 
             const oraclePrice = Math.random() * 99_999;
             await oracle.setPrice(oraclePrice.toFixed(18).toString());
-            exchange.assignPriceDao(await oracle.getAddress());
+            exchange.assignPriceDAO(await oracle.getAddress());
         
-            await exchange.listToken(await dxh.getAddress(), 0, 0, 0, ZeroAddress, "1");
+            await exchange.listToken(await dxh.getAddress(), 0, 0, "1");
 
 
             // Note: Allowance is not considered in this test
@@ -133,7 +135,7 @@ describe("Exchange", () => {
 
 
             await dxh.setBalance(owner, 10000);
-            await exchange.listToken(tkAddr, 0, 0, 0, ZeroAddress, price.toFixed(18).toString());
+            await exchange.listToken(tkAddr, 0, 0, price.toFixed(18).toString());
             
             await tk.setBalance(await owner.getAddress(), bigSellAmount);
 
@@ -142,7 +144,7 @@ describe("Exchange", () => {
             const orderPrice = oraclePrice / price;
             const pending = sellAmount * orderPrice;
 
-            const order = await exchange.viewOrder(tkAddr, 0);
+            const order = await exchange.viewOrderByToken(tkAddr, 0);
             
             expect((Number(order.price) / 1e18).toFixed(4)).eq(orderPrice.toFixed(4), "Order price is not accurate");
             expect((Number(order.pending) / 1e18).toFixed(4)).eq(pending.toFixed(4), "Pending price is not accurate");
@@ -155,9 +157,9 @@ describe("Exchange", () => {
 
             const oraclePrice = Math.random() * 99_999;
             await oracle.setPrice(oraclePrice.toFixed(18).toString());
-            exchange.assignPriceDao(await oracle.getAddress());
+            exchange.assignPriceDAO(await oracle.getAddress());
         
-            await exchange.listToken(await dxh.getAddress(), 0, 0, 0, ZeroAddress, "1");
+            await exchange.listToken(await dxh.getAddress(), 0, 0, "1");
 
             // Note: Allowance is not considered in this test
             const tk = tokens[1];
@@ -173,14 +175,14 @@ describe("Exchange", () => {
             await dxh.setBalance(parityAddr, BigInt(dxhParityPrice));
 
             await dxh.setBalance(owner, 10000);
-            await exchange.listToken(tkAddr, 1, 0, 0, parityAddr, "0");
+            await exchange.listParityToken(tkAddr, parityAddr, 0, 0);
 
             await exchange.createBuyOrder(tkAddr, {
                 value: BigInt(buyAmount * 1e18)
             });
 
             const pending = buyAmount / orderPrice;
-            const order = await exchange.viewOrder(tkAddr, 0);
+            const order = await exchange.viewOrderByToken(tkAddr, 0);
             
             expect((Number(order.price) / 1e18).toFixed(4)).eq(orderPrice.toFixed(4), "Order price is not accurate");
             expect((Number(order.pending) / 1e18).toFixed(4)).eq(pending.toFixed(4), "Pending price is not accurate");
@@ -193,9 +195,9 @@ describe("Exchange", () => {
 
             const oraclePrice = Math.random() * 99_999;
             await oracle.setPrice(oraclePrice.toFixed(18).toString());
-            exchange.assignPriceDao(await oracle.getAddress());
+            exchange.assignPriceDAO(await oracle.getAddress());
         
-            await exchange.listToken(await dxh.getAddress(), 0, 0, 0, ZeroAddress, "1");
+            await exchange.listToken(await dxh.getAddress(), 0, 0, "1");
 
             // Note: Allowance is not considered in this test
             const tk = tokens[1];
@@ -212,13 +214,13 @@ describe("Exchange", () => {
             await dxh.setBalance(parityAddr, BigInt(dxhParityPrice));
 
             await dxh.setBalance(owner, 10000);
-            await exchange.listToken(tkAddr, 1, 0, 0, parityAddr, "0");
+            await exchange.listParityToken(tkAddr, parityAddr, 0, 0);
 
             await tk.setBalance(await owner.getAddress(), bigSellAmount);
             await exchange.createSellOrder(tkAddr, bigSellAmount);
 
             const pending = sellAmount * orderPrice;
-            const order = await exchange.viewOrder(tkAddr, 0);
+            const order = await exchange.viewOrderByToken(tkAddr, 0);
             
             expect((Number(order.price) / 1e18).toFixed(4)).eq(orderPrice.toFixed(4), "Order price is not accurate");
             expect((Number(order.pending) / 1e18).toFixed(4)).eq(pending.toFixed(4), "Pending price is not accurate");

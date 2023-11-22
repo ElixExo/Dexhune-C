@@ -11,6 +11,8 @@
 *    ........................................................
 */
 
+pragma solidity ^0.8.22;
+
 import "../interfaces/IPriceDAO.sol";
 
 contract MockOracle is IPriceDAO {

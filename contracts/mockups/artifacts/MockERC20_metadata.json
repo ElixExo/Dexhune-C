@@ -316,26 +316,26 @@
 			"bytecodeHash": "ipfs"
 		},
 		"optimizer": {
-			"enabled": false,
+			"enabled": true,
 			"runs": 200
 		},
 		"remappings": []
 	},
 	"sources": {
 		"contracts/interfaces/IERC20.sol": {
-			"keccak256": "0x1ecf85c91a9f31dd8edaa6ce9e10b47967beb6246e476437199dba8fc4cd5144",
+			"keccak256": "0xccd9915623686bcd46147899b0bc62d959391bc3eb2e3435cf54ad05ed61fed0",
 			"license": "BSD-3-Clause",
 			"urls": [
-				"bzz-raw://8d4af454bc08b170d200beb6a3d17f3185dbbd0f376b2435a8a0c4e76b4edfec",
-				"dweb:/ipfs/QmT6rDdB7v5kTgLNGRpqaPeWSLLs2p9gqZ96BjubKn2e7g"
+				"bzz-raw://ca2c50334eb9c3124fb6fb571a59b1ae3b6abb4c71ccae22998517a1cf3749f5",
+				"dweb:/ipfs/Qmbf4MNFGN5dD1qKdSnwYG3ekCAK15quzvuZpn8c4uDY7e"
 			]
 		},
 		"contracts/mockups/MockERC20.sol": {
-			"keccak256": "0x46745a845de8dc1f8c576c36b23af1844ea7446b9b8df2bed083b8c798b0653a",
+			"keccak256": "0xbbddc5026fed56386e22cf79bbf70b14d21180d9b03a2eb000311bb71317d517",
 			"license": "BSD-3-Clause",
 			"urls": [
-				"bzz-raw://d41d35f1bb75ffb859c7185023c6f16e10c9f10ce3c0b4d9c69e3f0ff42bc15d",
-				"dweb:/ipfs/QmQShbDFC2pB95YytYBTjNWKnKUPALSuY7CTtZAykveWGP"
+				"bzz-raw://a2e504751d1f72c06181c66d763f4e5f3b9da2180f01931f9a1d34730c5674b9",
+				"dweb:/ipfs/QmYTRWh6VtYf6vEznC7PJw1a5UKtDnXGiy3tDmXTEnSyY5"
 			]
 		}
 	},

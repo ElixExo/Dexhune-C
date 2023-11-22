@@ -58,6 +58,43 @@
 				"type": "error"
 			},
 			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "x",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "y",
+						"type": "uint256"
+					}
+				],
+				"name": "MulDiv18Overflow",
+				"type": "error"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "x",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "y",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "denominator",
+						"type": "uint256"
+					}
+				],
+				"name": "MulDivOverflow",
+				"type": "error"
+			},
+			{
 				"inputs": [],
 				"name": "NoSuitableOrderFound",
 				"type": "error"
@@ -727,6 +764,19 @@
 			{
 				"inputs": [
 					{
+						"internalType": "address",
+						"name": "tokenAddr",
+						"type": "address"
+					}
+				],
+				"name": "updateTokenBalance",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
 						"internalType": "uint256",
 						"name": "index",
 						"type": "uint256"
@@ -1028,58 +1078,58 @@
 			"bytecodeHash": "ipfs"
 		},
 		"optimizer": {
-			"enabled": false,
+			"enabled": true,
 			"runs": 200
 		},
 		"remappings": []
 	},
 	"sources": {
 		"contracts/DexhuneExchange.sol": {
-			"keccak256": "0x84a873f910dad0c9d04f0634e21fd63dd7303051de427347009494b135a0c8f0",
+			"keccak256": "0xcba56b37befbd122b6322b6a86aa3fd73d1e8dbfb61df5f2b8c869065a636322",
 			"license": "BSD-3-Clause",
 			"urls": [
-				"bzz-raw://369e9f79c3f5a7a2df1fdfd5e1bfac13b718a66fd420ac8e972379f570b2b781",
-				"dweb:/ipfs/Qmah6ZoMN36iJZ6HunjwEYx7A778s6tq4Lrnn3q4ktQJ2f"
+				"bzz-raw://fbf4f718e026896cb89663df9c0acb4b23da64431acfdfeb929e9fee5669b897",
+				"dweb:/ipfs/Qmb8PffFfD9A9SBumkSN2d4x1jCLnHKgDPcv1mcsRVUPz2"
 			]
 		},
 		"contracts/DexhuneExchangeBase.sol": {
-			"keccak256": "0xea9136f043993d5982abc5ee619867afee4687db464c1a54e078c61093282028",
+			"keccak256": "0xbe55bc6199fd5f7e6f52eb07036505eac02832597b7b0f221bb6e92334a08a7c",
 			"license": "BSD-3-Clause",
 			"urls": [
-				"bzz-raw://86a1445ec068f9bc26029454f4fa055d3a93110c3b1bf8c370a6edabcb82a982",
-				"dweb:/ipfs/QmYAiSvbFZWxM6eKAyNCvf4JK9t5aHv1WThhpzvy6dpp11"
+				"bzz-raw://75709a6c061e4ab3c7ce39db9944bce52a1edef8da9632094294e66500d1e3a1",
+				"dweb:/ipfs/QmeAP4qv2mN6ZYofBW3krNYSNhhEuWft9hU68yvNjhEo2R"
 			]
 		},
 		"contracts/interfaces/IERC20.sol": {
-			"keccak256": "0x1ecf85c91a9f31dd8edaa6ce9e10b47967beb6246e476437199dba8fc4cd5144",
+			"keccak256": "0xccd9915623686bcd46147899b0bc62d959391bc3eb2e3435cf54ad05ed61fed0",
 			"license": "BSD-3-Clause",
 			"urls": [
-				"bzz-raw://8d4af454bc08b170d200beb6a3d17f3185dbbd0f376b2435a8a0c4e76b4edfec",
-				"dweb:/ipfs/QmT6rDdB7v5kTgLNGRpqaPeWSLLs2p9gqZ96BjubKn2e7g"
+				"bzz-raw://ca2c50334eb9c3124fb6fb571a59b1ae3b6abb4c71ccae22998517a1cf3749f5",
+				"dweb:/ipfs/Qmbf4MNFGN5dD1qKdSnwYG3ekCAK15quzvuZpn8c4uDY7e"
 			]
 		},
 		"contracts/interfaces/IPriceDAO.sol": {
-			"keccak256": "0x80fc127c5633a7978d5f30b069b67dca19951f407b1b7fef6aa03d1c1d5d0118",
+			"keccak256": "0xcc0991ee8f43f7e8bd78da2903f4ca8d4147d8d4990b27e6b8a9ab78c2ee6774",
 			"license": "BSD-3-Clause",
 			"urls": [
-				"bzz-raw://7d453d0ae09267fff8b8872156f387e155511a6d013e190a1c8f5f06f0ee8335",
-				"dweb:/ipfs/Qmd1tarPavKVhnaK6Bchmpqsa4ixCuKbdMRqkJCbPJeLJ8"
+				"bzz-raw://71974014f07085c0d145a95ec64f300369d9fb07daa956452557720788648748",
+				"dweb:/ipfs/QmXmt2f1eVnfFfq8XnwgepHT1sH88j5ugmySQYvLg3moA2"
 			]
 		},
 		"contracts/libraries/DexhuneMath.sol": {
-			"keccak256": "0x8b2238bd811cec27e29a82b8de119bddc7a1a54b71aa190f434d0183e9d2c62c",
+			"keccak256": "0x9c57a2f1d3df659f8445aebc83c28806ecf23be0c3b046faafa335086c1fa62e",
 			"license": "BSD-3-Clause",
 			"urls": [
-				"bzz-raw://4653fc665ed81808cc1c750cb85f3598d6ca40022e846d686b5a980a3fda8192",
-				"dweb:/ipfs/QmPZYMLHXAy6JneqP6BNLAqowAkZW3m1uB6reaDZNC6sjB"
+				"bzz-raw://6379c3f8e0550a2b40967c077729cb4aea96f8e6cdc7f9654556ce465be2b777",
+				"dweb:/ipfs/QmcdmudjBAM7pmSKw8LYsRJbJNyjk9xvjhjHBX1ir8JnVB"
 			]
 		},
 		"contracts/utils/Ownable.sol": {
-			"keccak256": "0x107a65ecf475f110e7b6db33eb8015fab2f512859da21d44093010e4b773a57c",
+			"keccak256": "0xc744aeb4b209aeffcbcd347af288a8c99a851f452e1804622ad8d1718202f9d1",
 			"license": "BSD-3-Clause",
 			"urls": [
-				"bzz-raw://cc22944a57cfbc246437c98694ead2916650150d36cf9ab50a3947420c8ebcc1",
-				"dweb:/ipfs/QmXebfaKfpGR3WcRYfSjPwQ7mCmjQogsdweS92QJDWUnrH"
+				"bzz-raw://1e9ed4ecbfe88e883aee1393e6a1ae1f06b7b40011323209955fb2193046a0b2",
+				"dweb:/ipfs/QmY3YrCwqjL5nyKFmR6qGDFtRP9wLB16pRREtdzq6D6eYV"
 			]
 		}
 	},

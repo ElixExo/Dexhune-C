@@ -7,12 +7,22 @@ dotEnvConfig();
 
 
 const config: HardhatUserConfig = {
-  solidity: "0.8.21",
+  solidity: {
+    version: "0.8.22",
+    settings: {
+      optimizer: {
+        enabled: true,
+        runs: 200,
+        details: { yul: false },
+      },
+    }
+  },
   etherscan: {
     apiKey: {
       avalancheFujiTestnet: process.env.SNOWTRACE_API_KEY as string
     },
   },
+  
   networks: {
     local: {
       url: 'http://127.0.0.1:8545/',

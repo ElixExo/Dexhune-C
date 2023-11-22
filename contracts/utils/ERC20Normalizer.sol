@@ -12,7 +12,7 @@
 *    ........................................................
 */
 
-pragma solidity ^0.8.21;
+pragma solidity ^0.8.22;
 
 abstract contract ERC20Normalizer {
     mapping(address => uint256) _scalars;

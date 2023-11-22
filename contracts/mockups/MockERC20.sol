@@ -11,6 +11,7 @@
 *    ........................................................
 */
 
+pragma solidity ^0.8.22;
 import "../interfaces/IERC20.sol";
 
 contract MockERC20 is IERC20 {

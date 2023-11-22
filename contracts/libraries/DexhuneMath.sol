@@ -13,9 +13,9 @@
 *    ........................................................
 */
 
-pragma solidity ^0.8.21;
+pragma solidity ^0.8.22;
 
-library DexhuneMath {
+library DexhuneMath { 
     /// @dev The unit number, which the decimal precision of the fixed-point types.
     uint256 constant UNIT = 1e18;
 

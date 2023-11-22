@@ -14,7 +14,7 @@
 *    ........................................................
 */
 
-pragma solidity ^0.8.21;
+pragma solidity ^0.8.22;
 import "./DexhuneERC20Base.sol";
 
 error InsufficientBalance();

@@ -114,6 +114,7 @@ export interface DexhuneExchangeInterface extends Interface {
       | "takeBuyOrder"
       | "takeSellOrder"
       | "transferOwnership"
+      | "updateTokenBalance"
       | "viewOrder"
       | "viewOrderByToken"
       | "viewPrice"
@@ -168,7 +169,7 @@ export interface DexhuneExchangeInterface extends Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "listParityToken",
-    values: [AddressLike, AddressLike, BigNumberish, BigNumberish, string]
+    values: [AddressLike, AddressLike, BigNumberish, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "listToken",
@@ -201,6 +202,10 @@ export interface DexhuneExchangeInterface extends Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "transferOwnership",
+    values: [AddressLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "updateTokenBalance",
     values: [AddressLike]
   ): string;
   encodeFunctionData(
@@ -276,6 +281,10 @@ export interface DexhuneExchangeInterface extends Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "transferOwnership",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "updateTokenBalance",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "viewOrder", data: BytesLike): Result;
@@ -568,8 +577,7 @@ export interface DexhuneExchange extends BaseContract {
       tokenAddr: AddressLike,
       parityAddr: AddressLike,
       reward: BigNumberish,
-      rewardThreshold: BigNumberish,
-      price: string
+      rewardThreshold: BigNumberish
     ],
     [void],
     "nonpayable"
@@ -633,6 +641,12 @@ export interface DexhuneExchange extends BaseContract {
 
   transferOwnership: TypedContractMethod<
     [_address: AddressLike],
+    [void],
+    "nonpayable"
+  >;
+
+  updateTokenBalance: TypedContractMethod<
+    [tokenAddr: AddressLike],
     [void],
     "nonpayable"
   >;
@@ -710,8 +724,7 @@ export interface DexhuneExchange extends BaseContract {
       tokenAddr: AddressLike,
       parityAddr: AddressLike,
       reward: BigNumberish,
-      rewardThreshold: BigNumberish,
-      price: string
+      rewardThreshold: BigNumberish
     ],
     [void],
     "nonpayable"
@@ -779,6 +792,9 @@ export interface DexhuneExchange extends BaseContract {
   getFunction(
     nameOrSignature: "transferOwnership"
   ): TypedContractMethod<[_address: AddressLike], [void], "nonpayable">;
+  getFunction(
+    nameOrSignature: "updateTokenBalance"
+  ): TypedContractMethod<[tokenAddr: AddressLike], [void], "nonpayable">;
   getFunction(
     nameOrSignature: "viewOrder"
   ): TypedContractMethod<

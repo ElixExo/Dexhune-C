@@ -10,7 +10,7 @@
 *    ........................................................
 */
 
-pragma solidity ^0.8.21;
+pragma solidity ^0.8.22;
 import "./utils/Ownable.sol";
 import "./interfaces/IERC20.sol";
 import "./interfaces/IPriceDAO.sol";
@@ -53,10 +53,12 @@ abstract contract DexhuneExchangeBase is Ownable {
     // Math
     function _mul(uint256 num1, uint256 num2) internal pure returns(uint256) {
         return DexhuneMath.mul(num1, num2);
+        // return 0;
     }
 
     function _div(uint256 num1, uint256 num2) internal pure returns(uint256) {
         return DexhuneMath.div(num1, num2);
+        // return 0;
     }
 
     function _parseNumber(string memory value) internal pure returns(uint256) {
@@ -187,12 +189,20 @@ abstract contract DexhuneExchangeBase is Ownable {
         uint256 reward;
         uint256 rewardThreshold;
 
+        
+        // uint256 xBalance; // Native Balance (AVAX)
+        // uint256 yBalance; // Token Balance
+
         uint256 price;
+        uint256 lastPriceCheck;
+
+        IERC20 instance;
+    }
+
+    struct LiquidToken {
         uint256 xBalance; // Native Balance (AVAX)
         uint256 yBalance; // Token Balance
-
         uint256 lastPriceCheck;
-        IERC20 instance;
     }
 
     struct TokenDataModel {

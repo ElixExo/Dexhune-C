@@ -2,17 +2,20 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "C:\\Users\\Prince\\source\\repos\\Peng_Protocol\\dexhune\\contracts\\DexhuneERC20.sol": {
-      "lastModificationDate": 1697740970880,
-      "contentHash": "c8d725b736e1ef0a93bae12e65ae0311",
+      "lastModificationDate": 1700688267352,
+      "contentHash": "edb682f2b1134276f78d3d9e9809406c",
       "sourceName": "contracts/DexhuneERC20.sol",
       "solcConfig": {
-        "version": "0.8.21",
+        "version": "0.8.22",
         "settings": {
-          "evmVersion": "paris",
           "optimizer": {
-            "enabled": false,
-            "runs": 200
+            "enabled": true,
+            "runs": 200,
+            "details": {
+              "yul": false
+            }
           },
+          "evmVersion": "paris",
           "outputSelection": {
             "*": {
               "*": [
@@ -33,24 +36,27 @@
         "./DexhuneERC20Base.sol"
       ],
       "versionPragmas": [
-        "^0.8.21"
+        "^0.8.22"
       ],
       "artifacts": [
         "DexhuneERC20"
       ]
     },
     "C:\\Users\\Prince\\source\\repos\\Peng_Protocol\\dexhune\\contracts\\DexhuneERC20Base.sol": {
-      "lastModificationDate": 1697751600052,
-      "contentHash": "9dd3a117c8b6817613659f994c73e26c",
+      "lastModificationDate": 1700688267351,
+      "contentHash": "baed399d1c57a99a05e4dabef2dfaca3",
       "sourceName": "contracts/DexhuneERC20Base.sol",
       "solcConfig": {
-        "version": "0.8.21",
+        "version": "0.8.22",
         "settings": {
-          "evmVersion": "paris",
           "optimizer": {
-            "enabled": false,
-            "runs": 200
+            "enabled": true,
+            "runs": 200,
+            "details": {
+              "yul": false
+            }
           },
+          "evmVersion": "paris",
           "outputSelection": {
             "*": {
               "*": [
@@ -71,24 +77,27 @@
         "./interfaces/IERC20.sol"
       ],
       "versionPragmas": [
-        "^0.8.21"
+        "^0.8.22"
       ],
       "artifacts": [
         "DexhuneERC20Base"
       ]
     },
     "C:\\Users\\Prince\\source\\repos\\Peng_Protocol\\dexhune\\contracts\\interfaces\\IERC20.sol": {
-      "lastModificationDate": 1697772693870,
-      "contentHash": "e501b11b97415a57c32c2b9b9d8ef92a",
+      "lastModificationDate": 1700688267363,
+      "contentHash": "97f1dd20122fe691adefa20ee43a4a80",
       "sourceName": "contracts/interfaces/IERC20.sol",
       "solcConfig": {
-        "version": "0.8.21",
+        "version": "0.8.22",
         "settings": {
-          "evmVersion": "paris",
           "optimizer": {
-            "enabled": false,
-            "runs": 200
+            "enabled": true,
+            "runs": 200,
+            "details": {
+              "yul": false
+            }
           },
+          "evmVersion": "paris",
           "outputSelection": {
             "*": {
               "*": [
@@ -107,24 +116,27 @@
       },
       "imports": [],
       "versionPragmas": [
-        "^0.8.21"
+        "^0.8.22"
       ],
       "artifacts": [
         "IERC20"
       ]
     },
     "C:\\Users\\Prince\\source\\repos\\Peng_Protocol\\dexhune\\contracts\\DexhunePriceDAOBase.sol": {
-      "lastModificationDate": 1699476709239,
-      "contentHash": "675a4374e547088d3fc9e9670f785d5e",
+      "lastModificationDate": 1700688267341,
+      "contentHash": "6d9500e696063eec2a2b74c8a323ba86",
       "sourceName": "contracts/DexhunePriceDAOBase.sol",
       "solcConfig": {
-        "version": "0.8.21",
+        "version": "0.8.22",
         "settings": {
-          "evmVersion": "paris",
           "optimizer": {
-            "enabled": false,
-            "runs": 200
+            "enabled": true,
+            "runs": 200,
+            "details": {
+              "yul": false
+            }
           },
+          "evmVersion": "paris",
           "outputSelection": {
             "*": {
               "*": [
@@ -147,24 +159,27 @@
         "./interfaces/IERC721.sol"
       ],
       "versionPragmas": [
-        "^0.8.21"
+        "^0.8.22"
       ],
       "artifacts": [
         "DexhunePriceDAOBase"
       ]
     },
     "C:\\Users\\Prince\\source\\repos\\Peng_Protocol\\dexhune\\contracts\\utils\\Ownable.sol": {
-      "lastModificationDate": 1698379799649,
-      "contentHash": "8cac7e4e7fcf74fe18451231d54a752a",
+      "lastModificationDate": 1700688267353,
+      "contentHash": "64e25072e1b58611225b8d9d93101062",
       "sourceName": "contracts/utils/Ownable.sol",
       "solcConfig": {
-        "version": "0.8.21",
+        "version": "0.8.22",
         "settings": {
-          "evmVersion": "paris",
           "optimizer": {
-            "enabled": false,
-            "runs": 200
+            "enabled": true,
+            "runs": 200,
+            "details": {
+              "yul": false
+            }
           },
+          "evmVersion": "paris",
           "outputSelection": {
             "*": {
               "*": [
@@ -183,24 +198,27 @@
       },
       "imports": [],
       "versionPragmas": [
-        "^0.8.21"
+        "^0.8.22"
       ],
       "artifacts": [
         "Ownable"
       ]
     },
     "C:\\Users\\Prince\\source\\repos\\Peng_Protocol\\dexhune\\contracts\\interfaces\\IERC721.sol": {
-      "lastModificationDate": 1698409943053,
-      "contentHash": "69cdb50a0bb7aaf7e68b7514d014c58d",
+      "lastModificationDate": 1700688267363,
+      "contentHash": "df7ac1370fe09ac08eb207afd292b945",
       "sourceName": "contracts/interfaces/IERC721.sol",
       "solcConfig": {
-        "version": "0.8.21",
+        "version": "0.8.22",
         "settings": {
-          "evmVersion": "paris",
           "optimizer": {
-            "enabled": false,
-            "runs": 200
+            "enabled": true,
+            "runs": 200,
+            "details": {
+              "yul": false
+            }
           },
+          "evmVersion": "paris",
           "outputSelection": {
             "*": {
               "*": [
@@ -219,24 +237,27 @@
       },
       "imports": [],
       "versionPragmas": [
-        "^0.8.21"
+        "^0.8.22"
       ],
       "artifacts": [
         "IERC721"
       ]
     },
     "C:\\Users\\Prince\\source\\repos\\Peng_Protocol\\dexhune\\contracts\\DexhuneExchangeBase.sol": {
-      "lastModificationDate": 1700615445786,
-      "contentHash": "de197ff18af88a502b4f9f2b5a321236",
+      "lastModificationDate": 1700688267343,
+      "contentHash": "0207d49280af75ea77960e9139f95f8b",
       "sourceName": "contracts/DexhuneExchangeBase.sol",
       "solcConfig": {
-        "version": "0.8.21",
+        "version": "0.8.22",
         "settings": {
-          "evmVersion": "paris",
           "optimizer": {
-            "enabled": false,
-            "runs": 200
+            "enabled": true,
+            "runs": 200,
+            "details": {
+              "yul": false
+            }
           },
+          "evmVersion": "paris",
           "outputSelection": {
             "*": {
               "*": [
@@ -260,24 +281,27 @@
         "./libraries/DexhuneMath.sol"
       ],
       "versionPragmas": [
-        "^0.8.21"
+        "^0.8.22"
       ],
       "artifacts": [
         "DexhuneExchangeBase"
       ]
     },
     "C:\\Users\\Prince\\source\\repos\\Peng_Protocol\\dexhune\\contracts\\DexhuneExchange.sol": {
-      "lastModificationDate": 1700615853955,
-      "contentHash": "5bd42200e6fdfa95ca4ee3c32715715a",
+      "lastModificationDate": 1700690142689,
+      "contentHash": "41c28819a9845d2dd865a1a562d8d0e4",
       "sourceName": "contracts/DexhuneExchange.sol",
       "solcConfig": {
-        "version": "0.8.21",
+        "version": "0.8.22",
         "settings": {
-          "evmVersion": "paris",
           "optimizer": {
-            "enabled": false,
-            "runs": 200
+            "enabled": true,
+            "runs": 200,
+            "details": {
+              "yul": false
+            }
           },
+          "evmVersion": "paris",
           "outputSelection": {
             "*": {
               "*": [
@@ -300,24 +324,27 @@
         "./DexhuneExchangeBase.sol"
       ],
       "versionPragmas": [
-        "^0.8.21"
+        "^0.8.22"
       ],
       "artifacts": [
         "DexhuneExchange"
       ]
     },
     "C:\\Users\\Prince\\source\\repos\\Peng_Protocol\\dexhune\\contracts\\interfaces\\IPriceDAO.sol": {
-      "lastModificationDate": 1697767503787,
-      "contentHash": "fb587862ac5c21b37bd5f5e28977a6c0",
+      "lastModificationDate": 1700688267363,
+      "contentHash": "1538b4d97cdf17af30487afadc662d99",
       "sourceName": "contracts/interfaces/IPriceDAO.sol",
       "solcConfig": {
-        "version": "0.8.21",
+        "version": "0.8.22",
         "settings": {
-          "evmVersion": "paris",
           "optimizer": {
-            "enabled": false,
-            "runs": 200
+            "enabled": true,
+            "runs": 200,
+            "details": {
+              "yul": false
+            }
           },
+          "evmVersion": "paris",
           "outputSelection": {
             "*": {
               "*": [
@@ -336,24 +363,27 @@
       },
       "imports": [],
       "versionPragmas": [
-        "^0.8.21"
+        "^0.8.22"
       ],
       "artifacts": [
         "IPriceDAO"
       ]
     },
     "C:\\Users\\Prince\\source\\repos\\Peng_Protocol\\dexhune\\contracts\\DexhunePriceDAO.sol": {
-      "lastModificationDate": 1699530229199,
-      "contentHash": "dcbe5f912c738224c0dc85f03f8a98c7",
+      "lastModificationDate": 1700688267342,
+      "contentHash": "eb2b4aece927ac75b3ee03f8f333ef63",
       "sourceName": "contracts/DexhunePriceDAO.sol",
       "solcConfig": {
-        "version": "0.8.21",
+        "version": "0.8.22",
         "settings": {
-          "evmVersion": "paris",
           "optimizer": {
-            "enabled": false,
-            "runs": 200
+            "enabled": true,
+            "runs": 200,
+            "details": {
+              "yul": false
+            }
           },
+          "evmVersion": "paris",
           "outputSelection": {
             "*": {
               "*": [
@@ -375,24 +405,27 @@
         "./DexhunePriceDAOBase.sol"
       ],
       "versionPragmas": [
-        "^0.8.21"
+        "^0.8.22"
       ],
       "artifacts": [
         "DexhunePriceDAO"
       ]
     },
     "C:\\Users\\Prince\\source\\repos\\Peng_Protocol\\dexhune\\contracts\\interfaces\\IERC165.sol": {
-      "lastModificationDate": 1697740970886,
-      "contentHash": "f3386a2f7b53a21f1fb03701bcc63733",
+      "lastModificationDate": 1700688267363,
+      "contentHash": "c0e7aa73681d23f864d94edc9771fb12",
       "sourceName": "contracts/interfaces/IERC165.sol",
       "solcConfig": {
-        "version": "0.8.21",
+        "version": "0.8.22",
         "settings": {
-          "evmVersion": "paris",
           "optimizer": {
-            "enabled": false,
-            "runs": 200
+            "enabled": true,
+            "runs": 200,
+            "details": {
+              "yul": false
+            }
           },
+          "evmVersion": "paris",
           "outputSelection": {
             "*": {
               "*": [
@@ -411,58 +444,27 @@
       },
       "imports": [],
       "versionPragmas": [
-        "^0.8.21"
+        "^0.8.22"
       ],
       "artifacts": [
         "IERC165"
       ]
     },
     "C:\\Users\\Prince\\source\\repos\\Peng_Protocol\\dexhune\\contracts\\mockups\\MockNFT.sol": {
-      "lastModificationDate": 1699526799355,
-      "contentHash": "27c2b3e9213e98089e0eb3077e86b2e4",
+      "lastModificationDate": 1700688297550,
+      "contentHash": "db40e2b53693f214d3d0f61838c37cd2",
       "sourceName": "contracts/mockups/MockNFT.sol",
       "solcConfig": {
-        "version": "0.8.21",
+        "version": "0.8.22",
         "settings": {
-          "evmVersion": "paris",
           "optimizer": {
-            "enabled": false,
-            "runs": 200
-          },
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ],
-              "": [
-                "ast"
-              ]
+            "enabled": true,
+            "runs": 200,
+            "details": {
+              "yul": false
             }
-          }
-        }
-      },
-      "imports": [],
-      "versionPragmas": [],
-      "artifacts": [
-        "MockNFT"
-      ]
-    },
-    "C:\\Users\\Prince\\source\\repos\\Peng_Protocol\\dexhune\\contracts\\utils\\ERC20Normalizer.sol": {
-      "lastModificationDate": 1697897934455,
-      "contentHash": "60010effa232ce6b2409d85e72ef5daf",
-      "sourceName": "contracts/utils/ERC20Normalizer.sol",
-      "solcConfig": {
-        "version": "0.8.21",
-        "settings": {
-          "evmVersion": "paris",
-          "optimizer": {
-            "enabled": false,
-            "runs": 200
           },
+          "evmVersion": "paris",
           "outputSelection": {
             "*": {
               "*": [
@@ -481,24 +483,66 @@
       },
       "imports": [],
       "versionPragmas": [
-        "^0.8.21"
+        "^0.8.22"
+      ],
+      "artifacts": [
+        "MockNFT"
+      ]
+    },
+    "C:\\Users\\Prince\\source\\repos\\Peng_Protocol\\dexhune\\contracts\\utils\\ERC20Normalizer.sol": {
+      "lastModificationDate": 1700688267363,
+      "contentHash": "83f05068fa4a484cee6f7c779cafbbc3",
+      "sourceName": "contracts/utils/ERC20Normalizer.sol",
+      "solcConfig": {
+        "version": "0.8.22",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200,
+            "details": {
+              "yul": false
+            }
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.22"
       ],
       "artifacts": [
         "ERC20Normalizer"
       ]
     },
     "C:\\Users\\Prince\\source\\repos\\Peng_Protocol\\dexhune\\contracts\\mockups\\MockERC20.sol": {
-      "lastModificationDate": 1700615494668,
-      "contentHash": "ec61e2d09769e1dfe71ebfd58cc559c6",
+      "lastModificationDate": 1700688305325,
+      "contentHash": "77fd5ae279ee2cc673fab37b4c08d177",
       "sourceName": "contracts/mockups/MockERC20.sol",
       "solcConfig": {
-        "version": "0.8.21",
+        "version": "0.8.22",
         "settings": {
-          "evmVersion": "paris",
           "optimizer": {
-            "enabled": false,
-            "runs": 200
+            "enabled": true,
+            "runs": 200,
+            "details": {
+              "yul": false
+            }
           },
+          "evmVersion": "paris",
           "outputSelection": {
             "*": {
               "*": [
@@ -518,23 +562,28 @@
       "imports": [
         "../interfaces/IERC20.sol"
       ],
-      "versionPragmas": [],
+      "versionPragmas": [
+        "^0.8.22"
+      ],
       "artifacts": [
         "MockERC20"
       ]
     },
     "C:\\Users\\Prince\\source\\repos\\Peng_Protocol\\dexhune\\contracts\\mockups\\MockOracle.sol": {
-      "lastModificationDate": 1700614981959,
-      "contentHash": "4b0bb170157af41056aeb0df7fea1aa9",
+      "lastModificationDate": 1700688304869,
+      "contentHash": "7d2ef79fae7429f87365b0947fd50066",
       "sourceName": "contracts/mockups/MockOracle.sol",
       "solcConfig": {
-        "version": "0.8.21",
+        "version": "0.8.22",
         "settings": {
-          "evmVersion": "paris",
           "optimizer": {
-            "enabled": false,
-            "runs": 200
+            "enabled": true,
+            "runs": 200,
+            "details": {
+              "yul": false
+            }
           },
+          "evmVersion": "paris",
           "outputSelection": {
             "*": {
               "*": [
@@ -554,23 +603,28 @@
       "imports": [
         "../interfaces/IPriceDAO.sol"
       ],
-      "versionPragmas": [],
+      "versionPragmas": [
+        "^0.8.22"
+      ],
       "artifacts": [
         "MockOracle"
       ]
     },
     "C:\\Users\\Prince\\source\\repos\\Peng_Protocol\\dexhune\\contracts\\libraries\\DexhuneMath.sol": {
-      "lastModificationDate": 1700615837805,
-      "contentHash": "6fd06035b247c00937a8d970b373b0c3",
+      "lastModificationDate": 1700688267352,
+      "contentHash": "c43e64f9e4b79dd7b01ff63b83057621",
       "sourceName": "contracts/libraries/DexhuneMath.sol",
       "solcConfig": {
-        "version": "0.8.21",
+        "version": "0.8.22",
         "settings": {
-          "evmVersion": "paris",
           "optimizer": {
-            "enabled": false,
-            "runs": 200
+            "enabled": true,
+            "runs": 200,
+            "details": {
+              "yul": false
+            }
           },
+          "evmVersion": "paris",
           "outputSelection": {
             "*": {
               "*": [
@@ -589,7 +643,7 @@
       },
       "imports": [],
       "versionPragmas": [
-        "^0.8.21"
+        "^0.8.22"
       ],
       "artifacts": [
         "DexhuneMath"
