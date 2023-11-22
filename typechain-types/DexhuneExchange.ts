@@ -96,7 +96,7 @@ export declare namespace DexhuneExchangeBase {
 export interface DexhuneExchangeInterface extends Interface {
   getFunction(
     nameOrSignature:
-      | "assignPriceDao"
+      | "assignPriceDAO"
       | "clearOrders"
       | "createBuyOrder"
       | "createSellOrder"
@@ -104,8 +104,10 @@ export interface DexhuneExchangeInterface extends Interface {
       | "depositToken"
       | "depositTokenFrom"
       | "getBalance"
+      | "listParityToken"
       | "listToken"
       | "listingCost"
+      | "orders"
       | "owner"
       | "queryBalance"
       | "settleOrders"
@@ -113,15 +115,27 @@ export interface DexhuneExchangeInterface extends Interface {
       | "takeSellOrder"
       | "transferOwnership"
       | "viewOrder"
+      | "viewOrderByToken"
       | "viewPrice"
       | "viewToken"
       | "viewTokenByIndex"
   ): FunctionFragment;
 
-  getEvent(nameOrSignatureOrTopic: "TransferredOwnership"): EventFragment;
+  getEvent(
+    nameOrSignatureOrTopic:
+      | "AVAXTransferred"
+      | "AssignedPriceDAO"
+      | "OrderCreated"
+      | "OrderReverted"
+      | "OrderSettled"
+      | "OrderTaken"
+      | "TokenListed"
+      | "TokenTransferred"
+      | "TransferredOwnership"
+  ): EventFragment;
 
   encodeFunctionData(
-    functionFragment: "assignPriceDao",
+    functionFragment: "assignPriceDAO",
     values: [AddressLike]
   ): string;
   encodeFunctionData(
@@ -153,19 +167,20 @@ export interface DexhuneExchangeInterface extends Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
+    functionFragment: "listParityToken",
+    values: [AddressLike, AddressLike, BigNumberish, BigNumberish, string]
+  ): string;
+  encodeFunctionData(
     functionFragment: "listToken",
-    values: [
-      AddressLike,
-      BigNumberish,
-      BigNumberish,
-      BigNumberish,
-      AddressLike,
-      string
-    ]
+    values: [AddressLike, BigNumberish, BigNumberish, string]
   ): string;
   encodeFunctionData(
     functionFragment: "listingCost",
     values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "orders",
+    values: [BigNumberish]
   ): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(
@@ -190,6 +205,10 @@ export interface DexhuneExchangeInterface extends Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "viewOrder",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "viewOrderByToken",
     values: [AddressLike, BigNumberish]
   ): string;
   encodeFunctionData(functionFragment: "viewPrice", values?: undefined): string;
@@ -203,7 +222,7 @@ export interface DexhuneExchangeInterface extends Interface {
   ): string;
 
   decodeFunctionResult(
-    functionFragment: "assignPriceDao",
+    functionFragment: "assignPriceDAO",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -228,11 +247,16 @@ export interface DexhuneExchangeInterface extends Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "getBalance", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "listParityToken",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "listToken", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "listingCost",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "orders", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "queryBalance",
@@ -255,12 +279,196 @@ export interface DexhuneExchangeInterface extends Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "viewOrder", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "viewOrderByToken",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "viewPrice", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "viewToken", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "viewTokenByIndex",
     data: BytesLike
   ): Result;
+}
+
+export namespace AVAXTransferredEvent {
+  export type InputTuple = [amount: BigNumberish, targetAddr: AddressLike];
+  export type OutputTuple = [amount: bigint, targetAddr: string];
+  export interface OutputObject {
+    amount: bigint;
+    targetAddr: string;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
+}
+
+export namespace AssignedPriceDAOEvent {
+  export type InputTuple = [addr: AddressLike];
+  export type OutputTuple = [addr: string];
+  export interface OutputObject {
+    addr: string;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
+}
+
+export namespace OrderCreatedEvent {
+  export type InputTuple = [
+    index: BigNumberish,
+    orderType: boolean,
+    tokenAddr: AddressLike,
+    amount: BigNumberish,
+    price: BigNumberish
+  ];
+  export type OutputTuple = [
+    index: bigint,
+    orderType: boolean,
+    tokenAddr: string,
+    amount: bigint,
+    price: bigint
+  ];
+  export interface OutputObject {
+    index: bigint;
+    orderType: boolean;
+    tokenAddr: string;
+    amount: bigint;
+    price: bigint;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
+}
+
+export namespace OrderRevertedEvent {
+  export type InputTuple = [
+    index: BigNumberish,
+    orderType: boolean,
+    maker: AddressLike
+  ];
+  export type OutputTuple = [index: bigint, orderType: boolean, maker: string];
+  export interface OutputObject {
+    index: bigint;
+    orderType: boolean;
+    maker: string;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
+}
+
+export namespace OrderSettledEvent {
+  export type InputTuple = [
+    index: BigNumberish,
+    orderType: boolean,
+    maker: AddressLike,
+    isPartial: boolean
+  ];
+  export type OutputTuple = [
+    index: bigint,
+    orderType: boolean,
+    maker: string,
+    isPartial: boolean
+  ];
+  export interface OutputObject {
+    index: bigint;
+    orderType: boolean;
+    maker: string;
+    isPartial: boolean;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
+}
+
+export namespace OrderTakenEvent {
+  export type InputTuple = [
+    index: BigNumberish,
+    orderType: boolean,
+    maker: AddressLike,
+    taker: AddressLike,
+    token: AddressLike,
+    amount: BigNumberish,
+    isPartial: boolean
+  ];
+  export type OutputTuple = [
+    index: bigint,
+    orderType: boolean,
+    maker: string,
+    taker: string,
+    token: string,
+    amount: bigint,
+    isPartial: boolean
+  ];
+  export interface OutputObject {
+    index: bigint;
+    orderType: boolean;
+    maker: string;
+    taker: string;
+    token: string;
+    amount: bigint;
+    isPartial: boolean;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
+}
+
+export namespace TokenListedEvent {
+  export type InputTuple = [
+    name: string,
+    symbol: string,
+    pricingScheme: BigNumberish,
+    addr: AddressLike,
+    index: BigNumberish
+  ];
+  export type OutputTuple = [
+    name: string,
+    symbol: string,
+    pricingScheme: bigint,
+    addr: string,
+    index: bigint
+  ];
+  export interface OutputObject {
+    name: string;
+    symbol: string;
+    pricingScheme: bigint;
+    addr: string;
+    index: bigint;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
+}
+
+export namespace TokenTransferredEvent {
+  export type InputTuple = [
+    amount: BigNumberish,
+    targetAddr: AddressLike,
+    tokenAddr: AddressLike
+  ];
+  export type OutputTuple = [
+    amount: bigint,
+    targetAddr: string,
+    tokenAddr: string
+  ];
+  export interface OutputObject {
+    amount: bigint;
+    targetAddr: string;
+    tokenAddr: string;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
 }
 
 export namespace TransferredOwnershipEvent {
@@ -319,7 +527,7 @@ export interface DexhuneExchange extends BaseContract {
     event?: TCEvent
   ): Promise<this>;
 
-  assignPriceDao: TypedContractMethod<
+  assignPriceDAO: TypedContractMethod<
     [addr: AddressLike],
     [void],
     "nonpayable"
@@ -355,13 +563,23 @@ export interface DexhuneExchange extends BaseContract {
 
   getBalance: TypedContractMethod<[], [bigint], "view">;
 
+  listParityToken: TypedContractMethod<
+    [
+      tokenAddr: AddressLike,
+      parityAddr: AddressLike,
+      reward: BigNumberish,
+      rewardThreshold: BigNumberish,
+      price: string
+    ],
+    [void],
+    "nonpayable"
+  >;
+
   listToken: TypedContractMethod<
     [
       tokenAddr: AddressLike,
-      scheme: BigNumberish,
       reward: BigNumberish,
       rewardThreshold: BigNumberish,
-      parityAddr: AddressLike,
       price: string
     ],
     [void],
@@ -369,6 +587,23 @@ export interface DexhuneExchange extends BaseContract {
   >;
 
   listingCost: TypedContractMethod<[], [bigint], "view">;
+
+  orders: TypedContractMethod<
+    [arg0: BigNumberish],
+    [
+      [string, string, boolean, bigint, bigint, bigint, bigint, bigint] & {
+        makerAddr: string;
+        tokenAddr: string;
+        orderType: boolean;
+        created: bigint;
+        rewardAmount: bigint;
+        price: bigint;
+        principal: bigint;
+        pending: bigint;
+      }
+    ],
+    "view"
+  >;
 
   owner: TypedContractMethod<[], [string], "view">;
 
@@ -403,6 +638,12 @@ export interface DexhuneExchange extends BaseContract {
   >;
 
   viewOrder: TypedContractMethod<
+    [index: BigNumberish],
+    [DexhuneExchangeBase.OrderStructOutput],
+    "view"
+  >;
+
+  viewOrderByToken: TypedContractMethod<
     [tokenAddr: AddressLike, index: BigNumberish],
     [DexhuneExchangeBase.OrderStructOutput],
     "view"
@@ -427,7 +668,7 @@ export interface DexhuneExchange extends BaseContract {
   ): T;
 
   getFunction(
-    nameOrSignature: "assignPriceDao"
+    nameOrSignature: "assignPriceDAO"
   ): TypedContractMethod<[addr: AddressLike], [void], "nonpayable">;
   getFunction(
     nameOrSignature: "clearOrders"
@@ -463,14 +704,25 @@ export interface DexhuneExchange extends BaseContract {
     nameOrSignature: "getBalance"
   ): TypedContractMethod<[], [bigint], "view">;
   getFunction(
+    nameOrSignature: "listParityToken"
+  ): TypedContractMethod<
+    [
+      tokenAddr: AddressLike,
+      parityAddr: AddressLike,
+      reward: BigNumberish,
+      rewardThreshold: BigNumberish,
+      price: string
+    ],
+    [void],
+    "nonpayable"
+  >;
+  getFunction(
     nameOrSignature: "listToken"
   ): TypedContractMethod<
     [
       tokenAddr: AddressLike,
-      scheme: BigNumberish,
       reward: BigNumberish,
       rewardThreshold: BigNumberish,
-      parityAddr: AddressLike,
       price: string
     ],
     [void],
@@ -479,6 +731,24 @@ export interface DexhuneExchange extends BaseContract {
   getFunction(
     nameOrSignature: "listingCost"
   ): TypedContractMethod<[], [bigint], "view">;
+  getFunction(
+    nameOrSignature: "orders"
+  ): TypedContractMethod<
+    [arg0: BigNumberish],
+    [
+      [string, string, boolean, bigint, bigint, bigint, bigint, bigint] & {
+        makerAddr: string;
+        tokenAddr: string;
+        orderType: boolean;
+        created: bigint;
+        rewardAmount: bigint;
+        price: bigint;
+        principal: bigint;
+        pending: bigint;
+      }
+    ],
+    "view"
+  >;
   getFunction(
     nameOrSignature: "owner"
   ): TypedContractMethod<[], [string], "view">;
@@ -512,6 +782,13 @@ export interface DexhuneExchange extends BaseContract {
   getFunction(
     nameOrSignature: "viewOrder"
   ): TypedContractMethod<
+    [index: BigNumberish],
+    [DexhuneExchangeBase.OrderStructOutput],
+    "view"
+  >;
+  getFunction(
+    nameOrSignature: "viewOrderByToken"
+  ): TypedContractMethod<
     [tokenAddr: AddressLike, index: BigNumberish],
     [DexhuneExchangeBase.OrderStructOutput],
     "view"
@@ -535,6 +812,62 @@ export interface DexhuneExchange extends BaseContract {
   >;
 
   getEvent(
+    key: "AVAXTransferred"
+  ): TypedContractEvent<
+    AVAXTransferredEvent.InputTuple,
+    AVAXTransferredEvent.OutputTuple,
+    AVAXTransferredEvent.OutputObject
+  >;
+  getEvent(
+    key: "AssignedPriceDAO"
+  ): TypedContractEvent<
+    AssignedPriceDAOEvent.InputTuple,
+    AssignedPriceDAOEvent.OutputTuple,
+    AssignedPriceDAOEvent.OutputObject
+  >;
+  getEvent(
+    key: "OrderCreated"
+  ): TypedContractEvent<
+    OrderCreatedEvent.InputTuple,
+    OrderCreatedEvent.OutputTuple,
+    OrderCreatedEvent.OutputObject
+  >;
+  getEvent(
+    key: "OrderReverted"
+  ): TypedContractEvent<
+    OrderRevertedEvent.InputTuple,
+    OrderRevertedEvent.OutputTuple,
+    OrderRevertedEvent.OutputObject
+  >;
+  getEvent(
+    key: "OrderSettled"
+  ): TypedContractEvent<
+    OrderSettledEvent.InputTuple,
+    OrderSettledEvent.OutputTuple,
+    OrderSettledEvent.OutputObject
+  >;
+  getEvent(
+    key: "OrderTaken"
+  ): TypedContractEvent<
+    OrderTakenEvent.InputTuple,
+    OrderTakenEvent.OutputTuple,
+    OrderTakenEvent.OutputObject
+  >;
+  getEvent(
+    key: "TokenListed"
+  ): TypedContractEvent<
+    TokenListedEvent.InputTuple,
+    TokenListedEvent.OutputTuple,
+    TokenListedEvent.OutputObject
+  >;
+  getEvent(
+    key: "TokenTransferred"
+  ): TypedContractEvent<
+    TokenTransferredEvent.InputTuple,
+    TokenTransferredEvent.OutputTuple,
+    TokenTransferredEvent.OutputObject
+  >;
+  getEvent(
     key: "TransferredOwnership"
   ): TypedContractEvent<
     TransferredOwnershipEvent.InputTuple,
@@ -543,6 +876,94 @@ export interface DexhuneExchange extends BaseContract {
   >;
 
   filters: {
+    "AVAXTransferred(uint256,address)": TypedContractEvent<
+      AVAXTransferredEvent.InputTuple,
+      AVAXTransferredEvent.OutputTuple,
+      AVAXTransferredEvent.OutputObject
+    >;
+    AVAXTransferred: TypedContractEvent<
+      AVAXTransferredEvent.InputTuple,
+      AVAXTransferredEvent.OutputTuple,
+      AVAXTransferredEvent.OutputObject
+    >;
+
+    "AssignedPriceDAO(address)": TypedContractEvent<
+      AssignedPriceDAOEvent.InputTuple,
+      AssignedPriceDAOEvent.OutputTuple,
+      AssignedPriceDAOEvent.OutputObject
+    >;
+    AssignedPriceDAO: TypedContractEvent<
+      AssignedPriceDAOEvent.InputTuple,
+      AssignedPriceDAOEvent.OutputTuple,
+      AssignedPriceDAOEvent.OutputObject
+    >;
+
+    "OrderCreated(uint256,bool,address,uint256,uint256)": TypedContractEvent<
+      OrderCreatedEvent.InputTuple,
+      OrderCreatedEvent.OutputTuple,
+      OrderCreatedEvent.OutputObject
+    >;
+    OrderCreated: TypedContractEvent<
+      OrderCreatedEvent.InputTuple,
+      OrderCreatedEvent.OutputTuple,
+      OrderCreatedEvent.OutputObject
+    >;
+
+    "OrderReverted(uint256,bool,address)": TypedContractEvent<
+      OrderRevertedEvent.InputTuple,
+      OrderRevertedEvent.OutputTuple,
+      OrderRevertedEvent.OutputObject
+    >;
+    OrderReverted: TypedContractEvent<
+      OrderRevertedEvent.InputTuple,
+      OrderRevertedEvent.OutputTuple,
+      OrderRevertedEvent.OutputObject
+    >;
+
+    "OrderSettled(uint256,bool,address,bool)": TypedContractEvent<
+      OrderSettledEvent.InputTuple,
+      OrderSettledEvent.OutputTuple,
+      OrderSettledEvent.OutputObject
+    >;
+    OrderSettled: TypedContractEvent<
+      OrderSettledEvent.InputTuple,
+      OrderSettledEvent.OutputTuple,
+      OrderSettledEvent.OutputObject
+    >;
+
+    "OrderTaken(uint256,bool,address,address,address,uint256,bool)": TypedContractEvent<
+      OrderTakenEvent.InputTuple,
+      OrderTakenEvent.OutputTuple,
+      OrderTakenEvent.OutputObject
+    >;
+    OrderTaken: TypedContractEvent<
+      OrderTakenEvent.InputTuple,
+      OrderTakenEvent.OutputTuple,
+      OrderTakenEvent.OutputObject
+    >;
+
+    "TokenListed(string,string,uint8,address,uint256)": TypedContractEvent<
+      TokenListedEvent.InputTuple,
+      TokenListedEvent.OutputTuple,
+      TokenListedEvent.OutputObject
+    >;
+    TokenListed: TypedContractEvent<
+      TokenListedEvent.InputTuple,
+      TokenListedEvent.OutputTuple,
+      TokenListedEvent.OutputObject
+    >;
+
+    "TokenTransferred(uint256,address,address)": TypedContractEvent<
+      TokenTransferredEvent.InputTuple,
+      TokenTransferredEvent.OutputTuple,
+      TokenTransferredEvent.OutputObject
+    >;
+    TokenTransferred: TypedContractEvent<
+      TokenTransferredEvent.InputTuple,
+      TokenTransferredEvent.OutputTuple,
+      TokenTransferredEvent.OutputObject
+    >;
+
     "TransferredOwnership(address,address)": TypedContractEvent<
       TransferredOwnershipEvent.InputTuple,
       TransferredOwnershipEvent.OutputTuple,

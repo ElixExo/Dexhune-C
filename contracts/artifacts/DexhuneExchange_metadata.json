@@ -1,0 +1,1087 @@
+{
+	"compiler": {
+		"version": "0.8.22+commit.4fc1097e"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [],
+				"stateMutability": "nonpayable",
+				"type": "constructor"
+			},
+			{
+				"inputs": [],
+				"name": "DepositFailed",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "FailedStringToNumberConversion",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "FailedToSendReward",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "FailedToTakeOrder",
+				"type": "error"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "balance",
+						"type": "uint256"
+					}
+				],
+				"name": "InsufficientBalance",
+				"type": "error"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "listingPrice",
+						"type": "uint256"
+					}
+				],
+				"name": "InsufficientBalanceForListing",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "InvalidTokenContract",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "NoSuitableOrderFound",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "OnlyOwnerMustSetDefaultToken",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "OrderDoesNotExist",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "OrderLimitReachedTryLater",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "ParityShouldNotHavePrice",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "RejectedZeroAmount",
+				"type": "error"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "contractAddr",
+						"type": "address"
+					}
+				],
+				"name": "TokenAlreadyExists",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "TokenLimitReached",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "TokenNotListed",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "TokenNotSupported_TooManyDecimals",
+				"type": "error"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "account",
+						"type": "address"
+					}
+				],
+				"name": "UnauthorizedAccount",
+				"type": "error"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "targetAddr",
+						"type": "address"
+					}
+				],
+				"name": "AVAXTransferred",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "addr",
+						"type": "address"
+					}
+				],
+				"name": "AssignedPriceDAO",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "index",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "bool",
+						"name": "orderType",
+						"type": "bool"
+					},
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "tokenAddr",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "price",
+						"type": "uint256"
+					}
+				],
+				"name": "OrderCreated",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "index",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "bool",
+						"name": "orderType",
+						"type": "bool"
+					},
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "maker",
+						"type": "address"
+					}
+				],
+				"name": "OrderReverted",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "index",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "bool",
+						"name": "orderType",
+						"type": "bool"
+					},
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "maker",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "bool",
+						"name": "isPartial",
+						"type": "bool"
+					}
+				],
+				"name": "OrderSettled",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "index",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "bool",
+						"name": "orderType",
+						"type": "bool"
+					},
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "maker",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "taker",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "token",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "bool",
+						"name": "isPartial",
+						"type": "bool"
+					}
+				],
+				"name": "OrderTaken",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "string",
+						"name": "name",
+						"type": "string"
+					},
+					{
+						"indexed": true,
+						"internalType": "string",
+						"name": "symbol",
+						"type": "string"
+					},
+					{
+						"indexed": false,
+						"internalType": "enum DexhuneExchangeBase.PricingScheme",
+						"name": "pricingScheme",
+						"type": "uint8"
+					},
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "addr",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "index",
+						"type": "uint256"
+					}
+				],
+				"name": "TokenListed",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "targetAddr",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "tokenAddr",
+						"type": "address"
+					}
+				],
+				"name": "TokenTransferred",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "oldOwner",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "newOwner",
+						"type": "address"
+					}
+				],
+				"name": "TransferredOwnership",
+				"type": "event"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "addr",
+						"type": "address"
+					}
+				],
+				"name": "assignPriceDAO",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "clearOrders",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "tokenAddr",
+						"type": "address"
+					}
+				],
+				"name": "createBuyOrder",
+				"outputs": [],
+				"stateMutability": "payable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "tokenAddr",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"name": "createSellOrder",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "tokenAddr",
+						"type": "address"
+					}
+				],
+				"name": "deposit",
+				"outputs": [],
+				"stateMutability": "payable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "tokenAddr",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"name": "depositToken",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "tokenAddr",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "fromAddress",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"name": "depositTokenFrom",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getBalance",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "tokenAddr",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "parityAddr",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "reward",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "rewardThreshold",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "price",
+						"type": "string"
+					}
+				],
+				"name": "listParityToken",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "tokenAddr",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "reward",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "rewardThreshold",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "price",
+						"type": "string"
+					}
+				],
+				"name": "listToken",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "listingCost",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"name": "orders",
+				"outputs": [
+					{
+						"internalType": "address payable",
+						"name": "makerAddr",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "tokenAddr",
+						"type": "address"
+					},
+					{
+						"internalType": "bool",
+						"name": "orderType",
+						"type": "bool"
+					},
+					{
+						"internalType": "uint256",
+						"name": "created",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "rewardAmount",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "price",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "principal",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "pending",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "owner",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "tokenAddr",
+						"type": "address"
+					},
+					{
+						"internalType": "bool",
+						"name": "isAVAX",
+						"type": "bool"
+					}
+				],
+				"name": "queryBalance",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "tokenAddr",
+						"type": "address"
+					},
+					{
+						"internalType": "bool",
+						"name": "orderType",
+						"type": "bool"
+					}
+				],
+				"name": "settleOrders",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "tokenAddr",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"name": "takeBuyOrder",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "tokenAddr",
+						"type": "address"
+					}
+				],
+				"name": "takeSellOrder",
+				"outputs": [],
+				"stateMutability": "payable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "_address",
+						"type": "address"
+					}
+				],
+				"name": "transferOwnership",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "index",
+						"type": "uint256"
+					}
+				],
+				"name": "viewOrder",
+				"outputs": [
+					{
+						"components": [
+							{
+								"internalType": "address payable",
+								"name": "makerAddr",
+								"type": "address"
+							},
+							{
+								"internalType": "address",
+								"name": "tokenAddr",
+								"type": "address"
+							},
+							{
+								"internalType": "bool",
+								"name": "orderType",
+								"type": "bool"
+							},
+							{
+								"internalType": "uint256",
+								"name": "created",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "rewardAmount",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "price",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "principal",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "pending",
+								"type": "uint256"
+							}
+						],
+						"internalType": "struct DexhuneExchangeBase.Order",
+						"name": "",
+						"type": "tuple"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "tokenAddr",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "index",
+						"type": "uint256"
+					}
+				],
+				"name": "viewOrderByToken",
+				"outputs": [
+					{
+						"components": [
+							{
+								"internalType": "address payable",
+								"name": "makerAddr",
+								"type": "address"
+							},
+							{
+								"internalType": "address",
+								"name": "tokenAddr",
+								"type": "address"
+							},
+							{
+								"internalType": "bool",
+								"name": "orderType",
+								"type": "bool"
+							},
+							{
+								"internalType": "uint256",
+								"name": "created",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "rewardAmount",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "price",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "principal",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "pending",
+								"type": "uint256"
+							}
+						],
+						"internalType": "struct DexhuneExchangeBase.Order",
+						"name": "",
+						"type": "tuple"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "viewPrice",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "tokenAddr",
+						"type": "address"
+					}
+				],
+				"name": "viewToken",
+				"outputs": [
+					{
+						"components": [
+							{
+								"internalType": "uint256",
+								"name": "tokenNo",
+								"type": "uint256"
+							},
+							{
+								"internalType": "string",
+								"name": "name",
+								"type": "string"
+							},
+							{
+								"internalType": "string",
+								"name": "sym",
+								"type": "string"
+							},
+							{
+								"internalType": "address",
+								"name": "addr",
+								"type": "address"
+							},
+							{
+								"internalType": "address",
+								"name": "parityAddr",
+								"type": "address"
+							},
+							{
+								"internalType": "uint256",
+								"name": "reward",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "rewardThreshold",
+								"type": "uint256"
+							},
+							{
+								"internalType": "enum DexhuneExchangeBase.PricingScheme",
+								"name": "scheme",
+								"type": "uint8"
+							},
+							{
+								"internalType": "uint256",
+								"name": "price",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "orders",
+								"type": "uint256"
+							}
+						],
+						"internalType": "struct DexhuneExchangeBase.TokenDataModel",
+						"name": "",
+						"type": "tuple"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "tokenNo",
+						"type": "uint256"
+					}
+				],
+				"name": "viewTokenByIndex",
+				"outputs": [
+					{
+						"components": [
+							{
+								"internalType": "uint256",
+								"name": "tokenNo",
+								"type": "uint256"
+							},
+							{
+								"internalType": "string",
+								"name": "name",
+								"type": "string"
+							},
+							{
+								"internalType": "string",
+								"name": "sym",
+								"type": "string"
+							},
+							{
+								"internalType": "address",
+								"name": "addr",
+								"type": "address"
+							},
+							{
+								"internalType": "address",
+								"name": "parityAddr",
+								"type": "address"
+							},
+							{
+								"internalType": "uint256",
+								"name": "reward",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "rewardThreshold",
+								"type": "uint256"
+							},
+							{
+								"internalType": "enum DexhuneExchangeBase.PricingScheme",
+								"name": "scheme",
+								"type": "uint8"
+							},
+							{
+								"internalType": "uint256",
+								"name": "price",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "orders",
+								"type": "uint256"
+							}
+						],
+						"internalType": "struct DexhuneExchangeBase.TokenDataModel",
+						"name": "",
+						"type": "tuple"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/DexhuneExchange.sol": "DexhuneExchange"
+		},
+		"evmVersion": "shanghai",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"contracts/DexhuneExchange.sol": {
+			"keccak256": "0x84a873f910dad0c9d04f0634e21fd63dd7303051de427347009494b135a0c8f0",
+			"license": "BSD-3-Clause",
+			"urls": [
+				"bzz-raw://369e9f79c3f5a7a2df1fdfd5e1bfac13b718a66fd420ac8e972379f570b2b781",
+				"dweb:/ipfs/Qmah6ZoMN36iJZ6HunjwEYx7A778s6tq4Lrnn3q4ktQJ2f"
+			]
+		},
+		"contracts/DexhuneExchangeBase.sol": {
+			"keccak256": "0xea9136f043993d5982abc5ee619867afee4687db464c1a54e078c61093282028",
+			"license": "BSD-3-Clause",
+			"urls": [
+				"bzz-raw://86a1445ec068f9bc26029454f4fa055d3a93110c3b1bf8c370a6edabcb82a982",
+				"dweb:/ipfs/QmYAiSvbFZWxM6eKAyNCvf4JK9t5aHv1WThhpzvy6dpp11"
+			]
+		},
+		"contracts/interfaces/IERC20.sol": {
+			"keccak256": "0x1ecf85c91a9f31dd8edaa6ce9e10b47967beb6246e476437199dba8fc4cd5144",
+			"license": "BSD-3-Clause",
+			"urls": [
+				"bzz-raw://8d4af454bc08b170d200beb6a3d17f3185dbbd0f376b2435a8a0c4e76b4edfec",
+				"dweb:/ipfs/QmT6rDdB7v5kTgLNGRpqaPeWSLLs2p9gqZ96BjubKn2e7g"
+			]
+		},
+		"contracts/interfaces/IPriceDAO.sol": {
+			"keccak256": "0x80fc127c5633a7978d5f30b069b67dca19951f407b1b7fef6aa03d1c1d5d0118",
+			"license": "BSD-3-Clause",
+			"urls": [
+				"bzz-raw://7d453d0ae09267fff8b8872156f387e155511a6d013e190a1c8f5f06f0ee8335",
+				"dweb:/ipfs/Qmd1tarPavKVhnaK6Bchmpqsa4ixCuKbdMRqkJCbPJeLJ8"
+			]
+		},
+		"contracts/libraries/DexhuneMath.sol": {
+			"keccak256": "0x8b2238bd811cec27e29a82b8de119bddc7a1a54b71aa190f434d0183e9d2c62c",
+			"license": "BSD-3-Clause",
+			"urls": [
+				"bzz-raw://4653fc665ed81808cc1c750cb85f3598d6ca40022e846d686b5a980a3fda8192",
+				"dweb:/ipfs/QmPZYMLHXAy6JneqP6BNLAqowAkZW3m1uB6reaDZNC6sjB"
+			]
+		},
+		"contracts/utils/Ownable.sol": {
+			"keccak256": "0x107a65ecf475f110e7b6db33eb8015fab2f512859da21d44093010e4b773a57c",
+			"license": "BSD-3-Clause",
+			"urls": [
+				"bzz-raw://cc22944a57cfbc246437c98694ead2916650150d36cf9ab50a3947420c8ebcc1",
+				"dweb:/ipfs/QmXebfaKfpGR3WcRYfSjPwQ7mCmjQogsdweS92QJDWUnrH"
+			]
+		}
+	},
+	"version": 1
+}

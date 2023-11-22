@@ -2,6 +2,7 @@
 /* tslint:disable */
 /* eslint-disable */
 export * as interfaces from "./interfaces";
+export * as libraries from "./libraries";
 export * as mockups from "./mockups";
 export * as utils from "./utils";
 export { DexhuneERC20__factory } from "./DexhuneERC20__factory";

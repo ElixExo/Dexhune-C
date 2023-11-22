@@ -14,13 +14,16 @@ pragma solidity ^0.8.21;
 import "./utils/Ownable.sol";
 import "./interfaces/IERC20.sol";
 import "./interfaces/IPriceDAO.sol";
-import { mul, div, convert, wrap, unwrap, UD60x18 } from "@prb/math/src/UD60x18.sol";
+import "./libraries/DexhuneMath.sol";
 
 abstract contract DexhuneExchangeBase is Ownable {
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Transfers
-    function _sendToken(IERC20 token, address targetAddr, uint256 amount) internal returns (bool) {
-        try token.transfer(targetAddr, amount) returns (bool success) {
+    function _sendToken(Token memory token, address targetAddr, uint256 amount) internal returns (bool) {
+        try token.instance.transfer(targetAddr, amount) returns (bool success) {
+            if (success) {
+                emit TokenTransferred(amount, targetAddr, token.addr);
+            }
             return success;
         } catch {
             return false;
@@ -38,6 +41,10 @@ abstract contract DexhuneExchangeBase is Ownable {
     function _sendAVAX(address payable to, uint256 amount) internal returns(bool) {
         (bool sent, ) = to.call{value: amount}("");
 
+        if (sent) {
+            emit AVAXTransferred(amount, to);
+        }
+
         return sent;
     }
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -45,17 +52,11 @@ abstract contract DexhuneExchangeBase is Ownable {
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Math
     function _mul(uint256 num1, uint256 num2) internal pure returns(uint256) {
-        UD60x18 n1 = wrap(num1);
-        UD60x18 n2 = wrap(num2);
-
-        return unwrap(mul(n1, n2));
+        return DexhuneMath.mul(num1, num2);
     }
 
     function _div(uint256 num1, uint256 num2) internal pure returns(uint256) {
-        UD60x18 n1 = wrap(num1);
-        UD60x18 n2 = wrap(num2);
-
-        return unwrap(div(n1, n2));
+        return DexhuneMath.div(num1, num2);
     }
 
     function _parseNumber(string memory value) internal pure returns(uint256) {
@@ -237,4 +238,17 @@ abstract contract DexhuneExchangeBase is Ownable {
     error FailedToTakeOrder();
     error FailedToSendReward();
     error InsufficientBalanceForListing(uint256 listingPrice);
+    error RejectedZeroAmount();
+
+    
+    event AssignedPriceDAO(address addr);
+    event TokenListed(string indexed name, string indexed symbol, PricingScheme pricingScheme, address addr, uint256 index);
+    event OrderCreated(uint256 index, bool orderType, address tokenAddr, uint256 amount, uint256 price);
+    event OrderTaken(uint256 index, bool orderType, address maker, address taker, address token, uint256 amount, bool isPartial);
+    event OrderReverted(uint256 index, bool orderType, address maker);
+    event OrderSettled(uint256 index, bool orderType, address maker, bool isPartial);
+    
+    event AVAXTransferred(uint256 amount, address targetAddr);
+    event TokenTransferred(uint256 amount, address targetAddr, address tokenAddr);
+    
 }

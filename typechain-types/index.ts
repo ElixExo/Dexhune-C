@@ -3,6 +3,8 @@
 /* eslint-disable */
 import type * as interfaces from "./interfaces";
 export type { interfaces };
+import type * as libraries from "./libraries";
+export type { libraries };
 import type * as mockups from "./mockups";
 export type { mockups };
 import type * as utils from "./utils";
@@ -28,6 +30,8 @@ export type { IERC721 } from "./interfaces/IERC721";
 export { IERC721__factory } from "./factories/interfaces/IERC721__factory";
 export type { IPriceDAO } from "./interfaces/IPriceDAO";
 export { IPriceDAO__factory } from "./factories/interfaces/IPriceDAO__factory";
+export type { DexhuneMath } from "./libraries/DexhuneMath";
+export { DexhuneMath__factory } from "./factories/libraries/DexhuneMath__factory";
 export type { MockERC20 } from "./mockups/MockERC20";
 export { MockERC20__factory } from "./factories/mockups/MockERC20__factory";
 export type { MockNFT } from "./mockups/MockNFT";
