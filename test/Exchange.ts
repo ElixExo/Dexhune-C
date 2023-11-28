@@ -10,7 +10,7 @@
 *    ........................................................
 */
 
-import { loadFixture } from "@nomicfoundation/hardhat-network-helpers";
+import { loadFixture, time } from "@nomicfoundation/hardhat-network-helpers";
 import { expect } from "chai";
 import { ethers } from "hardhat";
 import { ZeroAddress } from "ethers";
@@ -104,7 +104,7 @@ describe("Exchange", () => {
             });
 
             const orderPrice = oraclePrice / price;
-            const pending = buyAmount / orderPrice;
+            const pending = buyAmount * orderPrice;
 
             
             const order = await exchange.viewOrderByToken(tkAddr, 0);
@@ -142,7 +142,7 @@ describe("Exchange", () => {
             await exchange.createSellOrder(tkAddr, bigSellAmount);
 
             const orderPrice = oraclePrice / price;
-            const pending = sellAmount * orderPrice;
+            const pending = sellAmount / orderPrice;
 
             const order = await exchange.viewOrderByToken(tkAddr, 0);
             
@@ -181,7 +181,7 @@ describe("Exchange", () => {
                 value: BigInt(buyAmount * 1e18)
             });
 
-            const pending = buyAmount / orderPrice;
+            const pending = buyAmount * orderPrice;
             const order = await exchange.viewOrderByToken(tkAddr, 0);
             
             expect((Number(order.price) / 1e18).toFixed(4)).eq(orderPrice.toFixed(4), "Order price is not accurate");
@@ -219,7 +219,7 @@ describe("Exchange", () => {
             await tk.setBalance(await owner.getAddress(), bigSellAmount);
             await exchange.createSellOrder(tkAddr, bigSellAmount);
 
-            const pending = sellAmount * orderPrice;
+            const pending = sellAmount / orderPrice;
             const order = await exchange.viewOrderByToken(tkAddr, 0);
             
             expect((Number(order.price) / 1e18).toFixed(4)).eq(orderPrice.toFixed(4), "Order price is not accurate");
@@ -227,13 +227,29 @@ describe("Exchange", () => {
             expect((Number(order.principal) / 1e18).toFixed(4)).eq(sellAmount.toFixed(4), "Principal price is not accurate");
         });
 
-        // it ("Should correctly calculate partial takes for buy orders", async () => {
-        //     const [owner, parityAddr] = await ethers.getSigners();
-        //     const { exchange, dxh, tokens, oracle } = await loadFixture(deploy);
+        it ("Should allow orders to be cleared", async () => {
+            const [owner, parityAddr] = await ethers.getSigners();
+            const { exchange, dxh, tokens, oracle } = await loadFixture(deploy);
 
-            
+            const oraclePrice = Math.random() * 99_999;
+            await oracle.setPrice(oraclePrice.toFixed(18).toString());
+            exchange.assignPriceDAO(await oracle.getAddress());
+        
+            await exchange.listToken(await dxh.getAddress(), 0, 0, "1");
 
+            await exchange.createBuyOrder(await dxh.getAddress(), {
+                value: 5000
+            })
 
-        // });
+            await exchange.viewOrder(0);
+
+            await time.increase(40);
+            await exchange.clearOrders();
+
+            const res = exchange.viewOrder(0);
+            await expect(res).revertedWithCustomError(exchange, "OrderDoesNotExist");
+        });
+
+        it ("Should properly ")
     })
 });

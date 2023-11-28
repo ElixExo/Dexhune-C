@@ -77,7 +77,9 @@ contract DexhunePriceDAO is DexhunePriceDAOBase {
         _deadline = block.timestamp + PROPOSAL_DURATION;
         _votingDeadline = block.timestamp + PROPOSAL_VOTING_DURATION;
         
+        _clearVotes();
         _proposal = PriceProposal(msg.sender, price, description, false);
+        
         
         emit ProposalCreated(price, description, msg.sender);
     }
@@ -171,6 +173,13 @@ contract DexhunePriceDAO is DexhunePriceDAOBase {
         }
 
         return balance;
+    }
+
+    function _clearVotes() private {
+        for (uint256 i = _voters.length; i > 0; i--) {
+            _votes[_voters[i - 1]] = 0;
+            _voters.pop();
+        }
     }
 
     function _rewardProposer(uint16 total) private {

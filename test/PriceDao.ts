@@ -17,7 +17,7 @@ import { DexhunePriceDAO, MockNFT } from "../typechain-types";
 import { HardhatEthersSigner } from "@nomicfoundation/hardhat-ethers/signers";
 import { ContractTransactionReceipt } from "ethers";
 
-return;
+// return;
 
 const REWARD_MULTIPLIER = 20
 
@@ -191,15 +191,31 @@ describe("PriceDAO", function() {
             expect(res).eq(reward);
         });
 
-        // it ("Should not allow non eligible proposers", async () => {
-        //     const { PriceDao } = await loadFixture(deploy);
+        it ("Should not persist votes after proposal has been finalized", async () => {
+            const { PriceDao, MockNFT, ERC20} = await loadFixture(deploy);
+            const [ owner, user2 ] = await ethers.getSigners();
 
-        //     await proposeFirstPrice(PriceDao);
+            await ERC20.setBalance(await PriceDao.getAddress(), 999999);
+            await PriceDao.assignTokenAddress(await ERC20.getAddress());
 
-        //     const res = PriceDao.voteUp();
-        //     await expect(res).to.be
-        //         .revertedWithCustomError(PriceDao, "NotEligible");
-        // });
+            await proposeFirstPrice(PriceDao, MockNFT, owner);
+
+            let res = MockNFT.mint(owner.address);
+            await expect(res).to.not.be.reverted;
+
+            res = PriceDao.voteUp();
+            await expect(res).to.not.be.reverted;
+
+            const deadline = await PriceDao.votingEndsAfter();
+            await time.increase(deadline);
+
+            await PriceDao.finalizeProposal();
+
+            await PriceDao.proposePrice("Second price", "XD");
+
+            res = PriceDao.voteUp();
+            await expect(res).to.not.be.reverted;
+        });
 
         it ("Should not allow non eligible voters", async () => {
             const { PriceDao, MockNFT } = await loadFixture(deploy);

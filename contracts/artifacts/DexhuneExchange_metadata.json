@@ -555,11 +555,6 @@
 						"internalType": "uint256",
 						"name": "rewardThreshold",
 						"type": "uint256"
-					},
-					{
-						"internalType": "string",
-						"name": "price",
-						"type": "string"
 					}
 				],
 				"name": "listParityToken",
@@ -783,6 +778,72 @@
 					}
 				],
 				"name": "viewOrder",
+				"outputs": [
+					{
+						"components": [
+							{
+								"internalType": "address payable",
+								"name": "makerAddr",
+								"type": "address"
+							},
+							{
+								"internalType": "address",
+								"name": "tokenAddr",
+								"type": "address"
+							},
+							{
+								"internalType": "bool",
+								"name": "orderType",
+								"type": "bool"
+							},
+							{
+								"internalType": "uint256",
+								"name": "created",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "rewardAmount",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "price",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "principal",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "pending",
+								"type": "uint256"
+							}
+						],
+						"internalType": "struct DexhuneExchangeBase.Order",
+						"name": "",
+						"type": "tuple"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "makerAddr",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "index",
+						"type": "uint256"
+					}
+				],
+				"name": "viewOrderByMaker",
 				"outputs": [
 					{
 						"components": [
@@ -1079,17 +1140,17 @@
 		},
 		"optimizer": {
 			"enabled": true,
-			"runs": 200
+			"runs": 1000
 		},
 		"remappings": []
 	},
 	"sources": {
 		"contracts/DexhuneExchange.sol": {
-			"keccak256": "0xcba56b37befbd122b6322b6a86aa3fd73d1e8dbfb61df5f2b8c869065a636322",
+			"keccak256": "0xdae9f04e8d2609cb6cc42792cd369c86eb79195c87907d769db514fd2c761520",
 			"license": "BSD-3-Clause",
 			"urls": [
-				"bzz-raw://fbf4f718e026896cb89663df9c0acb4b23da64431acfdfeb929e9fee5669b897",
-				"dweb:/ipfs/Qmb8PffFfD9A9SBumkSN2d4x1jCLnHKgDPcv1mcsRVUPz2"
+				"bzz-raw://3f5cd505f2abc51a8dbf0988308ebb8411dca35824e6b674aab0378e99868b4b",
+				"dweb:/ipfs/Qmb2doaK5PWmyeQNzscUPqwm5r5AvHqrkJkNnMnwvRTA2N"
 			]
 		},
 		"contracts/DexhuneExchangeBase.sol": {

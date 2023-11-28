@@ -39,13 +39,15 @@ abstract contract DexhuneExchangeBase is Ownable {
     }
 
     function _sendAVAX(address payable to, uint256 amount) internal returns(bool) {
-        (bool sent, ) = to.call{value: amount}("");
+        // (bool sent, ) = to.call{value: amount}("");
+        
 
-        if (sent) {
+        if (to.send(amount)) {
             emit AVAXTransferred(amount, to);
+            return true;
         }
 
-        return sent;
+        return false;
     }
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

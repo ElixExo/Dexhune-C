@@ -116,6 +116,7 @@ export interface DexhuneExchangeInterface extends Interface {
       | "transferOwnership"
       | "updateTokenBalance"
       | "viewOrder"
+      | "viewOrderByMaker"
       | "viewOrderByToken"
       | "viewPrice"
       | "viewToken"
@@ -213,6 +214,10 @@ export interface DexhuneExchangeInterface extends Interface {
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
+    functionFragment: "viewOrderByMaker",
+    values: [AddressLike, BigNumberish]
+  ): string;
+  encodeFunctionData(
     functionFragment: "viewOrderByToken",
     values: [AddressLike, BigNumberish]
   ): string;
@@ -288,6 +293,10 @@ export interface DexhuneExchangeInterface extends Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "viewOrder", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "viewOrderByMaker",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "viewOrderByToken",
     data: BytesLike
@@ -657,6 +666,12 @@ export interface DexhuneExchange extends BaseContract {
     "view"
   >;
 
+  viewOrderByMaker: TypedContractMethod<
+    [makerAddr: AddressLike, index: BigNumberish],
+    [DexhuneExchangeBase.OrderStructOutput],
+    "view"
+  >;
+
   viewOrderByToken: TypedContractMethod<
     [tokenAddr: AddressLike, index: BigNumberish],
     [DexhuneExchangeBase.OrderStructOutput],
@@ -799,6 +814,13 @@ export interface DexhuneExchange extends BaseContract {
     nameOrSignature: "viewOrder"
   ): TypedContractMethod<
     [index: BigNumberish],
+    [DexhuneExchangeBase.OrderStructOutput],
+    "view"
+  >;
+  getFunction(
+    nameOrSignature: "viewOrderByMaker"
+  ): TypedContractMethod<
+    [makerAddr: AddressLike, index: BigNumberish],
     [DexhuneExchangeBase.OrderStructOutput],
     "view"
   >;

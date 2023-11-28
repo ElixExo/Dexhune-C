@@ -49,9 +49,23 @@ contract DexhuneExchange is DexhuneExchangeBase {
 
     uint256 private constant CLEAR_ORDERS_USER_LIMIT = 50;
     uint256 private constant CLEAR_ORDERS_LIMIT = 100;
+
+    // TODO: Principals might require normalization before interacting with other balances
     
     constructor() {
         owner = msg.sender;
+    }
+
+    function getBalance() external view returns(uint256) {
+        return address(this).balance;
+    }
+
+    function queryBalance(address tokenAddr, bool isAVAX) external view returns (uint256) {
+        if (isAVAX) {
+            return _avaxBalance[tokenAddr];
+        } else {
+            return _balances[tokenAddr];
+        }
     }
 
     function viewPrice() external view returns (uint256) {
@@ -83,30 +97,25 @@ contract DexhuneExchange is DexhuneExchangeBase {
     }
 
     function viewOrderByToken(address tokenAddr, uint256 index) external view returns (Order memory) {
-        uint256[] storage indexes = _ordersByToken[tokenAddr];
+        uint256[] memory indexes = _ordersByToken[tokenAddr];
 
         if (index >= indexes.length) {
             revert OrderDoesNotExist();
         }
 
         uint256 n = indexes[index];
-
-        Order memory order = _orders[n];
-        return order;
+        return _orders[n];
     }
 
-    function getBalance() external view returns(uint256) {
-        return address(this).balance;
-    }
+    function viewOrderByMaker(address makerAddr, uint256 index) external view returns(Order memory) {
+        uint256[] memory indexes = _ordersByUser[makerAddr];
 
-    function queryBalance(address tokenAddr, bool isAVAX) external view returns (uint256) {
-        // Token memory token = _fetchToken(tokenAddr);
-
-        if (isAVAX) {
-            return _avaxBalance[tokenAddr];
-        } else {
-            return _balances[tokenAddr];
+        if (index >= indexes.length) {
+            revert OrderDoesNotExist();
         }
+
+        uint256 n = indexes[index];
+        return _orders[n];
     }
 
     function listToken(address tokenAddr, uint256 reward, uint256 rewardThreshold, string memory price) external {
@@ -118,10 +127,14 @@ contract DexhuneExchange is DexhuneExchangeBase {
     }
 
     function _listToken(address tokenAddr, PricingScheme scheme, uint256 reward, uint256 rewardThreshold, address parityAddr, string memory price) private {
-        if (_tokens.length == 0) {
+        bool isDefault = _tokens.length == 0;
+
+        if (isDefault) {
             if (msg.sender != owner) {
                 revert OnlyOwnerMustSetDefaultToken();
             }
+
+            scheme = PricingScheme.Relative;
         }
 
         address addr = tokenAddr;
@@ -138,7 +151,11 @@ contract DexhuneExchange is DexhuneExchangeBase {
         uint256 nPrice = 0;
 
         if (scheme == PricingScheme.Relative) {
-            nPrice = _parseNumber(price);
+            if (!isDefault) {
+                nPrice = _parseNumber(price);
+            } else {
+                nPrice = 1e18;
+            }
         }
 
         _chargeForListing();
@@ -252,7 +269,7 @@ contract DexhuneExchange is DexhuneExchangeBase {
         bool found;
 
         for (uint256 i = norders.length; i > 0 && !found; i--) {
-            uint256 n = norders[i];
+            uint256 n = norders[i - 1];
             order = _orders[n];
 
             if (order.pending == amount) {
@@ -271,11 +288,13 @@ contract DexhuneExchange is DexhuneExchangeBase {
     function _takeOrder(Order storage order, bool orderType, uint256 index, uint256 amt, address tokenAddr) private {
         Token memory token = _fetchToken(tokenAddr);
 
-        uint256 amount; uint256 nAmount;
-        amount = nAmount = amt;
+        uint256 amount; uint256 dAmount;
 
-        if (!orderType) { // Sells
+        if (orderType) { // Buys
             amount = _normalize(amt, token.dec);
+            dAmount = amt;
+        } else {
+            amount = dAmount = amt;
         }
 
         order = _orders[index];
@@ -289,9 +308,9 @@ contract DexhuneExchange is DexhuneExchangeBase {
         
         if (isPartial) {
             if (orderType) {
-                principalDelta = _mul(amount, price);
-            } else {
                 principalDelta = _div(amount, price);
+            } else {
+                principalDelta = _mul(amount, price);
             }
         }
 
@@ -321,7 +340,7 @@ contract DexhuneExchange is DexhuneExchangeBase {
         }
 
         emit OrderTaken(index, orderType, makerAddr, 
-            msg.sender, token.addr, nAmount, isPartial);
+            msg.sender, token.addr, dAmount, isPartial);
     }
 
     function _makeOrderPayments(Order memory order, Token memory token, uint256 amount, uint256 principal) private {
@@ -344,8 +363,9 @@ contract DexhuneExchange is DexhuneExchangeBase {
             tkAddr = order.makerAddr;
         }
 
-        // TODO: Add reward to the delta
-        if (!_sendToken(token, tkAddr, tokenDelta)) {
+        uint256 dTokenDelta = _denormalize(tokenDelta, token.dec);
+
+        if (!_sendToken(token, tkAddr, dTokenDelta)) {
             revert FailedToTakeOrder();
         }
 
@@ -355,13 +375,13 @@ contract DexhuneExchange is DexhuneExchangeBase {
 
         // TODO: Balances should all be sufficient
         _avaxBalance[token.addr] -= nativeDelta;
-        bool canUseAlloc = _allocBalances[token.addr] > tokenDelta;
+        bool canUseAlloc = _allocBalances[token.addr] > dTokenDelta;
 
         if (canUseAlloc) {
-            _allocBalances[token.addr] -= tokenDelta;
+            _allocBalances[token.addr] -= dTokenDelta;
         }
 
-        _balances[token.addr] -= tokenDelta;
+        _balances[token.addr] -= dTokenDelta;
     }
 
     function settleOrders(address tokenAddr, bool orderType) external {
@@ -375,7 +395,7 @@ contract DexhuneExchange is DexhuneExchangeBase {
         
         // TODO: Retest this loop
         for (uint i = norders.length; balance > 0 && i > 0; i--) {
-            uint256 n = norders[i];
+            uint256 n = norders[i - 1];
             order = _orders[n];
 
             if (order.orderType != orderType) {
@@ -410,7 +430,7 @@ contract DexhuneExchange is DexhuneExchangeBase {
         uint256[] storage uorders = _ordersByUser[msg.sender];
         bool userOnly = uorders.length > 0;
 
-        uint256 reverted;
+        uint256 reverted = 0;
         uint256 limit = userOnly ? CLEAR_ORDERS_USER_LIMIT : CLEAR_ORDERS_LIMIT;
         
         uint256 n;
@@ -424,12 +444,12 @@ contract DexhuneExchange is DexhuneExchangeBase {
 
         if (userOnly) {
             for (uint256 i = uorders.length; i > 0 && reverted <= limit; i--) {
-                n = uorders[i];
+                n = uorders[i - 1];
                 order = _orders[n];
                 
                 if (timestamp - order.created > ORDER_LIFESPAN) {
                     if (_revertOrder(order, n)) {
-                        _removeItem(uorders, i);
+                        _removeItem(uorders, i - 1);
                         reverted++;
                     }
                 }
@@ -439,10 +459,10 @@ contract DexhuneExchange is DexhuneExchangeBase {
         }
 
         for (uint256 i = _orders.length; i > 0 && reverted <= limit; i--) {
-            order = _orders[i];
+            order = _orders[i - 1];
 
             if (timestamp - order.created > ORDER_LIFESPAN) {
-                if (_revertOrder(order, n)) {
+                if (_revertOrder(order, i - 1)) {
                     reverted++;
                 }
             }
@@ -515,9 +535,9 @@ contract DexhuneExchange is DexhuneExchangeBase {
 
         if (orderType) {
             // Buy
-            pending = _div(_normalize(amount, token.dec), price);
+            pending = _mul(amount, price);
         } else {
-            pending = _mul(_normalize(amount, token.dec), price);
+            pending = _div(_normalize(amount, token.dec), price);
         }
 
 
@@ -575,10 +595,6 @@ contract DexhuneExchange is DexhuneExchangeBase {
             revert InvalidTokenContract();
         }
 
-        if (parityAddr != address(0) && price > 0) {
-            revert ParityShouldNotHavePrice();
-        }
-
         Token memory token = Token(
             name, sym, decimals, scalar, 
             addr, parityAddr,
@@ -594,21 +610,29 @@ contract DexhuneExchange is DexhuneExchangeBase {
     }
 
     function _settleBuyOrder(Token memory token, Order storage order, uint256 index, uint256 balance) private returns (bool settled, uint256 remBalance) {
+        
+        uint256 nBalance = _normalize(balance, token.dec);
+        bool isPartial = nBalance < order.pending;
+
         uint256 amount;
-        bool isPartial = balance < order.pending;
+        uint256 dAmount;
+
         
         if (isPartial) {
-            amount = balance;
+            dAmount = balance;
         } else {
-            amount = order.pending;
+            dAmount = _denormalize(order.pending, token.dec);
         }
 
-        if (_sendToken(token, order.makerAddr, amount)) {
-            balance -= amount;
+        if (_sendToken(token, order.makerAddr, dAmount)) {
+            balance -= dAmount;
 
             if (isPartial) {
+                // Renormalize to get rid of unnecessary decimals
+                amount = _normalize(dAmount, token.dec);
+
                 order.pending -= amount;
-                order.principal = _mul(order.pending, order.price);
+                order.principal = _div(order.pending, order.price);
             }
         } else {
             return (false, balance);
@@ -634,7 +658,7 @@ contract DexhuneExchange is DexhuneExchangeBase {
 
             if (isPartial) {
                 order.pending -= amount;
-                order.principal = _div(order.pending, order.price);
+                order.principal = _mul(order.pending, order.price);
             }
 
             emit OrderSettled(index, order.orderType, order.makerAddr, isPartial);

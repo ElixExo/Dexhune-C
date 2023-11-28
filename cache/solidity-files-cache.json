@@ -10,7 +10,7 @@
         "settings": {
           "optimizer": {
             "enabled": true,
-            "runs": 200,
+            "runs": 1000,
             "details": {
               "yul": false
             }
@@ -51,7 +51,7 @@
         "settings": {
           "optimizer": {
             "enabled": true,
-            "runs": 200,
+            "runs": 1000,
             "details": {
               "yul": false
             }
@@ -92,7 +92,7 @@
         "settings": {
           "optimizer": {
             "enabled": true,
-            "runs": 200,
+            "runs": 1000,
             "details": {
               "yul": false
             }
@@ -131,7 +131,7 @@
         "settings": {
           "optimizer": {
             "enabled": true,
-            "runs": 200,
+            "runs": 1000,
             "details": {
               "yul": false
             }
@@ -174,7 +174,7 @@
         "settings": {
           "optimizer": {
             "enabled": true,
-            "runs": 200,
+            "runs": 1000,
             "details": {
               "yul": false
             }
@@ -213,7 +213,7 @@
         "settings": {
           "optimizer": {
             "enabled": true,
-            "runs": 200,
+            "runs": 1000,
             "details": {
               "yul": false
             }
@@ -244,15 +244,15 @@
       ]
     },
     "C:\\Users\\Prince\\source\\repos\\Peng_Protocol\\dexhune\\contracts\\DexhuneExchangeBase.sol": {
-      "lastModificationDate": 1700688267343,
-      "contentHash": "0207d49280af75ea77960e9139f95f8b",
+      "lastModificationDate": 1700774441070,
+      "contentHash": "9ba8c36e9ac8df5ddd6f835ff7414581",
       "sourceName": "contracts/DexhuneExchangeBase.sol",
       "solcConfig": {
         "version": "0.8.22",
         "settings": {
           "optimizer": {
             "enabled": true,
-            "runs": 200,
+            "runs": 1000,
             "details": {
               "yul": false
             }
@@ -288,15 +288,15 @@
       ]
     },
     "C:\\Users\\Prince\\source\\repos\\Peng_Protocol\\dexhune\\contracts\\DexhuneExchange.sol": {
-      "lastModificationDate": 1700690142689,
-      "contentHash": "41c28819a9845d2dd865a1a562d8d0e4",
+      "lastModificationDate": 1700843142791,
+      "contentHash": "b23c46c763a97bfa71bd88c5afc367e6",
       "sourceName": "contracts/DexhuneExchange.sol",
       "solcConfig": {
         "version": "0.8.22",
         "settings": {
           "optimizer": {
             "enabled": true,
-            "runs": 200,
+            "runs": 1000,
             "details": {
               "yul": false
             }
@@ -339,7 +339,7 @@
         "settings": {
           "optimizer": {
             "enabled": true,
-            "runs": 200,
+            "runs": 1000,
             "details": {
               "yul": false
             }
@@ -370,15 +370,15 @@
       ]
     },
     "C:\\Users\\Prince\\source\\repos\\Peng_Protocol\\dexhune\\contracts\\DexhunePriceDAO.sol": {
-      "lastModificationDate": 1700688267342,
-      "contentHash": "eb2b4aece927ac75b3ee03f8f333ef63",
+      "lastModificationDate": 1700819521621,
+      "contentHash": "72ae32a9d994e01e6875edc1e7a151a1",
       "sourceName": "contracts/DexhunePriceDAO.sol",
       "solcConfig": {
         "version": "0.8.22",
         "settings": {
           "optimizer": {
             "enabled": true,
-            "runs": 200,
+            "runs": 1000,
             "details": {
               "yul": false
             }
@@ -420,7 +420,7 @@
         "settings": {
           "optimizer": {
             "enabled": true,
-            "runs": 200,
+            "runs": 1000,
             "details": {
               "yul": false
             }
@@ -459,7 +459,7 @@
         "settings": {
           "optimizer": {
             "enabled": true,
-            "runs": 200,
+            "runs": 1000,
             "details": {
               "yul": false
             }
@@ -498,7 +498,7 @@
         "settings": {
           "optimizer": {
             "enabled": true,
-            "runs": 200,
+            "runs": 1000,
             "details": {
               "yul": false
             }
@@ -529,7 +529,7 @@
       ]
     },
     "C:\\Users\\Prince\\source\\repos\\Peng_Protocol\\dexhune\\contracts\\mockups\\MockERC20.sol": {
-      "lastModificationDate": 1700688305325,
+      "lastModificationDate": 1700774545382,
       "contentHash": "77fd5ae279ee2cc673fab37b4c08d177",
       "sourceName": "contracts/mockups/MockERC20.sol",
       "solcConfig": {
@@ -537,7 +537,7 @@
         "settings": {
           "optimizer": {
             "enabled": true,
-            "runs": 200,
+            "runs": 1000,
             "details": {
               "yul": false
             }
@@ -570,7 +570,7 @@
       ]
     },
     "C:\\Users\\Prince\\source\\repos\\Peng_Protocol\\dexhune\\contracts\\mockups\\MockOracle.sol": {
-      "lastModificationDate": 1700688304869,
+      "lastModificationDate": 1700771844442,
       "contentHash": "7d2ef79fae7429f87365b0947fd50066",
       "sourceName": "contracts/mockups/MockOracle.sol",
       "solcConfig": {
@@ -578,7 +578,7 @@
         "settings": {
           "optimizer": {
             "enabled": true,
-            "runs": 200,
+            "runs": 1000,
             "details": {
               "yul": false
             }
@@ -619,7 +619,7 @@
         "settings": {
           "optimizer": {
             "enabled": true,
-            "runs": 200,
+            "runs": 1000,
             "details": {
               "yul": false
             }
