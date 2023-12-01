@@ -1,7 +1,7 @@
 import { ethers } from "hardhat";
 
 async function main() {
-  const exchange = await ethers.deployContract("DexhuneExchange");
+  const exchange = await ethers.deployContract("contracts/DexhuneExchange_flattened.sol:DexhuneExchange");
   console.log(
     `Exchange has been deployed to ${exchange.target}`
   );

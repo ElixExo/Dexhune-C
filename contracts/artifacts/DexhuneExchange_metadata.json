@@ -635,11 +635,6 @@
 					},
 					{
 						"internalType": "uint256",
-						"name": "rewardAmount",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
 						"name": "price",
 						"type": "uint256"
 					},
@@ -803,11 +798,6 @@
 							},
 							{
 								"internalType": "uint256",
-								"name": "rewardAmount",
-								"type": "uint256"
-							},
-							{
-								"internalType": "uint256",
 								"name": "price",
 								"type": "uint256"
 							},
@@ -869,11 +859,6 @@
 							},
 							{
 								"internalType": "uint256",
-								"name": "rewardAmount",
-								"type": "uint256"
-							},
-							{
-								"internalType": "uint256",
 								"name": "price",
 								"type": "uint256"
 							},
@@ -931,11 +916,6 @@
 							{
 								"internalType": "uint256",
 								"name": "created",
-								"type": "uint256"
-							},
-							{
-								"internalType": "uint256",
-								"name": "rewardAmount",
 								"type": "uint256"
 							},
 							{
@@ -1131,66 +1111,26 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"contracts/DexhuneExchange.sol": "DexhuneExchange"
+			"contracts/DexhuneExchange_flattened.sol": "DexhuneExchange"
 		},
-		"evmVersion": "shanghai",
+		"evmVersion": "paris",
 		"libraries": {},
 		"metadata": {
 			"bytecodeHash": "ipfs"
 		},
 		"optimizer": {
 			"enabled": true,
-			"runs": 1000
+			"runs": 200
 		},
 		"remappings": []
 	},
 	"sources": {
-		"contracts/DexhuneExchange.sol": {
-			"keccak256": "0xdae9f04e8d2609cb6cc42792cd369c86eb79195c87907d769db514fd2c761520",
+		"contracts/DexhuneExchange_flattened.sol": {
+			"keccak256": "0x87281c3869912e232ce4643159f249f445910b8b51c94947a32d86b6809af8a8",
 			"license": "BSD-3-Clause",
 			"urls": [
-				"bzz-raw://3f5cd505f2abc51a8dbf0988308ebb8411dca35824e6b674aab0378e99868b4b",
-				"dweb:/ipfs/Qmb2doaK5PWmyeQNzscUPqwm5r5AvHqrkJkNnMnwvRTA2N"
-			]
-		},
-		"contracts/DexhuneExchangeBase.sol": {
-			"keccak256": "0xbe55bc6199fd5f7e6f52eb07036505eac02832597b7b0f221bb6e92334a08a7c",
-			"license": "BSD-3-Clause",
-			"urls": [
-				"bzz-raw://75709a6c061e4ab3c7ce39db9944bce52a1edef8da9632094294e66500d1e3a1",
-				"dweb:/ipfs/QmeAP4qv2mN6ZYofBW3krNYSNhhEuWft9hU68yvNjhEo2R"
-			]
-		},
-		"contracts/interfaces/IERC20.sol": {
-			"keccak256": "0xccd9915623686bcd46147899b0bc62d959391bc3eb2e3435cf54ad05ed61fed0",
-			"license": "BSD-3-Clause",
-			"urls": [
-				"bzz-raw://ca2c50334eb9c3124fb6fb571a59b1ae3b6abb4c71ccae22998517a1cf3749f5",
-				"dweb:/ipfs/Qmbf4MNFGN5dD1qKdSnwYG3ekCAK15quzvuZpn8c4uDY7e"
-			]
-		},
-		"contracts/interfaces/IPriceDAO.sol": {
-			"keccak256": "0xcc0991ee8f43f7e8bd78da2903f4ca8d4147d8d4990b27e6b8a9ab78c2ee6774",
-			"license": "BSD-3-Clause",
-			"urls": [
-				"bzz-raw://71974014f07085c0d145a95ec64f300369d9fb07daa956452557720788648748",
-				"dweb:/ipfs/QmXmt2f1eVnfFfq8XnwgepHT1sH88j5ugmySQYvLg3moA2"
-			]
-		},
-		"contracts/libraries/DexhuneMath.sol": {
-			"keccak256": "0x9c57a2f1d3df659f8445aebc83c28806ecf23be0c3b046faafa335086c1fa62e",
-			"license": "BSD-3-Clause",
-			"urls": [
-				"bzz-raw://6379c3f8e0550a2b40967c077729cb4aea96f8e6cdc7f9654556ce465be2b777",
-				"dweb:/ipfs/QmcdmudjBAM7pmSKw8LYsRJbJNyjk9xvjhjHBX1ir8JnVB"
-			]
-		},
-		"contracts/utils/Ownable.sol": {
-			"keccak256": "0xc744aeb4b209aeffcbcd347af288a8c99a851f452e1804622ad8d1718202f9d1",
-			"license": "BSD-3-Clause",
-			"urls": [
-				"bzz-raw://1e9ed4ecbfe88e883aee1393e6a1ae1f06b7b40011323209955fb2193046a0b2",
-				"dweb:/ipfs/QmY3YrCwqjL5nyKFmR6qGDFtRP9wLB16pRREtdzq6D6eYV"
+				"bzz-raw://c821e8e0ae183ff81da0e35f0a22d4f8229930ef2fda270f8692907b92624368",
+				"dweb:/ipfs/QmZv9jgfp7kArRSey9ewMD5mjYvUpiw9pqvCYzsmwgPDrA"
 			]
 		}
 	},

@@ -29,7 +29,6 @@ export declare namespace DexhuneExchangeBase {
     tokenAddr: AddressLike;
     orderType: boolean;
     created: BigNumberish;
-    rewardAmount: BigNumberish;
     price: BigNumberish;
     principal: BigNumberish;
     pending: BigNumberish;
@@ -40,7 +39,6 @@ export declare namespace DexhuneExchangeBase {
     tokenAddr: string,
     orderType: boolean,
     created: bigint,
-    rewardAmount: bigint,
     price: bigint,
     principal: bigint,
     pending: bigint
@@ -49,7 +47,6 @@ export declare namespace DexhuneExchangeBase {
     tokenAddr: string;
     orderType: boolean;
     created: bigint;
-    rewardAmount: bigint;
     price: bigint;
     principal: bigint;
     pending: bigint;
@@ -608,12 +605,11 @@ export interface DexhuneExchange extends BaseContract {
   orders: TypedContractMethod<
     [arg0: BigNumberish],
     [
-      [string, string, boolean, bigint, bigint, bigint, bigint, bigint] & {
+      [string, string, boolean, bigint, bigint, bigint, bigint] & {
         makerAddr: string;
         tokenAddr: string;
         orderType: boolean;
         created: bigint;
-        rewardAmount: bigint;
         price: bigint;
         principal: bigint;
         pending: bigint;
@@ -764,12 +760,11 @@ export interface DexhuneExchange extends BaseContract {
   ): TypedContractMethod<
     [arg0: BigNumberish],
     [
-      [string, string, boolean, bigint, bigint, bigint, bigint, bigint] & {
+      [string, string, boolean, bigint, bigint, bigint, bigint] & {
         makerAddr: string;
         tokenAddr: string;
         orderType: boolean;
         created: bigint;
-        rewardAmount: bigint;
         price: bigint;
         principal: bigint;
         pending: bigint;

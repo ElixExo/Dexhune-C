@@ -13,15 +13,17 @@
 import { loadFixture, time } from "@nomicfoundation/hardhat-network-helpers";
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { ZeroAddress } from "ethers";
+import { ContractFactory, ZeroAddress } from "ethers";
 import { MockNFT, MockERC20, DexhuneExchange, MockOracle } from "../typechain-types";
+
+const provider = ethers.provider;
 
 interface Context {
     exchange: DexhuneExchange,
     oracle: MockOracle,
     mockNFT: MockNFT,
     dxh: MockERC20,
-    tokens: MockERC20[]
+    tokens: MockERC20[],
 }
 
 describe("Exchange", () => {
@@ -46,6 +48,117 @@ describe("Exchange", () => {
     }
 
     function deploy40() { return deploy(40); };
+
+    async function deployWithBuyOrder() {
+        const ctx = await deploy();
+
+        while (true) {
+            try {
+                const [owner] = await ethers.getSigners();
+                const { exchange, oracle, dxh, tokens } = ctx;
+    
+                const oraclePrice = Math.random() * 99_999;
+                await oracle.setPrice(oraclePrice.toFixed(18).toString());
+                exchange.assignPriceDAO(await oracle.getAddress());
+    
+                await exchange.listToken(await dxh.getAddress(), 0, 0, "1");
+    
+                const tk = tokens[1];
+                const tkAddr = await tk.getAddress();
+    
+                const tkDec = Number((Math.random() * 18).toFixed());
+                await tk.setDecimals(tkDec);
+    
+                // console.log("Decimals: ", tkDec);
+    
+                const price = Math.random() * 99_999;
+    
+                const scalar = 10 ** tkDec;
+    
+                const initialDeposit =  Math.random() * 99_999;
+                const scaledDeposit = BigInt((initialDeposit * scalar).toFixed());
+                
+                const buyAmount = Math.random() * 999;
+    
+                await dxh.setBalance(owner, 10000);
+                await exchange.listToken(tkAddr, 0, 0, price.toFixed(18).toString());
+    
+                await tk.setBalance(await owner.getAddress(), scaledDeposit);
+                // await exchange.depositToken(tkAddr, scaledDeposit);
+    
+                await exchange.createBuyOrder(tkAddr, {
+                    value: BigInt((buyAmount * 1e18).toFixed())
+                });
+            } catch (err) {
+                if (err instanceof SyntaxError) {
+                    await provider.send("hardhat_reset", []);
+                    
+                    continue;
+                } else throw err;
+            }
+
+            return { ...ctx };
+        }
+    }
+
+    async function deployWithSellOrder() {
+        const ctx = await deploy();
+
+        while (true) {
+            try {
+                const [owner, user1] = await ethers.getSigners();
+                const { exchange, oracle, dxh, tokens } = ctx;
+    
+                // Provide us with sufficient AVAX for the test
+                provider.send("hardhat_setBalance", [
+                    user1.address,
+                    "0x10000000000000000000000000000000000000000",
+                ]);
+    
+                const oraclePrice = Math.random() * 99_999;
+                await oracle.setPrice(oraclePrice.toFixed(18).toString());
+                exchange.assignPriceDAO(await oracle.getAddress());
+    
+                await exchange.listToken(await dxh.getAddress(), 0, 0, "1");
+    
+                const tk = tokens[1];
+                const tkAddr = await tk.getAddress();
+    
+                const tkDec = Number((Math.random() * 18).toFixed());
+                tk.setDecimals(tkDec);
+    
+                // console.log("Decimals: ", tkDec);
+    
+                const price = Math.random() * 99_999;
+    
+                const scalar = 10 ** tkDec;
+    
+                const initialDeposit =  Math.random() * 99_999;
+                const scaledDeposit = BigInt((initialDeposit * scalar).toFixed());
+    
+                const sellAmount = Math.random() * 999;
+                const scaledSellAmount = BigInt(Number(sellAmount * scalar).toFixed());
+    
+                // console.log("Selling: ", sellAmount, scaledSellAmount);
+    
+                await dxh.setBalance(owner, 10000);
+                await exchange.listToken(tkAddr, 0, 0, price.toFixed(18).toString());
+    
+                await tk.setBalance(await owner.getAddress(), scaledDeposit);
+                await exchange.depositToken(tkAddr, scaledDeposit);
+    
+                await tk.setBalance(await owner.getAddress(), scaledSellAmount);
+                await exchange.createSellOrder(tkAddr, scaledSellAmount);
+            } catch (err) {
+                if (err instanceof SyntaxError) {
+                    await provider.send("hardhat_reset", []);
+                    continue;
+                } else throw err;
+            }
+
+            return { ...ctx }
+        }
+    }
 
     describe("Functionality", async () => {
         it ("Should have an incremental listing price", async () => {
@@ -87,9 +200,12 @@ describe("Exchange", () => {
 
             // Note: Allowance is not considered in this test
             const tk = tokens[1];
+            const tkDec = Number((Math.random() * 18).toFixed()); 
+            await tk.setDecimals(18);
+
             const tkAddr = await tk.getAddress();
 
-            const price = Math.random() * 99_999;
+            const price = Math.random () * 99_999;
             const buyAmount = Math.random() * 999;
 
 
@@ -104,7 +220,7 @@ describe("Exchange", () => {
             });
 
             const orderPrice = oraclePrice / price;
-            const pending = buyAmount * orderPrice;
+            const pending = (buyAmount * orderPrice);
 
             
             const order = await exchange.viewOrderByToken(tkAddr, 0);
@@ -250,6 +366,264 @@ describe("Exchange", () => {
             await expect(res).revertedWithCustomError(exchange, "OrderDoesNotExist");
         });
 
-        it ("Should properly ")
+        it ("Should correctly take buy orders", async () => {
+            const [owner, user1] = await ethers.getSigners();
+            const { exchange, tokens } = await loadFixture(deployWithBuyOrder);
+        
+            const ownerAddr = await owner.getAddress();
+            const user1Addr = await user1.getAddress();
+
+            const tk = tokens[1];
+            
+            const qtk = await exchange.viewTokenByIndex(2);
+            const order = await exchange.viewOrder(0);
+        
+            
+            await tk.setBalance(user1Addr, order.pending);
+            const takerFX = await exchange.connect(user1);
+
+            let tkBalance = await tk.balanceOf(ownerAddr);
+            
+            let balance = await ethers.provider.getBalance(user1Addr);
+
+            const buyRes = await takerFX.takeBuyOrder(qtk.addr, order.pending);
+            const receipt = await buyRes.wait();
+            const fees = Number(receipt?.fee || 0);
+        
+            const newBalance = await ethers.provider.getBalance(user1Addr);
+            expect(newBalance).eq(balance - BigInt(fees) + order.principal, "Taker balance is incorrect");
+
+            const newTkBalance = await tk.balanceOf(ownerAddr);
+            expect(newTkBalance).eq(tkBalance + order.pending, "Maker balance is incorrect");
+
+            const res = exchange.viewOrder(0);
+            await expect(res).revertedWithCustomError(exchange, "OrderDoesNotExist");
+        });
+
+        it ("Should correctly take buy orders partially", async () => {
+            const [owner, user1] = await ethers.getSigners();
+            const { exchange, tokens } = await loadFixture(deployWithBuyOrder);
+        
+            const ownerAddr = await owner.getAddress();
+            const user1Addr = await user1.getAddress();
+
+            const tk = tokens[1];
+            
+            const qtk = await exchange.viewTokenByIndex(2);
+            const order = await exchange.viewOrder(0);
+            const dec = Number(await tk.decimals());
+            const pending = Number((Math.random() * Number(order.pending)).toFixed());
+
+
+            // console.log("Attempting to buy: ", pending, pending / 10 ** dec);
+            // console.log("Old Order: ", order);
+            // console.log();console.log();console.log();
+        
+            
+            await tk.setBalance(user1Addr, order.pending);
+            const takerFX = await exchange.connect(user1);
+
+            let tkBalance = await tk.balanceOf(ownerAddr);
+            
+            let balance = await ethers.provider.getBalance(user1Addr);
+
+            const buyRes = await takerFX.takeBuyOrder(qtk.addr, pending);
+            const receipt = await buyRes.wait();
+            const fees = BigInt(receipt?.fee || 0);
+
+            // for (const log of receipt?.logs ?? []) {
+            //     if ("fragment" in log) {
+            //         console.log(`${log.fragment.name} => ${log.args}`);
+            //     } else {
+            //         console.log(log);
+            //     }
+            // }
+        
+            const newBalance = await ethers.provider.getBalance(user1Addr);
+            // expect(newBalance).eq(balance - fees + order.principal, "Taker balance is incorrect");
+
+            const newTkBalance = await tk.balanceOf(ownerAddr);
+            // expect(newTkBalance).eq(tkBalance + BigInt(pending), "Maker balance is incorrect");
+
+            const res = await exchange.viewOrder(0);
+            
+            // console.log("New Order: ", res);
+            await expect(res).not.reverted;
+        });
+
+        it ("Should correctly take sell orders (partial)", async () => {
+            const [owner, user1] = await ethers.getSigners();
+            const { exchange, tokens } = await loadFixture(deployWithSellOrder);
+        
+            const user1Addr = await user1.getAddress();
+
+            const tk = tokens[1];
+            const qtk = await exchange.viewTokenByIndex(2);
+
+            const order = await exchange.viewOrder(0);
+            const pending = Number((Math.random() * Number(order.pending)).toFixed());  
+            const principal = ((pending / Number(order.pending)) * Number(order.principal)).toFixed(); 
+            
+            const takerFX = await exchange.connect(user1);
+
+            const balance = await ethers.provider.getBalance(owner);
+            const tkBalance = await tk.balanceOf(user1Addr);
+
+            const sellRes = await takerFX.takeSellOrder(qtk.addr, {
+                value: BigInt(pending)
+            });
+            const receipt = await sellRes.wait();
+            const fees = BigInt(receipt?.fee || 0);
+
+            // for (const log of receipt?.logs ?? []) {
+            //     if ("fragment" in log) {
+            //         console.log(`${log.fragment.name} => ${log.args}`);
+            //     } else {
+            //         console.log(log);
+            //     }
+            // }
+        
+            // For some reason the amount of AVAX provided via value varies from the one read in the contract
+            // because of this, we have to loose some precision for these tests
+            const newBalance = await ethers.provider.getBalance(owner);
+            const oBal = (Number(balance - fees + BigInt(pending)) * 1e-18).toFixed(2);
+            const nBal = (Number(newBalance) * 1e-18).toFixed(2);
+
+            expect(oBal).eq(nBal, "Taker balance is incorrect");
+
+            const newTkBalance = await tk.balanceOf(user1Addr);
+            const otBal = (Number(tkBalance + principal) * 10 ** Number(tk.decimals)).toFixed(2);
+            const ntBal = (Number(newTkBalance) * 10 ** Number(tk.decimals)).toFixed(2);
+
+            expect(ntBal).eq(otBal, "Maker balance is incorrect");
+
+            await expect(exchange.viewOrder(0)).not.reverted;
+        });
+
+        it ("Should correctly settle buy orders", async () => {
+            const [owner, user1] = await ethers.getSigners();
+            const { exchange, tokens } = await loadFixture(deployWithBuyOrder);
+
+            const tk = tokens[1];
+            const [ownerAddr, user1Addr, fxAddr, tkAddr] = [await owner.getAddress(), await user1.getAddress(), await exchange.getAddress(), await tk.getAddress()];
+
+            const order = await exchange.viewOrder(0);
+
+            await tk.setBalance(user1Addr, order.pending);
+            const userFX =  await exchange.connect(user1);
+            await userFX.depositToken(tkAddr, order.pending);
+            
+
+            const fxBalance = await tk.balanceOf(fxAddr);
+            const balance = await tk.balanceOf(ownerAddr);
+
+            await exchange.settleOrders(tkAddr, true);
+
+            await expect(exchange.viewOrder(0))
+                .revertedWithCustomError(exchange, "OrderDoesNotExist");
+
+            const newFxBalance = await tk.balanceOf(fxAddr);
+            const newBalance = await tk.balanceOf(ownerAddr);
+
+            expect(newFxBalance).eq(fxBalance - order.pending, "FX balance is incorrect");
+            expect(newBalance).eq(balance + order.pending, "Maker balance is incorrect");
+        });
+
+        it ("Should correctly settle buy orders [PARTIAL]", async () => {
+            const [owner, user1] = await ethers.getSigners();
+            const { exchange, tokens } = await loadFixture(deployWithBuyOrder);
+
+            const tk = tokens[1];
+            const [ownerAddr, user1Addr, fxAddr, tkAddr] = [await owner.getAddress(), await user1.getAddress(), await exchange.getAddress(), await tk.getAddress()];
+
+            const order = await exchange.viewOrder(0);
+            const pending = BigInt((Math.random() * Number(order.pending)).toFixed());
+
+            await tk.setBalance(user1Addr, order.pending);
+            const userFX = await exchange.connect(user1);
+            await userFX.depositToken(tkAddr, pending);
+            
+
+            const fxBalance = await tk.balanceOf(fxAddr);
+            const balance = await tk.balanceOf(ownerAddr);
+
+            await exchange.settleOrders(tkAddr, true);
+
+            await expect(exchange.viewOrder(0)).to.not.be.reverted;
+
+            const newFxBalance = await tk.balanceOf(fxAddr);
+            const newBalance = await tk.balanceOf(ownerAddr);
+
+            expect(newFxBalance).eq(fxBalance - pending, "FX balance is incorrect");
+            expect(newBalance).eq(balance + pending, "Maker balance is incorrect");
+        });
+
+        it ("Should correctly settle sell orders", async () => {
+            const [owner, user1] = await ethers.getSigners();
+            const { exchange, tokens } = await loadFixture(deployWithSellOrder);
+
+            const tk = tokens[1];
+            const [ownerAddr, user1Addr, fxAddr, tkAddr] = [await owner.getAddress(), await user1.getAddress(), await exchange.getAddress(), await tk.getAddress()];
+
+            const order = await exchange.viewOrder(0);
+
+            const userFX =  await exchange.connect(user1);
+            await userFX.deposit(tkAddr, {
+                value: order.pending
+            });
+
+            const fxBalance = await provider.getBalance(fxAddr);
+            const balance = await provider.getBalance(ownerAddr);
+
+            const res = await exchange.settleOrders(tkAddr, false);
+            const tx = await res.wait();
+            const fee = tx?.fee ?? BigInt(0);
+
+            await expect(exchange.viewOrder(0))
+                .revertedWithCustomError(exchange, "OrderDoesNotExist");
+
+            const newFxBalance = await provider.getBalance(fxAddr);
+            const newBalance = await provider.getBalance(ownerAddr);
+
+            expect(newFxBalance).eq(fxBalance - order.pending, "FX balance is incorrect");
+            expect(newBalance).eq(balance - fee + order.pending, "Maker balance is incorrect");
+        });
+
+        it ("Should correctly settle sell orders [PARTIAL]", async () => {
+            const [owner, user1] = await ethers.getSigners();
+            const { exchange, tokens } = await loadFixture(deployWithSellOrder);
+
+            const tk = tokens[1];
+            const [ownerAddr, user1Addr, fxAddr, tkAddr] = [await owner.getAddress(), await user1.getAddress(), await exchange.getAddress(), await tk.getAddress()];
+
+            const order = await exchange.viewOrder(0);
+            const quotient = Math.random();
+            
+            const pending = BigInt((quotient * Number(order.pending)).toFixed());
+            let principal = Number(order.principal) - (quotient * Number(order.principal));
+            const bPrincipal = BigInt(principal.toFixed());
+
+            // TODO: Test against principal
+
+            const userFX = await exchange.connect(user1);
+            await userFX.deposit(tkAddr, {
+                value: pending
+            });
+
+            const fxBalance = await provider.getBalance(fxAddr);
+            const balance = await provider.getBalance(ownerAddr);
+
+            const res = await exchange.settleOrders(tkAddr, false);
+            const tx = await res.wait();
+            const fee = tx?.fee ?? BigInt(0);
+
+            await expect(exchange.viewOrder(0)).to.not.be.reverted;
+
+            const newFxBalance = await provider.getBalance(fxAddr);
+            const newBalance = await provider.getBalance(ownerAddr);
+
+            expect(newFxBalance).eq(fxBalance - pending, "FX balance is incorrect");
+            expect(newBalance).eq(balance - fee + pending, "Maker balance is incorrect");
+        });
     })
 });

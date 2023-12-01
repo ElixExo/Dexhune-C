@@ -33,6 +33,8 @@ export interface MockERC20Interface extends Interface {
       | "name"
       | "setBalance"
       | "setDecimals"
+      | "setName"
+      | "setSymbol"
       | "symbol"
       | "totalSupply"
       | "transfer"
@@ -63,6 +65,8 @@ export interface MockERC20Interface extends Interface {
     functionFragment: "setDecimals",
     values: [BigNumberish]
   ): string;
+  encodeFunctionData(functionFragment: "setName", values: [string]): string;
+  encodeFunctionData(functionFragment: "setSymbol", values: [string]): string;
   encodeFunctionData(functionFragment: "symbol", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "totalSupply",
@@ -87,6 +91,8 @@ export interface MockERC20Interface extends Interface {
     functionFragment: "setDecimals",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "setName", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "setSymbol", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "symbol", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "totalSupply",
@@ -204,6 +210,10 @@ export interface MockERC20 extends BaseContract {
 
   setDecimals: TypedContractMethod<[dec: BigNumberish], [void], "nonpayable">;
 
+  setName: TypedContractMethod<[szName: string], [void], "nonpayable">;
+
+  setSymbol: TypedContractMethod<[szSym: string], [void], "nonpayable">;
+
   symbol: TypedContractMethod<[], [string], "view">;
 
   totalSupply: TypedContractMethod<[], [bigint], "view">;
@@ -257,6 +267,12 @@ export interface MockERC20 extends BaseContract {
   getFunction(
     nameOrSignature: "setDecimals"
   ): TypedContractMethod<[dec: BigNumberish], [void], "nonpayable">;
+  getFunction(
+    nameOrSignature: "setName"
+  ): TypedContractMethod<[szName: string], [void], "nonpayable">;
+  getFunction(
+    nameOrSignature: "setSymbol"
+  ): TypedContractMethod<[szSym: string], [void], "nonpayable">;
   getFunction(
     nameOrSignature: "symbol"
   ): TypedContractMethod<[], [string], "view">;

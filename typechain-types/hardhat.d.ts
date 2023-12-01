@@ -29,6 +29,30 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.DexhuneExchangeBase__factory>;
     getContractFactory(
+      name: "DexhuneMath",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.DexhuneMath__factory>;
+    getContractFactory(
+      name: "IERC20",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IERC20__factory>;
+    getContractFactory(
+      name: "IPriceDAO",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IPriceDAO__factory>;
+    getContractFactory(
+      name: "Ownable",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.Ownable__factory>;
+    getContractFactory(
+      name: "DexhuneExchange",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.DexhuneExchange__factory>;
+    getContractFactory(
+      name: "DexhuneExchangeBase",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.DexhuneExchangeBase__factory>;
+    getContractFactory(
       name: "DexhunePriceDAO",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.DexhunePriceDAO__factory>;
@@ -98,6 +122,36 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.DexhuneExchangeBase>;
     getContractAt(
+      name: "DexhuneMath",
+      address: string | ethers.Addressable,
+      signer?: ethers.Signer
+    ): Promise<Contracts.DexhuneMath>;
+    getContractAt(
+      name: "IERC20",
+      address: string | ethers.Addressable,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IERC20>;
+    getContractAt(
+      name: "IPriceDAO",
+      address: string | ethers.Addressable,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IPriceDAO>;
+    getContractAt(
+      name: "Ownable",
+      address: string | ethers.Addressable,
+      signer?: ethers.Signer
+    ): Promise<Contracts.Ownable>;
+    getContractAt(
+      name: "DexhuneExchange",
+      address: string | ethers.Addressable,
+      signer?: ethers.Signer
+    ): Promise<Contracts.DexhuneExchange>;
+    getContractAt(
+      name: "DexhuneExchangeBase",
+      address: string | ethers.Addressable,
+      signer?: ethers.Signer
+    ): Promise<Contracts.DexhuneExchangeBase>;
+    getContractAt(
       name: "DexhunePriceDAO",
       address: string | ethers.Addressable,
       signer?: ethers.Signer
@@ -175,6 +229,30 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.DexhuneExchangeBase>;
     deployContract(
+      name: "DexhuneMath",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.DexhuneMath>;
+    deployContract(
+      name: "IERC20",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IERC20>;
+    deployContract(
+      name: "IPriceDAO",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IPriceDAO>;
+    deployContract(
+      name: "Ownable",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.Ownable>;
+    deployContract(
+      name: "DexhuneExchange",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.DexhuneExchange>;
+    deployContract(
+      name: "DexhuneExchangeBase",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.DexhuneExchangeBase>;
+    deployContract(
       name: "DexhunePriceDAO",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.DexhunePriceDAO>;
@@ -233,6 +311,36 @@ declare module "hardhat/types/runtime" {
       args: any[],
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.DexhuneERC20Base>;
+    deployContract(
+      name: "DexhuneExchange",
+      args: any[],
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.DexhuneExchange>;
+    deployContract(
+      name: "DexhuneExchangeBase",
+      args: any[],
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.DexhuneExchangeBase>;
+    deployContract(
+      name: "DexhuneMath",
+      args: any[],
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.DexhuneMath>;
+    deployContract(
+      name: "IERC20",
+      args: any[],
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IERC20>;
+    deployContract(
+      name: "IPriceDAO",
+      args: any[],
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IPriceDAO>;
+    deployContract(
+      name: "Ownable",
+      args: any[],
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.Ownable>;
     deployContract(
       name: "DexhuneExchange",
       args: any[],

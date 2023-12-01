@@ -17,11 +17,17 @@ import "./interfaces/IPriceDAO.sol";
 import "./libraries/DexhuneMath.sol";
 
 abstract contract DexhuneExchangeBase is Ownable {
+    mapping(address => uint256) internal _avaxBalance; // Balance X
+    mapping(address => uint256) internal _balances; // Balance Y
+    mapping(address => uint256) internal _allocBalances; // Balance Z
+    mapping(uint8 => uint256) private _scalars;
+
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Transfers
     function _sendToken(Token memory token, address targetAddr, uint256 amount) internal returns (bool) {
         try token.instance.transfer(targetAddr, amount) returns (bool success) {
             if (success) {
+                _balances[token.addr] -= amount;
                 emit TokenTransferred(amount, targetAddr, token.addr);
             }
             return success;
@@ -30,20 +36,44 @@ abstract contract DexhuneExchangeBase is Ownable {
         }
     }
 
-    function _withdrawToken(IERC20 token, address targetAddr, uint256 amount) internal returns (bool) {
-        try token.transferFrom(targetAddr, address(this), amount) returns (bool success) {
+     function _sendTokenAlloc(Token memory token, address targetAddr, uint256 amount) internal returns (bool) {
+        try token.instance.transfer(targetAddr, amount) returns (bool success) {
+            if (success) {                
+                _balances[token.addr] -= amount;
+                _allocBalances[token.addr] -= amount;
+                emit TokenTransferred(amount, targetAddr, token.addr);
+            }
             return success;
         } catch {
             return false;
         }
     }
 
-    function _sendAVAX(address payable to, uint256 amount) internal returns(bool) {
-        // (bool sent, ) = to.call{value: amount}("");
-        
+    function _withdrawToken(Token memory token, address targetAddr, uint256 amount) internal returns (bool) {
+        try token.instance.transferFrom(targetAddr, address(this), amount) returns (bool success) {
+            if (success) {
+                _balances[token.addr] += amount;
+            }
 
+            return success;
+        } catch {
+            return false;
+        }
+    }
+
+    function _withdrawTokenAlloc(Token memory token, address targetAddr, uint256 amount) internal returns (bool) {
+        bool success = _withdrawToken(token, targetAddr, amount);
+        if (success) {
+            _allocBalances[token.addr] += amount;
+        }
+
+        return success;
+    }
+
+    function _sendAVAX(Token memory token, address payable to, uint256 amount) internal returns(bool) {
         if (to.send(amount)) {
             emit AVAXTransferred(amount, to);
+            _avaxBalance[token.addr] -= amount;
             return true;
         }
 
@@ -117,6 +147,24 @@ abstract contract DexhuneExchangeBase is Ownable {
 
         return (res, !hasErr);
     }   
+
+    function _normalize(uint256 amount, uint8 decimals) internal returns(uint256) {
+        return decimals == 1 ? amount : amount * _computeScalar(decimals);
+    }
+
+    function _denormalize(uint256 amount, uint8 decimals) internal returns(uint256) {
+        return decimals == 1 ? amount : amount / _computeScalar(decimals);
+    }
+
+    function _computeScalar(uint8 decimals) internal returns(uint256 scalar) {
+        scalar = _scalars[decimals];
+    
+        if (scalar == 0) {
+            unchecked {
+                _scalars[decimals] = scalar = 10 ** (18 - decimals);
+            }
+        }
+    }
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -140,36 +188,6 @@ abstract contract DexhuneExchangeBase is Ownable {
 
         arr.pop();
     }
-
-    function _scaleUp(uint256 amount, uint256 decimals) internal pure returns(uint256) {
-        // TODO: Add this to a mapping
-        return decimals == 1 ? amount : amount *  10 ** decimals;
-    }
-
-    function _scaleDown(uint256 amount, uint256 decimals) internal pure returns(uint256) {
-        // TODO: Add this to a mapping
-        return decimals == 1 ? amount : amount / 10 ** decimals;
-    }
-
-
-
-    function _normalize(uint256 amount, uint256 decimals) internal pure returns(uint256) {
-        return decimals == 1 ? amount : amount * _computeScalar(decimals);
-    }
-
-    function _denormalize(uint256 amount, uint256 decimals) internal pure returns(uint256) {
-        return decimals == 1 ? amount : amount / _computeScalar(decimals);
-    }
-
-    function _computeScalar(uint256 decimals) internal pure returns(uint256 scalar) {
-        if (decimals == 18) {
-            scalar = 1;
-        } else {
-            unchecked {
-                scalar = 10 ** (18 - decimals);
-            }
-        }
-    }
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     
 
@@ -182,7 +200,6 @@ abstract contract DexhuneExchangeBase is Ownable {
         string name;
         string sym;
         uint8 dec;
-        uint256 scalar;
         address addr;
         address parityAddr;
         
@@ -191,20 +208,10 @@ abstract contract DexhuneExchangeBase is Ownable {
         uint256 reward;
         uint256 rewardThreshold;
 
-        
-        // uint256 xBalance; // Native Balance (AVAX)
-        // uint256 yBalance; // Token Balance
-
         uint256 price;
         uint256 lastPriceCheck;
 
         IERC20 instance;
-    }
-
-    struct LiquidToken {
-        uint256 xBalance; // Native Balance (AVAX)
-        uint256 yBalance; // Token Balance
-        uint256 lastPriceCheck;
     }
 
     struct TokenDataModel {
@@ -227,8 +234,6 @@ abstract contract DexhuneExchangeBase is Ownable {
         bool orderType;
 
         uint256 created;
-        uint256 rewardAmount;
-
         uint256 price;
         uint256 principal;
         uint256 pending;
