@@ -3,13 +3,6 @@
 ## Premise
 A frontend web application for interacting with Dexhune smart contracts. 
 
-note; change order creation system to automatically decide how much AVAX the user is spending so as to avoid getting an order with a settlement amount that has decimals. 
-
-abstract token buy with token amount even though it targets AVAX, estimate via frontend 
-
-Request allowances before every listing or order make/take
-
-
 ## Disambiguation
 - "Symbol(Button)" ; button is visually a symbol 
 - "Text(Button)" ; button is visually text
@@ -29,34 +22,52 @@ Request allowances before every listing or order make/take
 (Top left)
 
 1a. Wallet connect status - panel - subheading 2 - show *User's wallet address* if connected 
+
 1b. Github link - symbol(button) - hyperlink  
+
 1c. Whitepaper link - symbol(button) - hyperlink
+
 1d. Token contract address - symbol(button) - hyperlink
+
 1e. Exchange contract address - symbol(button) - hyperlink
+
 1f. DAO contract address - symbol(button) - hyperlink
+
 
 (Top right)
 
 2a. Connect wallet - symbol - web3 
+
 2b. Price panel - panel - label 3 - Prewrap 4
+
 2c. Query(Price Panel) - Text(button) Triggers "PreWrap 4"
+
 2d. Help button (bottom) - symbol(button) - popup - Subheading 8
+
 
 (Center)
 
 3a. Welcome image -  image - image 1
+
 3b. Welcome panel - panel - Subheading 1
 
 
 (Maker Menu)
 
 4a. Contract field - field - label 1
+
 4b. Amount field - field - label 2
+
 4c. Query(name panel) - Text(button) - triggers "PreWrap 1"  
-4d. Buy - Text(button) - triggers 'Function Buy' [See E1]
-4e. Sell - Text(button) - triggers 'Function Sell'  [See E2] 
+
+4d. Buy - Text(button) - triggers 'Function Buy' [See "Buy / Sell"] [See E1 & E2]
+
+4e. Sell - Text(button) - triggers 'Function Sell'
+
 4f. Help button (top) - symbol(button) - popup - Subheading 3
+
 4g. Help button (bottom) - symbol(button) - popup - Subheading 5
+
 4h. clearOrder (user) - button - triggers "clear order"
 
 
@@ -66,20 +77,32 @@ Request allowances before every listing or order make/take
 (Taker Menu)
 
 5a. Contract field - field - label 1
+
 5b. Amount field - field - label 2
+
 5c. Query(name panel) - Text(button) - triggers "PreWrap 1"  
+
 5d. Take Buy - Text(toggle) - triggers "takeBuy" function
+
 5e. Take Sell - Text(toggle) - triggers "takeSell" function
+
 5h. Help button (top) - symbol(button) - popup - Subheading 6
+
 
 (Orderbook) 
 
 6a. Contract field - field - Label 1
+
 6b. Pending orders - Scroll(panel) - PreWrap 3
+
 6c. Query - Text(button) - triggers "PreWrap 3"
+
 6d. Balances - Scroll(panel) - PreWrap 6
+
 6e. Query - Text(button) - triggers "PreWrap 6"
+
 6f. Clear orders - Text(button) - Triggers "function ; clear all orders"
+
 6g. Help button (top) - symbol(button) - popup - Subheading 4
 
 
@@ -89,33 +112,52 @@ Request allowances before every listing or order make/take
 (Minting Interface)
 
 7a. Remaining Pengs - panel - PreWrap 5
+
 7b. Query (Remaining Pengs) - Symbol(button) - Triggers "PreWrap 5"
+
 7c. Help button (top) - symbol(button) - popup - Subheading 7
+
 7d. Mint number - field - label 8
+
 7e. Mint Now - Symbol(button) - Web3 - triggers "Mint Peng" 
+
 7f. Marketplace - image - button - image 2
+
 
 (Listing Interface) 
 
 8a. Contract field - field - Label 1
+
 8b. Reward? - toggle - on/off - reveals 8c and 8d if "on"
+
 8c. Reward amount - field - hidden if 8b is "off" - label 4
+
 8d. Reward Threshold - field - hidden if 8b is "off" - label 5
+
 8e. Parity - toggle - on/off - reveals 8f if "on", reveals 8g if "off"
+
 8f. Parity address - field - hidden if 8e is "off" - label 6
+
 8g. Listing Price - field - hidden if 8e is "on" - label 7
+
 8h. List token - Text(button) - triggers "list token"
+
 8i. All listings - Scroll(panel) - Prewrap 7 
+
 8j. Query (All listings) - Text(button) - triggers "Prewrap 7"
+
 8k. Help button (top) - Symbol(button) - popup - Subheading 8
+
 
 (Self Reference) 
 
 9a. Telegram link - Symbol(button) - hyperlink
+
 9b. Reddit link - Symbol(button) - hyperlink
+
 9c. Twitter link - Symbol(button) - hyperlink
 
-/// Functions ///
+## Functions
 1. Buy / Sell; triggers the browser webapp to produce (3) pending transactions, first it queues 'approve' at the token's contract address for the stated amount, then 'createSellOrder' or 'createSellOrder' depending on if it is a buy or sell, then lastly; 'settleOrders' at the exchange contract. 
 The frontend uses the target token's contract address and provided Order type for 'settleOrders'. This causes the contract to instantly settle an order once posted if sufficient tokens exist for doing so. 
 
@@ -128,7 +170,7 @@ Note; if price changes while the user is signing this doesn't disqualify their o
 
 3. clear order ; triggers the browser webapp to produce a  single pending transaction for 'clearOrders' at the exchange contract, requests signature at wallet, broadcasts once signed. 
 
-4. Clear all orders ; triggers the browser webapp to produce a  (2) pending transaction for 'clearOrders' at the exchange contract, requests signature at wallet, broadcasts once signed. When both are signed the exchange will clear all pending orders older than 40 seconds. 
+4. Clear all orders ; triggers the browser webapp to produce (2) pending transaction for 'clearOrders' at the exchange contract, requests signature at wallet, broadcasts once signed. When both are signed the exchange will clear all pending orders older than 40 seconds. 
 
 4. Take buy; triggers the browser webapp to produce (2) pending transactions, the first approves the amount being spent via the token's contract address, and the second queues the user to call 'takeBuyOrder' at the exchange contract using the inputted data, requests signature at the wallet, broadcasts once signed. 
 
@@ -138,23 +180,28 @@ Note; each "takeBuy" deducts [TOKEN] from the taker's balance to settle the make
 
 Note; each "takeSell" deducts AVAX from the taker's balance to settle the maker. 
 
-6.Mint Now; triggers the browser webapp to produce a pending transaction to call 'mint' at the Peng NFT contract using the number set in the  "Mint number" as the "mintAmount" then multiplying the mint number by 14000 to get the detail set in "mint" (payable amount), and lastly setting self address in "_to(address)". So if the user wanted to mint 2 Pengs, this would charge them 28000 AVAX. 
+6. Mint Now; triggers the browser webapp to produce a pending transaction to call 'mint' at the Peng NFT contract using the number set in the  "Mint number" as the "mintAmount" then multiplying the mint number by 14000 to get the detail set in "mint" (payable amount), and lastly setting self address in "_to(address)". So if the user wanted to mint 2 Pengs, this would charge them 28000 AVAX. 
 
-7. List Token; Once clicked, first creates a prompt showing current listing cost, requires a query at the exchange contract to return 'Listing Cost'. User needs to click "accept" or "reject" once listing cost is displayed, the webapp produces (2) pending transaction, the first calls 'listToken' at the exchange contract with the provided details. 
+7. List Token; Once clicked, first creates a prompt showing current listing cost, requires a query at the exchange contract to return 'Listing Cost'. User needs to click "accept" or "reject" once listing cost is displayed, the webapp produces (2) pending transaction, the first queues a call for 'approve' at the DXH token address for 2x the listing cost, the second queues a call for 'listToken' at the exchange contract with the provided details. 
 
 ## Images
-![Image 1](https://files.catbox.moe/tbltve.png)
+Image 1 : 
+<img src="https://files.catbox.moe/tbltve.png" width="100" height="100">
 
-![Image 2](https://files.catbox.moe/4jeyr6.png)
+Image 2 : 
+<img src="https://files.catbox.moe/4jeyr6.png" width="350" height="200">
 
-![Image 3](https://files.catbox.moe/848pit.png)
+Image 3 :
+<img src="https://files.catbox.moe/848pit.png" width="300" height="100">
 
-![Image 4](https://files.catbox.moe/8bqw6x.png)
+Image 4 :
+<img src="https://files.catbox.moe/8bqw6x.png" width="300" height="100">
 
-![Image 5](https://files.catbox.moe/ew0629.png)
+Image 5 :
+<img src="https://files.catbox.moe/ew0629.png" width="300" height="100">
 
 
-/// Labels and PreWraps ///
+## Labels and PreWraps
 - Label 1 ; "Token Contract Address"
 
 - Label 2 ; "Amount" 
@@ -175,7 +222,7 @@ Note; each "takeSell" deducts AVAX from the taker's balance to settle the maker.
 
 - PreWrap 2 ; shows the estimated cost or settlement amount, if the order is a "buy" it shows the cost, if "sell' it shows the settlement amount. Cost is gotten through the process explained in "Function Buy / Sell". While settlement amount is gotten by dividing the stated amount by the relative price (base price / token price). If the base price is 104 and token price is 1, then relative price is 104. In this case if the user was selling 1000 TOKEN, this is 1000 / 104 = 9.615384… (AVAX). 
 
-After the settlement amount is displayed, the frontend replaces it with a second popup after 5 seconds which displays one of the following messages at random;
+After the settlement amount is accepted, the frontend replaces it with a second popup after 5 seconds which displays one of the following messages at random;
 
 "The taker menu looks good this time of year" 
 
@@ -227,7 +274,7 @@ It parses the price base from unit256 to string.
 Label is; "Query all listings"
 This query presents tokens as only their contract address, slot number and price
 
-/// Subheadings /// 
+## Subheadings
 - Subheading 1; "Swap Dx tokens for AVAX and vice versa! List your own pegged tokens relative to gold or any dataset! Dexhune is a peer-based distributed exchange that connects buyers and sellers directly using fixed pricing derived from a decentralized oracle, liquidity is enhanced by single-sided non-removable liquidity pools."  
 
 - Subheading 2; "Your wallet is not connected, please click (symbol - wallet connect)"
@@ -246,15 +293,15 @@ This query presents tokens as only their contract address, slot number and price
 
 - Subheading 9 ; "Use this price field to get the latest DXH/AVAX price, query twice to get the latest DXH/USD price, the latter is acquired via Chainlink"
 
-/// Details /// 
-> fields; have a simple loading animation when a query is in progress. Animation is replaced by the fetched data
+## Details  
+- fields; have a simple loading animation when a query is in progress. Animation is replaced by the fetched data
 
-/// Examples ///
+## Examples
 E1 : Once a user puts a contract address in the "Token Address" field, this begins building their order, once they add "Amount" and "Buy or sell" the details they added get used to call 'createBuyOrder' or 'createSellOrder'. So if they wrote; Contract; 0x23fg...f0d3, Amount; 1000, and "Buy", this writes the data as required for 'makeOrder', setting "Order type" to "True"
 
 E2 : Once a user clicks "Buy" or "Sell", the frontend first creates a popup showing their settlement amount or estimated cost as per "Prewrap 2".
 
-/// Notes /// 
+## Notes
 Template is "2dvanced Studios" website except in a red tone:  
 
 ![](https://files.catbox.moe/hm9onb.png)
@@ -280,10 +327,10 @@ text should be white but set against dark red  or black panels
 
 - Abstraction if necessary; when users input amounts like 1000, with tokens that have a certain number of decimals, assuming that number is 18, the actual input is 1000000000000000000000. The Dapp converts string data to relevant uint decimal structure, meaning upon execution of each order it checks how many decimals the token has, before parsing the "amount" field and presenting a transaction for the wallet to sign. 
 
-/// Rationale ///
+## Rationale
 The Dexhune web interface is a local client that queries certain data from the blockchain in regards to the Dexhune smart contracts, the client broadcasts transactions via the user's wallet. 
 
-The Dexhune web interface uses a public RPC to carrying out any web3 functions, none of the interface's functions are carried out automatically, commonly automatic functions such as wallet connect do not occur automatically, they must be invoked. There are no animations on the page save for the "query loading". All images are very low resolution, almost pixelated.
+The Dexhune web interface uses a public RPC in carrying out any web3 functions, none of the interface's functions are carried out automatically, commonly automatic functions such as wallet connect do not occur automatically, they must be invoked. There are no animations on the page save for the "query loading". All images are very low resolution, almost pixelated.
 
 The interface is segmented into different areas for different actions. "4" is the Maker menu, "5" is the Taker menu, "6" is the Order book, "7" is the NFT minting menu, and lastly "8" is the Token listing menu. 
 
