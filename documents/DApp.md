@@ -189,7 +189,7 @@ Image 1 :
 <img src="https://files.catbox.moe/tbltve.png" width="100" height="100">
 
 Image 2 : 
-<img src="https://files.catbox.moe/4jeyr6.png" width="350" height="200">
+<img src="https://files.catbox.moe/t3ip3h.png" width="350" height="200">
 
 Image 3 :
 <img src="https://files.catbox.moe/848pit.png" width="300" height="100">
