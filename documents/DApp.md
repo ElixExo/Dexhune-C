@@ -158,7 +158,7 @@ A frontend web application for interacting with Dexhune smart contracts.
 9c. Twitter link - Symbol(button) - hyperlink
 
 ## Functions
-1. Buy / Sell; triggers the browser webapp to produce (3) pending transactions, first it queues 'approve' at the token's contract address for the stated amount, then 'createSellOrder' or 'createSellOrder' depending on if it is a buy or sell, then lastly; 'settleOrders' at the exchange contract. 
+1. Buy / Sell; triggers the browser webapp to produce (3) pending transactions, first it queues 'approve' at the token's contract address for the stated amount, then 'createBuyOrder' or 'createSellOrder' depending on if it is a buy or sell, then lastly; 'settleOrders' at the exchange contract. 
 The frontend uses the target token's contract address and provided Order type for 'settleOrders'. This causes the contract to instantly settle an order once posted if sufficient tokens exist for doing so. 
 
 Note; the contract parses all relevant information to produce the queued transaction, such as the price, when a user inputs an amount to 'buy', the contract checks the order amount supplied by the user and price stored by the exchange. 
