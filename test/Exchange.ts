@@ -15,6 +15,7 @@ import { expect } from "chai";
 import { ethers } from "hardhat";
 import { ContractFactory, ZeroAddress } from "ethers";
 import { MockNFT, MockERC20, DexhuneExchange, MockOracle } from "../typechain-types";
+import { HardhatEthersSigner } from "@nomicfoundation/hardhat-ethers/signers";
 
 const provider = ethers.provider;
 
@@ -48,6 +49,40 @@ describe("Exchange", () => {
     }
 
     function deploy40() { return deploy(40); };
+
+    async function deployAndList40() {
+        const ctx = await deploy(40);
+        const [owner] = await ethers.getSigners();
+        const { exchange, dxh, tokens, oracle } = ctx;
+
+        const ownerAddr = await owner.getAddress();
+        let balance = await dxh.balanceOf(ownerAddr);
+
+        const oraclePrice = Math.random() * 99_999;
+        await oracle.setPrice(oraclePrice.toFixed(18).toString());
+        exchange.assignPriceDAO(await oracle.getAddress());
+
+        for (let i = 0; i < tokens.length; i++) {
+            const tk = tokens[i];
+            const tkAddr = await tk.getAddress();
+
+            balance += await exchange.listingCost();
+            await dxh.setBalance(ownerAddr, balance);
+
+            switch (i) {
+                case 0:
+                    await exchange.listToken(tkAddr, 0, 0, "1");
+                    break;
+
+                default:
+                    const price = Math.random() * 99_999;
+                    await exchange.listToken(tkAddr, 0, 0, price.toFixed(18).toString());
+                    break;
+            }
+        }
+
+        return { ...ctx }
+    }
 
     async function deployWithBuyOrder() {
         const ctx = await deploy();
@@ -400,7 +435,7 @@ describe("Exchange", () => {
             await expect(res).revertedWithCustomError(exchange, "OrderDoesNotExist");
         });
 
-        it ("Should correctly take buy orders partially", async () => {
+        it ("Should correctly take buy orders [PARTIAL]", async () => {
             const [owner, user1] = await ethers.getSigners();
             const { exchange, tokens } = await loadFixture(deployWithBuyOrder);
         
@@ -427,7 +462,7 @@ describe("Exchange", () => {
             
             let balance = await ethers.provider.getBalance(user1Addr);
 
-            const buyRes = await takerFX.takeBuyOrder(qtk.addr, pending);
+            const buyRes = await takerFX.takeBuyOrder(qtk.addr, BigInt(pending));
             const receipt = await buyRes.wait();
             const fees = BigInt(receipt?.fee || 0);
 
@@ -451,7 +486,7 @@ describe("Exchange", () => {
             await expect(res).not.reverted;
         });
 
-        it ("Should correctly take sell orders (partial)", async () => {
+        it ("Should correctly take sell orders [PARTIAL]", async () => {
             const [owner, user1] = await ethers.getSigners();
             const { exchange, tokens } = await loadFixture(deployWithSellOrder);
         
@@ -625,5 +660,152 @@ describe("Exchange", () => {
             expect(newFxBalance).eq(fxBalance - pending, "FX balance is incorrect");
             expect(newBalance).eq(balance - fee + pending, "Maker balance is incorrect");
         });
-    })
+    });
+
+    describe("Order Management", () => {
+        it ("Should properly clear orders", async () => {
+            const { exchange, tokens } = await loadFixture(deployAndList40);
+            const signers = await ethers.getSigners();
+
+            for (let i = 0; i < 100; i++) {
+                const signer = signers[Math.floor(Math.random() * signers.length)];
+                const signerAddr = await signer.getAddress();
+                const buffedSigners = new Map<string, boolean>()
+
+                const signerFX = await exchange.connect(signer);
+
+                const shouldBuy = Math.random() < .5;
+                
+                const tk = tokens[Math.floor(Math.random() * tokens.length)];
+                const tkAddr = await tk.getAddress();
+                const scalar = 10 ** (Number(await tk.decimals()));
+
+                while (true) {
+                    try {
+                        if (shouldBuy) {
+                            const initialDeposit =  Math.random() * 99_999;
+                            const scaledDeposit = BigInt((initialDeposit * scalar).toFixed());
+
+                            if (!buffedSigners.has(signerAddr)) {
+                                provider.send("hardhat_setBalance", [
+                                    signerAddr,
+                                    "0x10000000000000000000000000000000000000000",
+                                ]);
+                                buffedSigners.set(signerAddr, true);
+                            }
+        
+                            
+        
+                            const buyAmount = Math.random() * 999;
+        
+                            await tk.setBalance(signerAddr, scaledDeposit);
+        
+                            await signerFX.createBuyOrder(await tk.getAddress(), {
+                                value: BigInt((buyAmount * 1e18).toFixed())
+                            });
+                        } else {
+                            const sellAmount = Math.random() * 999;
+                            const scaledSellAmount = BigInt(Number(sellAmount * scalar).toFixed());
+        
+                            await tk.setBalance(signerAddr, scaledSellAmount);
+                            await signerFX.createSellOrder(tkAddr, scaledSellAmount);
+                        }
+
+                        break;
+                    } catch (err) {
+                        if (err instanceof SyntaxError) {
+                            // await provider.send("hardhat_reset", []);
+                            
+                            continue;
+                        } else throw err;
+                    }
+                }
+            }
+
+            await time.increase(40);
+
+            await exchange.clearOrders();
+            await exchange.clearOrders();
+
+            await expect(exchange.viewOrder(0))
+                .revertedWithCustomError(exchange, "OrderDoesNotExist");
+        });
+
+        it ("Should properly clear token orders", async () => {
+            const { exchange, tokens } = await loadFixture(deployAndList40);
+            const signers = await ethers.getSigners();
+            // const orderCount = Math.random() * 1000;
+
+            for (let i = 0; i < 100; i++) {
+                const signer = signers[Math.floor(Math.random() * signers.length)];
+                const signerAddr = await signer.getAddress();
+                const buffedSigners = new Map<string, boolean>()
+
+                const signerFX = await exchange.connect(signer);
+
+                const shouldBuy = Math.random() < .5;
+                
+                const tk = tokens[Math.floor(Math.random() * tokens.length)];
+                const tkAddr = await tk.getAddress();
+                const scalar = 10 ** (Number(await tk.decimals()));
+
+                while (true) {
+                    try {
+                        if (shouldBuy) {
+                            const initialDeposit =  Math.random() * 99_999;
+                            const scaledDeposit = BigInt((initialDeposit * scalar).toFixed());
+
+                            if (!buffedSigners.has(signerAddr)) {
+                                provider.send("hardhat_setBalance", [
+                                    signerAddr,
+                                    "0x10000000000000000000000000000000000000000",
+                                ]);
+                                buffedSigners.set(signerAddr, true);
+                            }
+        
+                            
+        
+                            const buyAmount = Math.random() * 999;
+        
+                            await tk.setBalance(signerAddr, scaledDeposit);
+        
+                            await signerFX.createBuyOrder(await tk.getAddress(), {
+                                value: BigInt((buyAmount * 1e18).toFixed())
+                            });
+                        } else {
+                            const sellAmount = Math.random() * 999;
+                            const scaledSellAmount = BigInt(Number(sellAmount * scalar).toFixed());
+        
+                            await tk.setBalance(signerAddr, scaledSellAmount);
+                            await signerFX.createSellOrder(tkAddr, scaledSellAmount);
+                        }
+
+                        break;
+                    } catch (err) {
+                        if (err instanceof SyntaxError) {
+                            // await provider.send("hardhat_reset", []);
+                            
+                            continue;
+                        } else throw err;
+                    }
+                }
+            }
+
+            await time.increase(40);
+
+            const tkAddr = await tokens[Math.floor(Math.random() * tokens.length)].getAddress();
+            let tk2Addr = "";
+
+            while (tk2Addr == "" || tk2Addr == tkAddr) {
+                tk2Addr = await tokens[Math.floor(Math.random() * tokens.length)].getAddress();
+            }
+
+            await exchange.clearTokenOrders(tkAddr);
+
+            await expect(exchange.viewOrderByToken(tkAddr, 0))
+                .revertedWithCustomError(exchange, "OrderDoesNotExist");
+
+            await expect(exchange.viewOrderByToken(tk2Addr, 0)).not.reverted;
+        });
+    });
 });

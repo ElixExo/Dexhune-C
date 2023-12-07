@@ -67,11 +67,6 @@
     },
     {
       "inputs": [],
-      "name": "OrderLimitReachedTryLater",
-      "type": "error"
-    },
-    {
-      "inputs": [],
       "name": "ParityShouldNotHavePrice",
       "type": "error"
     },
@@ -104,6 +99,11 @@
     {
       "inputs": [],
       "name": "TokenNotSupported_TooManyDecimals",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "TokenOrderLimitReachedRetryOrClear",
       "type": "error"
     },
     {

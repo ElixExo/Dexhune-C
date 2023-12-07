@@ -73,11 +73,6 @@ const _abi = [
   },
   {
     inputs: [],
-    name: "OrderLimitReachedTryLater",
-    type: "error",
-  },
-  {
-    inputs: [],
     name: "ParityShouldNotHavePrice",
     type: "error",
   },
@@ -110,6 +105,11 @@ const _abi = [
   {
     inputs: [],
     name: "TokenNotSupported_TooManyDecimals",
+    type: "error",
+  },
+  {
+    inputs: [],
+    name: "TokenOrderLimitReachedRetryOrClear",
     type: "error",
   },
   {

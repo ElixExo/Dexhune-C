@@ -32,6 +32,8 @@ export declare namespace DexhuneExchangeBase {
     price: BigNumberish;
     principal: BigNumberish;
     pending: BigNumberish;
+    tokenIndex: BigNumberish;
+    userIndex: BigNumberish;
   };
 
   export type OrderStructOutput = [
@@ -41,7 +43,9 @@ export declare namespace DexhuneExchangeBase {
     created: bigint,
     price: bigint,
     principal: bigint,
-    pending: bigint
+    pending: bigint,
+    tokenIndex: bigint,
+    userIndex: bigint
   ] & {
     makerAddr: string;
     tokenAddr: string;
@@ -50,6 +54,8 @@ export declare namespace DexhuneExchangeBase {
     price: bigint;
     principal: bigint;
     pending: bigint;
+    tokenIndex: bigint;
+    userIndex: bigint;
   };
 
   export type TokenDataModelStruct = {
@@ -95,6 +101,7 @@ export interface DexhuneExchangeInterface extends Interface {
     nameOrSignature:
       | "assignPriceDAO"
       | "clearOrders"
+      | "clearTokenOrders"
       | "createBuyOrder"
       | "createSellOrder"
       | "deposit"
@@ -140,6 +147,10 @@ export interface DexhuneExchangeInterface extends Interface {
   encodeFunctionData(
     functionFragment: "clearOrders",
     values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "clearTokenOrders",
+    values: [AddressLike]
   ): string;
   encodeFunctionData(
     functionFragment: "createBuyOrder",
@@ -234,6 +245,10 @@ export interface DexhuneExchangeInterface extends Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "clearOrders",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "clearTokenOrders",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -550,6 +565,12 @@ export interface DexhuneExchange extends BaseContract {
 
   clearOrders: TypedContractMethod<[], [void], "nonpayable">;
 
+  clearTokenOrders: TypedContractMethod<
+    [tokenAddr: AddressLike],
+    [void],
+    "nonpayable"
+  >;
+
   createBuyOrder: TypedContractMethod<
     [tokenAddr: AddressLike],
     [void],
@@ -605,7 +626,17 @@ export interface DexhuneExchange extends BaseContract {
   orders: TypedContractMethod<
     [arg0: BigNumberish],
     [
-      [string, string, boolean, bigint, bigint, bigint, bigint] & {
+      [
+        string,
+        string,
+        boolean,
+        bigint,
+        bigint,
+        bigint,
+        bigint,
+        bigint,
+        bigint
+      ] & {
         makerAddr: string;
         tokenAddr: string;
         orderType: boolean;
@@ -613,6 +644,8 @@ export interface DexhuneExchange extends BaseContract {
         price: bigint;
         principal: bigint;
         pending: bigint;
+        tokenIndex: bigint;
+        userIndex: bigint;
       }
     ],
     "view"
@@ -699,6 +732,9 @@ export interface DexhuneExchange extends BaseContract {
     nameOrSignature: "clearOrders"
   ): TypedContractMethod<[], [void], "nonpayable">;
   getFunction(
+    nameOrSignature: "clearTokenOrders"
+  ): TypedContractMethod<[tokenAddr: AddressLike], [void], "nonpayable">;
+  getFunction(
     nameOrSignature: "createBuyOrder"
   ): TypedContractMethod<[tokenAddr: AddressLike], [void], "payable">;
   getFunction(
@@ -760,7 +796,17 @@ export interface DexhuneExchange extends BaseContract {
   ): TypedContractMethod<
     [arg0: BigNumberish],
     [
-      [string, string, boolean, bigint, bigint, bigint, bigint] & {
+      [
+        string,
+        string,
+        boolean,
+        bigint,
+        bigint,
+        bigint,
+        bigint,
+        bigint,
+        bigint
+      ] & {
         makerAddr: string;
         tokenAddr: string;
         orderType: boolean;
@@ -768,6 +814,8 @@ export interface DexhuneExchange extends BaseContract {
         price: bigint;
         principal: bigint;
         pending: bigint;
+        tokenIndex: bigint;
+        userIndex: bigint;
       }
     ],
     "view"

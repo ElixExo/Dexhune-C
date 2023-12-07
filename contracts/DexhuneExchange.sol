@@ -16,7 +16,7 @@ import "./interfaces/IPriceDAO.sol";
 import "./DexhuneExchangeBase.sol";
 
 contract DexhuneExchange is DexhuneExchangeBase {
-    uint256 public listingCost = INITIAL_LISTING_PRICE;
+    uint256 public listingCost = INITIAL_LISTING_COST;
 
     Token[] private _tokens;
     Order[] private _orders;
@@ -32,17 +32,21 @@ contract DexhuneExchange is DexhuneExchangeBase {
     IPriceDAO private _oracle;
 
     uint8 private constant NATIVE_TOKEN_DECIMALS = 18;
-    uint256 private constant MAX_ORDER_COUNT = 100_000;
+    uint256 private constant MAX_ORDERS_PER_TOKEN = 10_000;
     uint256 private constant MAX_TOKEN_COUNT = 1_000_000;
     uint256 private constant ORDER_LIFESPAN = 40 seconds;
     uint256 private constant PRICE_CHECK_INTERVAL = 4 minutes;
 
-    uint256 private constant LISTING_PRICE_INCREASE_BY_THOUSAND = 5;
-    uint256 private constant INITIAL_LISTING_PRICE = 1000; // DXH
-    uint256 private constant MAX_LISTING_FEE = 1_000_000;
+    /// @dev Constant per thousand to increase the listing price by. Default value is 5, indicating 0.005% [0.005 * 1000]
+    uint256 private constant LISTING_COST_INCREASE_BY_THOUSAND = 5;
+    /// @dev Initial listing cost in DXH
+    uint256 private constant INITIAL_LISTING_COST = 1000; // DXH
+    /// @dev Maximum amount of listing cost allowed
+    uint256 private constant MAX_LISTING_COST = 1_000_000;
 
+    uint256 private constant ORDER_LOOP_LIMIT = 100;
     uint256 private constant CLEAR_ORDERS_USER_LIMIT = 50;
-    uint256 private constant CLEAR_ORDERS_LIMIT = 100;
+    
     
     constructor() {
         owner = msg.sender;
@@ -166,7 +170,6 @@ contract DexhuneExchange is DexhuneExchangeBase {
         Token storage token = _fetchStorageToken(tokenAddr);
         _avaxBalance[tokenAddr] += amount;
         
-
         _createOrder(token, true, amount);
     }
 
@@ -311,7 +314,7 @@ contract DexhuneExchange is DexhuneExchangeBase {
             order.pending -= amount;
             order.principal -= principal;
         } else {
-            _removeItem(_orders, index);
+            _removeOrder(order, index);
         }
 
         _rewardTaker(token, tokenDelta);
@@ -372,10 +375,12 @@ contract DexhuneExchange is DexhuneExchangeBase {
 
         bool settled;
         uint256 balance;
-        uint256 i; uint256 j;
+        uint256 i; uint256 j; uint256 k;
         
-        for (i = norders.length; i > 0; i--) {
+        for (i = norders.length; i > 0 && k < ORDER_LOOP_LIMIT; i--) {
+            k++;
             j = i - 1;
+            
 
             uint256 n = norders[j];
             order = _orders[n];
@@ -398,9 +403,8 @@ contract DexhuneExchange is DexhuneExchangeBase {
             if (!settled) {
                 continue;
             }
-            
-            _removeItem(norders, j);
-            _removeItem(_orders, n);
+
+            _removeOrder(order, n);
         }
     }
 
@@ -409,7 +413,7 @@ contract DexhuneExchange is DexhuneExchangeBase {
         bool userOnly = uorders.length > 0;
 
         uint256 reverted = 0;
-        uint256 limit = userOnly ? CLEAR_ORDERS_USER_LIMIT : CLEAR_ORDERS_LIMIT;
+        uint256 limit = userOnly ? CLEAR_ORDERS_USER_LIMIT : ORDER_LOOP_LIMIT;
         
         uint256 n;
         uint256 timestamp = block.timestamp;
@@ -430,7 +434,6 @@ contract DexhuneExchange is DexhuneExchangeBase {
                 
                 if (timestamp - order.created > ORDER_LIFESPAN) {
                     if (_revertOrder(order, n)) {
-                        _removeItem(uorders, j);
                         reverted++;
                     }
                 }
@@ -451,6 +454,30 @@ contract DexhuneExchange is DexhuneExchangeBase {
         }
     }
 
+    function clearTokenOrders(address tokenAddr) external {
+        uint256[] storage torders = _ordersByToken[tokenAddr];
+        
+        uint256 n;
+        uint256 i; uint256 j;
+        uint256 reverted;
+        uint256 timestamp = block.timestamp;
+
+        Order memory order;
+
+        for (i = torders.length; i > 0 && reverted < ORDER_LOOP_LIMIT; i--) {
+            j = i - 1;
+
+            n = torders[j];
+            order = _orders[n];
+
+            if (timestamp - order.created > ORDER_LIFESPAN) {
+                if (_revertOrder(order, n)) {
+                    reverted++;
+                }
+            }
+        }
+    }
+
     function _revertOrder(Order memory order, uint256 index) private returns (bool) {
         Token memory token = _fetchToken(order.tokenAddr);
 
@@ -465,10 +492,42 @@ contract DexhuneExchange is DexhuneExchangeBase {
         }
 
         // TODO: Review Order events
+        _removeOrder(order, index);
         emit OrderReverted(index, order.orderType, order.makerAddr);
-        _removeItem(_orders, index);
+        
 
         return true;
+    }
+
+    function _removeOrder(Order memory order, uint256 index) private {
+        uint256 userIndex = order.userIndex;
+        uint256 tokenIndex = order.tokenIndex;
+
+        uint256[] storage uorders = _ordersByUser[order.makerAddr];
+        uint256[] storage torders = _ordersByToken[order.tokenAddr];
+        Order storage rOrder;
+
+        if (_removeItem(uorders, userIndex)) {
+            rOrder = _orders[uorders[userIndex]];
+            rOrder.userIndex = userIndex;
+        }
+
+        if (_removeItem(torders, tokenIndex)) {
+            rOrder = _orders[torders[tokenIndex]];
+            rOrder.tokenIndex = tokenIndex;
+        }
+
+        if (_removeItem(_orders, index)) {
+            rOrder = _orders[index];
+            
+            userIndex = rOrder.userIndex;
+            tokenIndex = rOrder.tokenIndex;
+            uorders = _ordersByUser[rOrder.makerAddr];
+            torders = _ordersByToken[rOrder.tokenAddr];
+
+            uorders[userIndex] = index;
+            torders[tokenIndex] = index;
+        }
     }
 
     function _createOrder(Token storage token, bool orderType, uint256 amount) private {
@@ -508,18 +567,26 @@ contract DexhuneExchange is DexhuneExchangeBase {
             pending = _div(_normalize(amount, token.dec), price);
         }
 
+        uint256[] storage torders = _ordersByToken[token.addr];
+        uint256[] storage uorders = _ordersByUser[msg.sender];
 
-        Order memory order = Order(payable(msg.sender), token.addr, orderType, block.timestamp, price, amount, pending);
+        if (torders.length >= MAX_ORDERS_PER_TOKEN) {
+            revert TokenOrderLimitReachedRetryOrClear();
+        }
+
+        uint256 index = _orders.length;
+        Order memory order = Order(payable(msg.sender), token.addr, orderType, 
+            block.timestamp, price, amount, pending, 
+            torders.length, uorders.length);
+
+        
         _orders.push(order);
-
-        uint256 index = _orders.length - 1;
-        _ordersByUser[msg.sender].push(index);
-        _ordersByToken[token.addr].push(index);
+        torders.push(index);
+        uorders.push(index);
 
         emit OrderCreated(index, orderType, token.addr, amount, price);
     }
-
-    
+   
     function _prepareToken(address addr, uint256 price, PricingScheme scheme, address parityAddr, uint256 reward, uint256 rewardThreshold) private {
         IERC20 inst = IERC20(addr);
         
@@ -633,9 +700,15 @@ contract DexhuneExchange is DexhuneExchangeBase {
         if (!_withdrawToken(_tokens[0], msg.sender, listingCost)) {
             revert InsufficientBalanceForListing(listingCost);
         }
-        
-        uint256 lPrice = (listingCost * LISTING_PRICE_INCREASE_BY_THOUSAND) / 1000;
-        listingCost += lPrice;
+
+        if (listingCost != MAX_LISTING_COST) {
+            uint256 lPrice = (listingCost * LISTING_COST_INCREASE_BY_THOUSAND) / 1000;
+            listingCost += lPrice;
+
+            if (listingCost > MAX_LISTING_COST) {
+                listingCost = MAX_LISTING_COST;
+            }
+        }
     }
 
     function _ensurePrice() private {

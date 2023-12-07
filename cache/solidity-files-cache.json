@@ -8,11 +8,14 @@
       "solcConfig": {
         "version": "0.8.22",
         "settings": {
-          "evmVersion": "paris",
           "optimizer": {
-            "enabled": false,
-            "runs": 200
+            "enabled": true,
+            "runs": 1000,
+            "details": {
+              "yul": false
+            }
           },
+          "evmVersion": "paris",
           "outputSelection": {
             "*": {
               "*": [
@@ -46,11 +49,14 @@
       "solcConfig": {
         "version": "0.8.22",
         "settings": {
-          "evmVersion": "paris",
           "optimizer": {
-            "enabled": false,
-            "runs": 200
+            "enabled": true,
+            "runs": 1000,
+            "details": {
+              "yul": false
+            }
           },
+          "evmVersion": "paris",
           "outputSelection": {
             "*": {
               "*": [
@@ -84,11 +90,14 @@
       "solcConfig": {
         "version": "0.8.22",
         "settings": {
-          "evmVersion": "paris",
           "optimizer": {
-            "enabled": false,
-            "runs": 200
+            "enabled": true,
+            "runs": 1000,
+            "details": {
+              "yul": false
+            }
           },
+          "evmVersion": "paris",
           "outputSelection": {
             "*": {
               "*": [
@@ -120,11 +129,14 @@
       "solcConfig": {
         "version": "0.8.22",
         "settings": {
-          "evmVersion": "paris",
           "optimizer": {
-            "enabled": false,
-            "runs": 200
+            "enabled": true,
+            "runs": 1000,
+            "details": {
+              "yul": false
+            }
           },
+          "evmVersion": "paris",
           "outputSelection": {
             "*": {
               "*": [
@@ -160,11 +172,14 @@
       "solcConfig": {
         "version": "0.8.22",
         "settings": {
-          "evmVersion": "paris",
           "optimizer": {
-            "enabled": false,
-            "runs": 200
+            "enabled": true,
+            "runs": 1000,
+            "details": {
+              "yul": false
+            }
           },
+          "evmVersion": "paris",
           "outputSelection": {
             "*": {
               "*": [
@@ -196,11 +211,14 @@
       "solcConfig": {
         "version": "0.8.22",
         "settings": {
-          "evmVersion": "paris",
           "optimizer": {
-            "enabled": false,
-            "runs": 200
+            "enabled": true,
+            "runs": 1000,
+            "details": {
+              "yul": false
+            }
           },
+          "evmVersion": "paris",
           "outputSelection": {
             "*": {
               "*": [
@@ -226,17 +244,20 @@
       ]
     },
     "C:\\Users\\Prince\\source\\repos\\Peng_Protocol\\dexhune\\contracts\\DexhuneExchangeBase.sol": {
-      "lastModificationDate": 1701338800076,
-      "contentHash": "fb0aef600ba685691061b0610e8b3141",
+      "lastModificationDate": 1701986477490,
+      "contentHash": "52ee5ddf7bcb9f05edef3dce173080d3",
       "sourceName": "contracts/DexhuneExchangeBase.sol",
       "solcConfig": {
         "version": "0.8.22",
         "settings": {
-          "evmVersion": "paris",
           "optimizer": {
-            "enabled": false,
-            "runs": 200
+            "enabled": true,
+            "runs": 1000,
+            "details": {
+              "yul": false
+            }
           },
+          "evmVersion": "paris",
           "outputSelection": {
             "*": {
               "*": [
@@ -267,17 +288,20 @@
       ]
     },
     "C:\\Users\\Prince\\source\\repos\\Peng_Protocol\\dexhune\\contracts\\DexhuneExchange.sol": {
-      "lastModificationDate": 1701423475416,
-      "contentHash": "252e1ac905024dbd75c0a22c81c1d3a5",
+      "lastModificationDate": 1701989594573,
+      "contentHash": "e14c0afea418a72b4683b24e86c67186",
       "sourceName": "contracts/DexhuneExchange.sol",
       "solcConfig": {
         "version": "0.8.22",
         "settings": {
-          "evmVersion": "paris",
           "optimizer": {
-            "enabled": false,
-            "runs": 200
+            "enabled": true,
+            "runs": 1000,
+            "details": {
+              "yul": false
+            }
           },
+          "evmVersion": "paris",
           "outputSelection": {
             "*": {
               "*": [
@@ -313,11 +337,14 @@
       "solcConfig": {
         "version": "0.8.22",
         "settings": {
-          "evmVersion": "paris",
           "optimizer": {
-            "enabled": false,
-            "runs": 200
+            "enabled": true,
+            "runs": 1000,
+            "details": {
+              "yul": false
+            }
           },
+          "evmVersion": "paris",
           "outputSelection": {
             "*": {
               "*": [
@@ -349,11 +376,14 @@
       "solcConfig": {
         "version": "0.8.22",
         "settings": {
-          "evmVersion": "paris",
           "optimizer": {
-            "enabled": false,
-            "runs": 200
+            "enabled": true,
+            "runs": 1000,
+            "details": {
+              "yul": false
+            }
           },
+          "evmVersion": "paris",
           "outputSelection": {
             "*": {
               "*": [
@@ -388,11 +418,14 @@
       "solcConfig": {
         "version": "0.8.22",
         "settings": {
-          "evmVersion": "paris",
           "optimizer": {
-            "enabled": false,
-            "runs": 200
+            "enabled": true,
+            "runs": 1000,
+            "details": {
+              "yul": false
+            }
           },
+          "evmVersion": "paris",
           "outputSelection": {
             "*": {
               "*": [
@@ -424,11 +457,14 @@
       "solcConfig": {
         "version": "0.8.22",
         "settings": {
-          "evmVersion": "paris",
           "optimizer": {
-            "enabled": false,
-            "runs": 200
+            "enabled": true,
+            "runs": 1000,
+            "details": {
+              "yul": false
+            }
           },
+          "evmVersion": "paris",
           "outputSelection": {
             "*": {
               "*": [
@@ -460,11 +496,14 @@
       "solcConfig": {
         "version": "0.8.22",
         "settings": {
-          "evmVersion": "paris",
           "optimizer": {
-            "enabled": false,
-            "runs": 200
+            "enabled": true,
+            "runs": 1000,
+            "details": {
+              "yul": false
+            }
           },
+          "evmVersion": "paris",
           "outputSelection": {
             "*": {
               "*": [
@@ -496,11 +535,14 @@
       "solcConfig": {
         "version": "0.8.22",
         "settings": {
-          "evmVersion": "paris",
           "optimizer": {
-            "enabled": false,
-            "runs": 200
+            "enabled": true,
+            "runs": 1000,
+            "details": {
+              "yul": false
+            }
           },
+          "evmVersion": "paris",
           "outputSelection": {
             "*": {
               "*": [
@@ -534,11 +576,14 @@
       "solcConfig": {
         "version": "0.8.22",
         "settings": {
-          "evmVersion": "paris",
           "optimizer": {
-            "enabled": false,
-            "runs": 200
+            "enabled": true,
+            "runs": 1000,
+            "details": {
+              "yul": false
+            }
           },
+          "evmVersion": "paris",
           "outputSelection": {
             "*": {
               "*": [
@@ -572,11 +617,14 @@
       "solcConfig": {
         "version": "0.8.22",
         "settings": {
-          "evmVersion": "paris",
           "optimizer": {
-            "enabled": false,
-            "runs": 200
+            "enabled": true,
+            "runs": 1000,
+            "details": {
+              "yul": false
+            }
           },
+          "evmVersion": "paris",
           "outputSelection": {
             "*": {
               "*": [
@@ -599,52 +647,6 @@
       ],
       "artifacts": [
         "DexhuneMath"
-      ]
-    },
-    "C:\\Users\\Prince\\source\\repos\\Peng_Protocol\\dexhune\\contracts\\DexhuneExchange_flattened.sol": {
-      "lastModificationDate": 1701423878597,
-      "contentHash": "f51e526cab9041782c8dd5ef6a3485f0",
-      "sourceName": "contracts/DexhuneExchange_flattened.sol",
-      "solcConfig": {
-        "version": "0.8.22",
-        "settings": {
-          "evmVersion": "paris",
-          "optimizer": {
-            "enabled": false,
-            "runs": 200
-          },
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [],
-      "versionPragmas": [
-        "^0.8.22",
-        "^0.8.22",
-        "^0.8.22",
-        "^0.8.22",
-        "^0.8.22",
-        "^0.8.22"
-      ],
-      "artifacts": [
-        "DexhuneExchange",
-        "DexhuneExchangeBase",
-        "DexhuneMath",
-        "IERC20",
-        "IPriceDAO",
-        "Ownable"
       ]
     }
   }

@@ -169,24 +169,28 @@ abstract contract DexhuneExchangeBase is Ownable {
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Utils
-    function _removeItem(uint256[] storage arr, uint256 index) internal {
+    function _removeItem(uint256[] storage arr, uint256 index) internal returns(bool) {
         uint256 last = arr.length - 1;
+        bool isLast = index == last;
         
-        if (index != last) {
+        if (!isLast) {
             arr[index] = arr[last];
         }
 
         arr.pop();
+        return !isLast;
     }
 
-    function _removeItem(Order[] storage arr, uint256 index) internal {
+    function _removeItem(Order[] storage arr, uint256 index) internal returns(bool) {
         uint256 last = arr.length - 1;
-
-        if (index != last) {
+        bool isLast = index == last;
+        
+        if (!isLast) {
             arr[index] = arr[last];
         }
 
         arr.pop();
+        return !isLast;
     }
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     
@@ -237,12 +241,15 @@ abstract contract DexhuneExchangeBase is Ownable {
         uint256 price;
         uint256 principal;
         uint256 pending;
+
+        uint256 tokenIndex;
+        uint256 userIndex;
     }
 
     error FailedStringToNumberConversion();
     error TokenAlreadyExists(address contractAddr);
     error TokenLimitReached();
-    error OrderLimitReachedTryLater();
+    error TokenOrderLimitReachedRetryOrClear();
     error TokenNotListed();
     error OrderDoesNotExist();
     error InvalidTokenContract();
