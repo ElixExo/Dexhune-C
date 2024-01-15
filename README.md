@@ -11,4 +11,4 @@ Documentation on the implemented third contract "DexhuneExchange" can be found [
 
 Design specifications for the three systems can be found [here](https://github.com/ElixExo/PengProtocol/tree/Dexhune/documents).
 
-Further development is planned on Polygon MATIC, details of which can be found [here](https://medium.com/@genericmage1127/design-proposal-dexhune-marker-foundry-23585152debb).
+Further development is planned on Ethereum Layer 2's, details of which can be found [here](https://medium.com/@genericmage1127/design-proposal-dexhune-marker-foundry-23585152debb).
