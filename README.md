@@ -1,5 +1,5 @@
 # Introduction 
-Dexhune is a permissionless orderbook Exchange built on Avalanche C-Chain and Polygon mainnet, Dexhune allows tokens to utilize their volume as liquidity and trade effectively at a price determined by oracles or by parity pairs. 
+Dexhune is a permissionless orderbook Exchange built for the EVM, Dexhune allows tokens to utilize their volume as liquidity and trade effectively at a price determined by oracles or by parity pairs. 
 
 The Dexhune-AVAX whitepaper can be found [Here](https://files.catbox.moe/iwn6lg.pdf)
 
@@ -11,4 +11,4 @@ Documentation on the implemented third contract "DexhuneExchange" can be found [
 
 Design specifications for the three systems can be found [here](https://github.com/ElixExo/PengProtocol/tree/Dexhune/documents).
 
-Further development is planned on Ethereum Layer 2's, details of which can be found [here](https://medium.com/@genericmage1127/design-proposal-dexhune-marker-foundry-23585152debb).
+Further development is planned, details of which can be found [here](https://medium.com/@genericmage1127/design-proposal-dexhune-marker-foundry-23585152debb).
