@@ -1,0 +1,51 @@
+[1117/224930.327:ERROR:registration_protocol_win.cc(107)] CreateFile: The system cannot find the file specified. (0x2)
+
+
+Solidity 0.8.22 is not fully supported yet. You can still use Hardhat, but some features, like stack traces, might not work correctly.
+                                                                                                                                      
+Learn more at https://hardhat.org/hardhat-runner/docs/reference/solidity-support                                                      
+                                                                                                                                      
+Nothing to compile                                                                                                                    
+No need to generate any newer typings.                                                                                                
+                                                                                                                                      
+                                                                                                                                      
+  Exchange                                                                                                                            
+    Functionality                                                                                                                     
+Owner Balance:  9999987958655600207099n                                                                                               
+Owner Balance After:  9999987958655600207099n                                                                                         
+Decimals:  14                                                                                                                         
+Selling:  349.1828382533801 34918283825338012n                                                                                        
+Loaded                                                                                                                                
+Order Result(8) [                                                                                                                     
+  '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266',                                                                                       
+  '0x5FC8d32690cc91D4c39d9d3abcBD16989F875707',                                                                                       
+  false,                                                                                                                              
+  1701285382n,                                                                                                                        
+  0n,                                                                                                                                 
+  204660709843368152473n,                                                                                                             
+  34918283825338012n,                                                                                                                 
+  1706154730532393284n                                                                                                                
+]                                                                                                                                     
+                                                                                                                                      
+                                                                                                                                      
+                                                                                                                                      
+Balance vs Pending:  1461501637330902918203684832716283019655932542976n 1115454830812481900                                           
+Exchange has:  0n                                                                                                                     
+TokenTransferred => 22828977747229667,0x70997970C51812dc3A010C7d01b50e0d17dc79C8,0x5FC8d32690cc91D4c39d9d3abcBD16989F875707           
+AVAXTransferred => 1115454830812481920,0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266                                                     
+OrderTaken => 0,false,0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266,0x70997970C51812dc3A010C7d01b50e0d17dc79C8,0x5FC8d32690cc91D4c39d9d3a
+cBD16989F875707,1115454830812481920,true                                                                                              
+New Order:  Result(8) [                                                                                                               
+  '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266',                                                                                       
+  '0x5FC8d32690cc91D4c39d9d3abcBD16989F875707',                                                                                       
+  false,                                                                                                                              
+  1701285382n,                                                                                                                        
+  0n,                                                                                                                                 
+  204660709843368152473n,                                                                                                             
+  12089306078108345n,                                                                                                                 
+  590699899719911364n                                                                                                                 
+]                                                                                                                                     
+      √ Should correctly take sell orders partially (4154ms)                                                                          
+                                                                                                                                      
+                                                                                                                                      
+  1 passing (4s)                                                                                                                      [1201/115318.174:ERROR:registration_protocol_win.cc(107)] CreateFile: The system cannot find the file specified. (0x2)

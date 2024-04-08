@@ -1,0 +1,84 @@
+{
+	"compiler": {
+		"version": "0.8.22+commit.4fc1097e"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [],
+				"name": "getPrice",
+				"outputs": [
+					{
+						"internalType": "string",
+						"name": "",
+						"type": "string"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "string",
+						"name": "price",
+						"type": "string"
+					}
+				],
+				"name": "setPrice",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {
+				"getPrice()": {
+					"notice": "Get the current price"
+				}
+			},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/mockups/MockOracle.sol": "MockOracle"
+		},
+		"evmVersion": "shanghai",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": true,
+			"runs": 1000
+		},
+		"remappings": []
+	},
+	"sources": {
+		"contracts/interfaces/IPriceDAO.sol": {
+			"keccak256": "0xcc0991ee8f43f7e8bd78da2903f4ca8d4147d8d4990b27e6b8a9ab78c2ee6774",
+			"license": "BSD-3-Clause",
+			"urls": [
+				"bzz-raw://71974014f07085c0d145a95ec64f300369d9fb07daa956452557720788648748",
+				"dweb:/ipfs/QmXmt2f1eVnfFfq8XnwgepHT1sH88j5ugmySQYvLg3moA2"
+			]
+		},
+		"contracts/mockups/MockOracle.sol": {
+			"keccak256": "0xbc4296b405f416fa69f8d44e151beef5afca8c560f4ee8c67942d64399e880d8",
+			"license": "BSD-3-Clause",
+			"urls": [
+				"bzz-raw://3bc27e0de2d87119480d4a5c7db813304d3f78433487d0915c57b8af24ab5af1",
+				"dweb:/ipfs/QmPGdS1DX4bbLCcRwagKMam77XbdjU9NrbBGgPowgC2LiX"
+			]
+		}
+	},
+	"version": 1
+}

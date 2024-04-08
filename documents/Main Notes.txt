@@ -1,0 +1,45 @@
+/// Notes /// 
+- Use of an Avvy resolver (.avax.sh) is advised to make the site easier to access.
+
+- A taker robot should be created alongside the 'Exchange contract' to allow easier trading. 
+
+- A taker may attempt to spam transactions in order to trade with themselves, but each time someone else captures the trade before them; they lose money due to transaction fees. But if the majority of traders decide to spam transactions then the likelihood of catching it is much greater. 
+
+- Customization of taker bots should allow takers to only trade specific tokens which they are interested in, or trade only pre approved tokens from CC-UI. 
+
+- Malware tokens could be listed with the aim of siphoning funds from unsuspecting victims, but listings aren't a world ender since takers still need to hear about the token and voluntarily decide to trade it. 
+
+- In the event of a rugpull, takers would still be trading the abandoned token until they reconfigure their bots to dump the token and ignore it. In this scenario the last one(s) holding the bag suffer the damage. 
+
+- A rugpull implies there was something in a listed token's contract which allowed the owner to mint a large amount of tokens and then dump on the exchange. Alternatively; if the creator had a large amount of the token supply that they intended to later dump on the exchange, either of these scenarios are not optimal. If rugpulls continue; it erodes trust in one of two things; the exchange or new tokens listed to it. 
+If takers decide to ignore all new tokens then fewer legitimate projects will want to list since it would require more effort on their part to keep their token trading.
+
+- One of the advantages the Dexhune exchange has over DEXs is that a project requires zero liqudity to start, so long as there is sufficient trust and hype in the project then takers would naturally gravitate towards it and provide the liqudity needed for trades. 
+
+- The important thing to remember about takers is that they are a fluid association, anyone at any moment can become a takers, so long as you own the listed token you can decide to exclusively sell (for a period) or if you only own the default tokens (AVAX), you can decide to only buy (for a period). Likewise a taker who wishes to exit their position can set their bot to sell only until all they have is AVAX.
+
+- A taker bot on 'Sell Only' will continue to sell until they either expend their balance or they have so little liquidity in the listed token that they cannot fill any new orders. The last remains of the token must be manually sold by the owner of the respective taker bot.  
+
+- All liquidity is concentrated, any token which becomes recognized by the majority or all takers will immediately draw from this pool. That means if there is 500,000AVAX made available by takers, then all tokens they've opted into can at any moment call upon that liquidity. This allows systems to be more robust and support one another. But if there is a breach of trust then everyone suffers.
+
+- Changes were made to prevent low value transactions getting rewards, the current reward rate guarantees that trading higher amounts yields more rewards. 
+
+- DXH is treated more like a listed token in the latest version of the design specs, this allows 'Mass Settlement' and rewards to be easier defined for all tokens using Balance-x and y. 
+
+- If someone had 500,000,000TOKEN in a listed token, but only 500,000TOKEN worth of AVAX is made available by takers, with a buying volume of 25,000TOKEN worth of AVAX per day, it would take the seller 20,000 days (54 years) to liquidate his position. This sort of illiquidity is baked into the system for tokens pending solely on Peer Trading. 
+
+- 'Partial Settlement' was originally withheld from the whitepaper, partly due to me deliberating on whether it was necessary at all for Dexhune, but all standard orderbooks do something similar, so most people in the know would assume we would adopt a sensible settlement method. Without 'partial settlement' large orders will float around in the contract until reverted or until someone with the exact size needed fills it (which might never happen since there is no incentive to take large orders). I didn't see this as an issue before. 
+
+- Without 'Mass Settlement' listed tokens would have inefficient liquidity if left without a way to automatically settle trades. 
+
+- Updated functionality with 'Mass Settlement' is similar to a liquidity pool, except there are no rewards for adding liquidity and it cannot be withdrawn.
+
+- (See "Taker Bots.txt") All taker bots automatically halt if the DAO price of DXH differs by more than 0.5% from the actual price. This reduces the potential liquidity an attacker could tap into and spares takers from heavy losses. 
+
+- The ideal price for a 'Peng' is; (Estimated value from exploitation / 1000), So the ideal price once initial supply is fully liquid is; ~$200,000 per NFT. And this scales as the project grows because to capture a Peng is to capture 1/1000th the potential to drain the Liquidity. 
+
+- Much like Byzantine fault tolerance, the system incentivizes people to behave in the best interests of the network. If someone could make a comfy profit from supporting the DAO plus dividends, whereas attempting to exploit the system could result in a loss of anything between ~$10,200,000 to ~$30,600,000, they'd be more inclined to behave. 
+
+- Over time as 'Pengs' get lost or confiscated they will become even more expensive due to scarcity.  
+
+- If abstracted to gold price; DXH has 4 decimals, to get 1 ounce of gold from DXH you need 10,000 DXH. 
